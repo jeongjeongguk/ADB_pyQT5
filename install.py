@@ -18,7 +18,9 @@ class default(object):
     @classmethod
     def run_info(cls, filepath):
         cls.filepath = filepath
-        if os.getcwd() != "C:\\Users\\Jeongkuk\\PycharmProjects\\alsongAndroid\\apks" : os.chdir("./apks")
+        company = "C:\\Users\\Jeongkuk\\PycharmProjects\\alsongAndroid\\apks"
+        home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
+        if os.getcwd() != home : os.chdir(home)
         test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
                                 stderr=cmd.STDOUT, shell=True)
         cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
@@ -51,7 +53,7 @@ class default(object):
         os.system("adb start-server")
 
 if __name__ == "__main__":
-    filepath = "alsong_4.0.0.11_7cha.apk"
+    filepath = "SecurityToday.apk"
     test = default()
     #test.run_info(filepath)
     #test.adb_kill()
