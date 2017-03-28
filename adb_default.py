@@ -6,9 +6,16 @@ class default(object):
         self.filepath = ""
         self.packageName = ""
         self.startActivity = ""
+        self.DeviceHistory = {self.ConnectDevices, self.DisconnectDevices}
+        self.ConnectDevices = {}
+        self.DisconnectDevices = {}
 
-    def check_connect(self):
+    @classmethod
+    def check_connect(cls):
         os.system("adb devices")
+        #devicesList = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True)
+        #print(devicesList)
+        #TODO : devicesList를 self.ConnectDevices 에 추가하고, self.ConnectDevices 프린트
 
     def install_apk(self, filepath):
         os.chdir("./apks")
@@ -18,9 +25,9 @@ class default(object):
     @classmethod
     def run_info(cls, filepath):
         cls.filepath = filepath
-        company = "C:\\Users\\Jeongkuk\\PycharmProjects\\alsongAndroid\\apks"
+        company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
         home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
-        if os.getcwd() != home : os.chdir(home)
+        if os.getcwd() != company : os.chdir(company)
         test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
                                 stderr=cmd.STDOUT, shell=True)
         cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
@@ -37,12 +44,23 @@ class default(object):
     def uninstall_apk(cls,filepath):
         cls.run_info(filepath)
         os.system("adb uninstall " + cls.packageName)
+        cls.check_install()
 
     @classmethod
     def reinstall_apk(cls, filepath):
         cls.run_info(filepath)
         os.system("adb install -r " + filepath)
         cls.run_apk(filepath)
+
+    @classmethod
+    def check_install(cls):
+        try:
+            test = cmd.check_output("adb shell pm list package -f | findstr " + cls.packageName,
+                                    stderr=cmd.STDOUT, shell=True).decode("utf-8").split("=")[1]
+            print(test)
+            print("installed program")
+        except:
+            print("Not installed program")
 
     def adb_kill(self):
         os.system("adb kill-server")
@@ -59,4 +77,7 @@ if __name__ == "__main__":
     #test.adb_kill()
     #test.install_apk(filepath)
     #test.run_apk(filepath)
-    test.reinstall_apk(filepath)
+    #test.reinstall_apk(filepath)
+    #test.check_install()
+    #test.uninstall_apk(filepath)
+    test.check_connect()
