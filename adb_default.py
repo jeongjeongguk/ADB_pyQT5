@@ -6,9 +6,9 @@ class default(object):
         self.filepath = ""
         self.packageName = ""
         self.startActivity = ""
-        self.DeviceHistory = {self.ConnectDevices, self.DisconnectDevices}
-        self.ConnectDevices = {}
-        self.DisconnectDevices = {}
+#       self.DeviceHistory = {self.ConnectDevices, self.DisconnectDevices}
+#       self.ConnectDevices = {}
+#       self.DisconnectDevices = {}
 
     @classmethod
     def check_connect(cls):
@@ -20,7 +20,11 @@ class default(object):
     def install_apk(self, filepath):
         os.chdir("./apks")
         os.system("adb install " + filepath)
+        time.sleep(10)
         self.run_apk(filepath)
+        #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
+        #TODO : 위 내용관련한 처리필요
+
 
     @classmethod
     def run_info(cls, filepath):
@@ -28,6 +32,7 @@ class default(object):
         company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
         home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
         if os.getcwd() != company : os.chdir(company)
+        #TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
         test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
                                 stderr=cmd.STDOUT, shell=True)
         cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
@@ -71,13 +76,13 @@ class default(object):
         os.system("adb start-server")
 
 if __name__ == "__main__":
-    filepath = "SecurityToday.apk"
+    filepath = "teamUP-trial-release-v3.5.2.7-122.apk"
     test = default()
     #test.run_info(filepath)
     #test.adb_kill()
-    #test.install_apk(filepath)
+    test.install_apk(filepath)
     #test.run_apk(filepath)
     #test.reinstall_apk(filepath)
     #test.check_install()
     #test.uninstall_apk(filepath)
-    test.check_connect()
+    #test.check_connect()
