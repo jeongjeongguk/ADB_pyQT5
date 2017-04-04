@@ -14,7 +14,7 @@ class myADB(object):
         #ui.Ui_MainWindow.setupUi.lineEdit.text()
         #ui.Ui_MainWindow.test(path)
 
-    def install(self):
+    def install(self) -> object:
         print(ui.Ui_MainWindow.setupUi.lineEdit.text())
         #ui.Ui_MainWindow.label.setText("설치중")
         path = ui.Ui_MainWindow.setupUi.lineEdit.text()
