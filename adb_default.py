@@ -6,16 +6,20 @@ class default(object):
         self.filepath = ""
         self.packageName = ""
         self.startActivity = ""
-#       self.DeviceHistory = {self.ConnectDevices, self.DisconnectDevices}
-#       self.ConnectDevices = {}
-#       self.DisconnectDevices = {}
+        #self.ConnectDevices = []
+        #self.DisconnectDevices = []
 
     @classmethod
     def check_connect(cls):
         os.system("adb devices")
-        #devicesList = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True)
-        #print(devicesList)
+        '''
+        devicesList = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True).decode("utf-8")
+        devicesList = devicesList.replace("List of devices attached","")
+        devicesList = devicesList.replace("\r\n","")
+        #b'List of devices attached\r\nLGF700K525fbc3\tdevice\r\n'
         #TODO : devicesList를 self.ConnectDevices 에 추가하고, self.ConnectDevices 프린트
+        print(devicesList)
+        '''
 
     def install_apk(self, filepath):
         os.chdir("./apks")
@@ -80,9 +84,9 @@ if __name__ == "__main__":
     test = default()
     #test.run_info(filepath)
     #test.adb_kill()
-    test.install_apk(filepath)
+    #test.install_apk(filepath)
     #test.run_apk(filepath)
     #test.reinstall_apk(filepath)
     #test.check_install()
     #test.uninstall_apk(filepath)
-    #test.check_connect()
+    test.check_connect()

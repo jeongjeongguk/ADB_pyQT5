@@ -4,9 +4,9 @@ import subprocess as cmd
 
 class record(adb_default.default):
     def __init__(self):
-
         self.today = ""
         self.currentTime = ""
+        self.deviceData = ""
         self.makedir()
 
     @classmethod
@@ -20,8 +20,8 @@ class record(adb_default.default):
         os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
         os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
         cls.check_time()
-        #print(cls.currentTime)
-        os.system("ren test.png "+ cls.currentTime +".jpg")
+        cls.device_info(None)
+        os.system("ren test.png "+ cls.currentTime + "_" + cls.deviceData+".jpg")
 
     @classmethod
     def makedir(cls):
@@ -35,8 +35,20 @@ class record(adb_default.default):
 
     @classmethod
     def check_time(cls):
-        cls.currentTime = datetime.datetime.now().strftime("%H%M%S")
+        cls.currentTime = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
         print(cls.currentTime)
+
+    @classmethod
+    def device_info(cls, select_device):
+        select_device = "" #TODO : delete this line
+        os_ver = cmd.check_output("adb shell "+ select_device +"getprop ro.build.version.release",
+                         stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
+        api_level = cmd.check_output("adb shell "+ select_device+"getprop ro.build.version.sdk",
+                         stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
+        model = cmd.check_output("adb shell "+ select_device+"getprop ro.product.model",
+                         stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
+        cls.deviceData = model + "_" + os_ver +"_API"+ api_level
+        print(cls.deviceData)
 
 
 if __name__ == "__main__":
@@ -45,4 +57,5 @@ if __name__ == "__main__":
     test.screenshot()
     #test.makedir()
     #test.check_time()
+    #test.device_info(None)
     pass
