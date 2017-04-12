@@ -35,14 +35,17 @@ class default(object):
         cls.filepath = filepath
         company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
         home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
-        if os.getcwd() != company : os.chdir(company)
-        #TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
-        test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
-                                stderr=cmd.STDOUT, shell=True)
-        cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
-        test = cmd.check_output("aapt dump badging " + filepath + " | findstr package",
-                                stderr=cmd.STDOUT, shell=True)
-        cls.packageName = test.decode("utf-8").split(" ")[1].split("'")[1]
+        if os.getcwd() != company: os.chdir(company)
+        try:
+            test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
+                                    stderr=cmd.STDOUT, shell=True)
+            cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
+            test = cmd.check_output("aapt dump badging " + filepath + " | findstr package",
+                                    stderr=cmd.STDOUT, shell=True)
+            cls.packageName = test.decode("utf-8").split(" ")[1].split("'")[1]
+        except:
+            # TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
+            pass
 
     @classmethod
     def run_apk(cls,filepath):
@@ -76,17 +79,17 @@ class default(object):
         self.adb_restrat()
         self.check_connect()
 
-    def adb_restrat(self):
+    def adb_restart(self):
         os.system("adb start-server")
 
 if __name__ == "__main__":
     filepath = "teamUP-trial-release-v3.5.2.7-122.apk"
     test = default()
-    #test.run_info(filepath)
+    test.run_info(filepath)
     #test.adb_kill()
     #test.install_apk(filepath)
     #test.run_apk(filepath)
     #test.reinstall_apk(filepath)
     #test.check_install()
     #test.uninstall_apk(filepath)
-    test.check_connect()
+    #test.check_connect()
