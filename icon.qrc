@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="menu">
+    <file>icons/Capture_image.png</file>
+    <file>icons/Capture_video.png</file>
+    <file>icons/Export.jpg</file>
+    <file>icons/Main.png</file>
+    <file>icons/Option.png</file>
+    <file>icons/Connect_usb.ico</file>
+  </qresource>
+</RCC>

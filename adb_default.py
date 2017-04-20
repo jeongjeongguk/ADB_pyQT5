@@ -22,8 +22,11 @@ class default(object):
         '''
 
     def install_apk(self, filepath):
-        os.chdir("./apks")
-        os.system("adb install " + filepath)
+        #os.chdir("./apks")
+        company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
+        home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
+        if os.getcwd() != company: os.chdir(company)
+        os.system("adb install " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
         time.sleep(10)
         self.run_apk(filepath)
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
@@ -74,20 +77,23 @@ class default(object):
         except:
             print("Not installed program")
 
+    @staticmethod
     def adb_kill(self):
         os.system("adb kill-server")
         self.adb_restrat()
         self.check_connect()
 
+    @staticmethod
     def adb_restart(self):
         os.system("adb start-server")
 
 if __name__ == "__main__":
-    filepath = "teamUP-trial-release-v3.5.2.7-122.apk"
+    filepath = "AlsongAndroid_4.0.7_20170420.apk"
+    #filepath = "Alsong_v3.810_1cha.apk"
     test = default()
     test.run_info(filepath)
     #test.adb_kill()
-    #test.install_apk(filepath)
+    test.install_apk(filepath)
     #test.run_apk(filepath)
     #test.reinstall_apk(filepath)
     #test.check_install()
