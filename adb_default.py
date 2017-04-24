@@ -92,6 +92,22 @@ class default(object):
     def adb_device_reboot(self):
         os.system("adb reboot")
 
+'''
+adb uninstall com.estsoft.alsong
+adb shell am start -a android.intent.action.VIEW -d "https://play.google.com/store/apps/details?id=com.estsoft.alsong"
+::adb install  .\alsong_release.apk
+@echo off
+adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.ui.AlsongStartActivity
+echo 설정할 것들 설정하세요
+pause
+::adb uninstall com.estsoft.alsong
+adb install -r .\alsong_4.0.0.11_7cha.apk
+::adb install -r .\alsong_4.0.0.10_7cha.apk
+::adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.ui.AlsongStartActivity
+adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.SplashActivity
+pause
+'''
+
 if __name__ == "__main__":
     filepath = "alsong_4.0.7.3.apk"
     #filepath = "Alsong_v3.810_1cha.apk"
