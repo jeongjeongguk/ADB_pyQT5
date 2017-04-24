@@ -26,7 +26,8 @@ class default(object):
         company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
         home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
         if os.getcwd() != company: os.chdir(company)
-        os.system("adb install " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
+        # TODO : error: more than one device/emulator 예외처리필요
+        os.system("adb install -r " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
         time.sleep(10)
         self.run_apk(filepath)
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
@@ -87,11 +88,16 @@ class default(object):
     def adb_restart(self):
         os.system("adb start-server")
 
+    @staticmethod
+    def adb_device_reboot(self):
+        os.system("adb reboot")
+
 if __name__ == "__main__":
-    filepath = "AlsongAndroid_4.0.7_20170420.apk"
+    filepath = "alsong_4.0.7.3.apk"
     #filepath = "Alsong_v3.810_1cha.apk"
     test = default()
     test.run_info(filepath)
+    test.uninstall_apk(filepath)
     #test.adb_kill()
     test.install_apk(filepath)
     #test.run_apk(filepath)
@@ -99,3 +105,9 @@ if __name__ == "__main__":
     #test.check_install()
     #test.uninstall_apk(filepath)
     #test.check_connect()
+    '''
+    time.sleep(30)
+    filepath = "alsong_4.0.7.3.apk"
+    test.run_info(filepath)
+    test.install_apk(filepath)
+    '''
