@@ -55,7 +55,6 @@ if __name__ == "__main__":
 
     test = record()
     test.screenshot()
-    #test.makedir()
-    #test.check_time()
-    #test.device_info(None)
-    pass
+    # test.makedir()
+    # test.check_time()
+    # test.device_info(None)
