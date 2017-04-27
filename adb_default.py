@@ -1,9 +1,12 @@
+
+
 import ctypes
 import datetime
 import os
 import subprocess as cmd
 import time
 from xml.dom.minidom import parse
+from pywinauto.application import Application
 
 
 class default(object):
@@ -104,19 +107,17 @@ class default(object):
     def update(cls, filepath_old, filepath_new): #TODO: devices arg 전달필요
         try:
             cls.run_info(filepath_old)
-            os.system("adb uninstall " + cls.packageName)
+            cmd.check_output("adb uninstall " + cls.packageName, stderr=cmd.STDOUT, shell=True)
             time.sleep(5)
             cls.run_info(filepath_new)
-            os.system("adb uninstall " + cls.packageName)
+            cmd.check_output("adb uninstall " + cls.packageName, stderr=cmd.STDOUT, shell=True)
             time.sleep(5)
         except:
             pass
         CHK_ANYDevice = cls.check_connect() #check_any_connect_device
         print(CHK_ANYDevice)
         if CHK_ANYDevice == 0 :
-            #TODO : HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            test = ctypes.windll.user32.MessageBoxW(0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
-            print(test)
+            ctypes.windll.user32.MessageBoxW(0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
         else :
             try :
                 cls.run_info(filepath_old) #알송기준 : com.estsoft.alsong
@@ -188,7 +189,7 @@ class default(object):
         print(cls.currentTime)
 
     @classmethod
-    def device_info(cls, select_device):
+    def device_info(cls, select_device): #TODO : 여려기기 연결되어있을때에, 기기를 선택해서 기기별 리스트에 정보저장필요
         select_device = ""  # TODO : delete this line
         os_ver = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.release",
                                   stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
@@ -197,7 +198,7 @@ class default(object):
         model = cmd.check_output("adb shell " + select_device + "getprop ro.product.model",
                                  stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
         cls.deviceData = model + "_" + os_ver + "_API" + api_level
-        print(cls.deviceData)
+        # print(cls.deviceData)
 
     @classmethod
     def capture2image(cls):#TODO : 기기 잠금화면 상태유무 확인후, 잠금해제 메소드 추가 필요
@@ -216,15 +217,54 @@ class default(object):
         os.system("move " + changedName + " " +cls.today)
 
     @classmethod
-    def capture2viedo(cls):
-        cls.check_connect()
-        cls.device_info(None)
+    def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것
+        ConnectedDevicesCnt = cls.check_connect()
+        if ConnectedDevicesCnt > 0 :
+            cls.device_info(None)
+            print(ConnectedDevicesCnt)
+            print(cls.deviceData)
+            ctypes.windll.user32.MessageBoxW \
+            (0, "현재 %i대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n%s" %(ConnectedDevicesCnt, cls.deviceData), "연결된 기기", 0)
+        else :
+            ctypes.windll.user32.MessageBoxW \
+                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
         # TODO : 4.4 이상일때에만 영상녹화하고, 메시지다이얼로그의 '녹화끝','취소'리턴받으면 녹화중지시키고 영상뺴오기
+        device_api = cls.deviceData.split("_")[1]
+        device_api = device_api.split("I")[0].replace("\r","")
+        videoEnableOSver = 4.4
+        print("연결된 기기의 OS 버전은 " + device_api)
+        if float(device_api) < videoEnableOSver :
+            ctypes.windll.user32.MessageBoxW(0, "선택된 기기에서는 녹화가 되지 않습니다.", "녹화지원안됨", 0)
+        else:
+            try :
+                cmd.check_output("adb shell rm -r /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
+                cmd.check_output("adb shell mkdir /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
+            except :
+                pass
+            # New window cmd : start cmd/k command
+            os.system("start /B start cmd.exe @cmd /k "
+            #     os.system("start cmd /k "
+                      "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
+            path = os.getcwd().replace("\\","/").replace("\r","").replace("\n","")
+            RecordCnt = ctypes.windll.user32.MessageBoxW \
+                (0, "영상기록을 시작합니다.\n확인 : 영상기록 PC전송\n취소 : 영상기록삭제", "영상기록중", 1)
+            app = Application()
+            RecordVideo = app.window_(title_re=".*C:\WINDOWS.*")
+            RecordVideoConfirm = app.window_(title_re='.*영상기록중.*'.decode('euc-kr'))
+            RecordVideoConfirm.SetFocus()
+            if RecordCnt == 1: # 확인 : 기기 -> PC 로 영상전송
+                RecordVideo.DrawOutline()
+
+                cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
+            else : # 취소 : 기기에서 삭제
+                RecordVideo.Exists()
+                cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
+
         cls.check_time()
         changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
+        os.system("cd %s"%path)
         os.system("ren test.mp4 " + changedName)
         os.system("move " + changedName + " " + cls.today)
-        pass
 
 if __name__ == "__main__":
     #'''
@@ -249,3 +289,7 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
+    try :
+        test.capture2viedo()
+    except :
+        pass

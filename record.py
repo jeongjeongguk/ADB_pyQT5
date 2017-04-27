@@ -6,7 +6,7 @@ class record(adb_default.default):
     def __init__(self):
         self.today = ""
         self.currentTime = ""
-        self.deviceData = ""
+        self.deviceData = {}
         self.makedir()
 
     @classmethod
@@ -39,22 +39,42 @@ class record(adb_default.default):
         print(cls.currentTime)
 
     @classmethod
-    def device_info(cls, select_device):
-        select_device = "" #TODO : delete this line
-        os_ver = cmd.check_output("adb shell "+ select_device +"getprop ro.build.version.release",
-                         stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
-        api_level = cmd.check_output("adb shell "+ select_device+"getprop ro.build.version.sdk",
-                         stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
-        model = cmd.check_output("adb shell "+ select_device+"getprop ro.product.model",
-                         stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
-        cls.deviceData = model + "_" + os_ver +"_API"+ api_level
+    def device_info(cls, *devices):
+        for arg in devices :
+            select_device = []
+            select_device.append(arg)
+        # select_device = "" #TODO : delete this line
+            os_ver = cmd.check_output("adb shell "+ select_device[arg] +"getprop ro.build.version.release",
+                             stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
+            api_level = cmd.check_output("adb shell "+ select_device[arg]+"getprop ro.build.version.sdk",
+                             stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
+            model = cmd.check_output("adb shell "+ select_device[arg]+"getprop ro.product.model",
+                             stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n","")
+            cls.deviceData = model + "_" + os_ver +"_API"+ api_level
         print(cls.deviceData)
+
+    @classmethod
+    def check_connect(cls):
+        try:
+            # \r\n 제거는 윈도우기준
+            List_misi = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True) \
+                .decode("utf-8") \
+                .replace("List of devices attached", "") \
+                .replace("\r\n", "") \
+                .replace("device", "") #TODO : 제거가 아니라, 이것도 따로 뽑아서 속성으로 묶어야됨. wifi인 경우 확인필요
+            cls.ConnectDevices = List_misi.split("	")
+            cls.ConnectDevices.remove("")
+            # return len(cls.ConnectDevices)
+            return cls.ConnectDevices
+        except:
+            return 0
 
 
 if __name__ == "__main__":
 
     test = record()
-    test.screenshot()
+    # test.screenshot()
     # test.makedir()
     # test.check_time()
     # test.device_info(None)
+    print(test.check_connect())
