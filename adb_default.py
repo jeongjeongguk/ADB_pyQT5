@@ -1,12 +1,10 @@
-
-
 import ctypes
 import datetime
 import os
 import subprocess as cmd
 import time
 from xml.dom.minidom import parse
-from pywinauto.application import Application
+from pywinauto import application
 
 
 class default(object):
@@ -27,7 +25,7 @@ class default(object):
     @classmethod
     def check_connect(cls):
         try:
-            # \r\n 제거는 윈도우기준
+            # \r\n 제거는 윈도우10 x64 Enterprise 1607 기준
             List_misi = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True) \
                                             .decode("utf-8") \
                                             .replace("List of devices attached", "") \
@@ -87,22 +85,20 @@ class default(object):
         try:
             test = cmd.check_output("adb shell pm list package -f | findstr " + cls.packageName,
                                     stderr=cmd.STDOUT, shell=True).decode("utf-8").split("=")[1]
-            print(test)
-            print("installed program")
+            # print(test)
+            # print("installed program")
+            if test != None :
+                ctypes.windll.user32.MessageBoxW \
+                    (0, "패키지명 : %s \n설치유무 : 설치됨" % cls.packageName, "설치확인", 0)
         except:
-            print("Not installed program")
+            # print("Not installed program")
+            try:
+                ctypes.windll.user32.MessageBoxW \
+                    (0, "패키지명 : %s \n설치유무 : 설치안됨" %cls.packageName, "설치확인", 0)
+            except:
+                ctypes.windll.user32.MessageBoxW \
+                    (0, "선택한 설치파일의 경로 및 파일명을 확인해주세요.\n(영문,숫자만 가능)", "설치확인", 0)
 
-    '''
-    adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.ui.AlsongStartActivity
-    echo 설정할 것들 설정하세요
-    pause
-    ::adb uninstall com.estsoft.alsong
-    adb install -r .\alsong_4.0.0.11_7cha.apk
-    ::adb install -r .\alsong_4.0.0.10_7cha.apk
-    ::adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.ui.AlsongStartActivity
-    adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.SplashActivity
-    pause
-    '''
     @classmethod
     def update(cls, filepath_old, filepath_new): #TODO: devices arg 전달필요
         try:
@@ -115,7 +111,7 @@ class default(object):
         except:
             pass
         CHK_ANYDevice = cls.check_connect() #check_any_connect_device
-        print(CHK_ANYDevice)
+        # print(CHK_ANYDevice)
         if CHK_ANYDevice == 0 :
             ctypes.windll.user32.MessageBoxW(0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
         else :
@@ -179,14 +175,15 @@ class default(object):
         check_folder = cmd.call("dir " + cls.today, stderr=cmd.STDOUT, shell=True)
         if check_folder != False:
             os.system("mkdir " + cls.today)
-            print("make directory " + cls.today)  # TODO: Need to change method to "pop-up message"
+            ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", 0)
+            # print("make directory " + cls.today)
         else:
-            print("생성된 폴더내에 파일이 저장됩니다.")  # TODO: Need to change method to "pop-up message"
+            ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : "+ cls.today, "스크린샷 저장경로안내", 0)
 
     @classmethod
     def check_time(cls):
         cls.currentTime = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-        print(cls.currentTime)
+        # print(cls.currentTime)
 
     @classmethod
     def device_info(cls, select_device): #TODO : 여려기기 연결되어있을때에, 기기를 선택해서 기기별 리스트에 정보저장필요
@@ -217,12 +214,12 @@ class default(object):
         os.system("move " + changedName + " " +cls.today)
 
     @classmethod
-    def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것
+    def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
         ConnectedDevicesCnt = cls.check_connect()
         if ConnectedDevicesCnt > 0 :
             cls.device_info(None)
-            print(ConnectedDevicesCnt)
-            print(cls.deviceData)
+            # print(ConnectedDevicesCnt)
+            # print(cls.deviceData)
             ctypes.windll.user32.MessageBoxW \
             (0, "현재 %i대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n%s" %(ConnectedDevicesCnt, cls.deviceData), "연결된 기기", 0)
         else :
@@ -232,7 +229,7 @@ class default(object):
         device_api = cls.deviceData.split("_")[1]
         device_api = device_api.split("I")[0].replace("\r","")
         videoEnableOSver = 4.4
-        print("연결된 기기의 OS 버전은 " + device_api)
+        # print("연결된 기기의 OS 버전은 " + device_api)
         if float(device_api) < videoEnableOSver :
             ctypes.windll.user32.MessageBoxW(0, "선택된 기기에서는 녹화가 되지 않습니다.", "녹화지원안됨", 0)
         else:
@@ -241,23 +238,19 @@ class default(object):
                 cmd.check_output("adb shell mkdir /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
             except :
                 pass
+            app = application.Application()
             # New window cmd : start cmd/k command
             os.system("start /B start cmd.exe @cmd /k "
-            #     os.system("start cmd /k "
                       "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
             path = os.getcwd().replace("\\","/").replace("\r","").replace("\n","")
+            time.sleep(1)
             RecordCnt = ctypes.windll.user32.MessageBoxW \
                 (0, "영상기록을 시작합니다.\n확인 : 영상기록 PC전송\n취소 : 영상기록삭제", "영상기록중", 1)
-            app = Application()
-            RecordVideo = app.window_(title_re=".*C:\WINDOWS.*")
-            RecordVideoConfirm = app.window_(title_re='.*영상기록중.*'.decode('euc-kr'))
-            RecordVideoConfirm.SetFocus()
             if RecordCnt == 1: # 확인 : 기기 -> PC 로 영상전송
-                RecordVideo.DrawOutline()
-
+                os.system("TASKKILL /F /IM cmd.exe /T")
+                time.sleep(1)
                 cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
             else : # 취소 : 기기에서 삭제
-                RecordVideo.Exists()
                 cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
 
         cls.check_time()
@@ -269,6 +262,7 @@ class default(object):
 if __name__ == "__main__":
     #'''
     filepath = "alsong_4.0.7.3.apk"
+    # filepath = "a.apk"
     # filepath = "Alsong_v3.810_1cha.apk"
     test = default()
     # test.run_info(filepath)
@@ -293,3 +287,11 @@ if __name__ == "__main__":
         test.capture2viedo()
     except :
         pass
+    # from cProfile import Profile
+    # from pstats import Stats
+    # profiler = Profile()
+    # profiler.runcall(test.capture2viedo)
+    # stats = Stats()
+    # stats.strip_dirs()
+    # stats.sort_stats('cumulative')
+    # stats.print_stats()
