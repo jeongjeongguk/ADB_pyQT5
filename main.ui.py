@@ -1,0 +1,90 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'main.ui'
+#
+# Created by: PyQt5 UI code generator 5.6
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(203, 101)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/menu/icons/Main.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.captureImage = QtWidgets.QPushButton(self.centralwidget)
+        self.captureImage.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/menu/icons/Capture_image.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.captureImage.setIcon(icon1)
+        self.captureImage.setIconSize(QtCore.QSize(30, 30))
+        self.captureImage.setFlat(True)
+        self.captureImage.setObjectName("captureImage")
+        self.horizontalLayout.addWidget(self.captureImage)
+        self.captureVideo = QtWidgets.QPushButton(self.centralwidget)
+        self.captureVideo.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/menu/icons/Capture_video.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.captureVideo.setIcon(icon2)
+        self.captureVideo.setIconSize(QtCore.QSize(25, 25))
+        self.captureVideo.setFlat(True)
+        self.captureVideo.setObjectName("captureVideo")
+        self.horizontalLayout.addWidget(self.captureVideo)
+        self.ConnectedDevices = QtWidgets.QPushButton(self.centralwidget)
+        self.ConnectedDevices.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/menu/icons/Folder.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ConnectedDevices.setIcon(icon3)
+        self.ConnectedDevices.setIconSize(QtCore.QSize(30, 30))
+        self.ConnectedDevices.setFlat(True)
+        self.ConnectedDevices.setObjectName("ConnectedDevices")
+        self.horizontalLayout.addWidget(self.ConnectedDevices)
+        self.option = QtWidgets.QPushButton(self.centralwidget)
+        self.option.setText("")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/menu/icons/Option.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.option.setIcon(icon4)
+        self.option.setIconSize(QtCore.QSize(30, 30))
+        self.option.setFlat(True)
+        self.option.setObjectName("option")
+        self.horizontalLayout.addWidget(self.option)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.horizontalLayout_3.addLayout(self.verticalLayout_2)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 203, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+
+import icon_rc
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+
