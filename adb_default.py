@@ -261,7 +261,7 @@ class default(object):
 
 if __name__ == "__main__":
     #'''
-    filepath = "alsong_4.0.7.3.apk"
+    # filepath = "alsong_4.0.7.3.apk"
     # filepath = "a.apk"
     # filepath = "Alsong_v3.810_1cha.apk"
     test = default()
@@ -282,11 +282,11 @@ if __name__ == "__main__":
     # filepath = "alsong_4.0.7.3.apk"
     # test.run_info(filepath)
     # test.install_apk(filepath)
-    # test.capture2image()
-    try :
-        test.capture2viedo()
-    except :
-        pass
+    test.capture2image()
+    # try :
+    #     test.capture2viedo()
+    # except :
+    #     pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()

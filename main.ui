@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>203</width>
+    <width>299</width>
     <height>101</height>
    </rect>
   </property>
@@ -23,6 +23,46 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="icon.qrc">
+            <normaloff>:/menu/icons/Main.png</normaloff>:/menu/icons/Main.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="icon.qrc">
+            <normaloff>:/menu/icons/1494232917_icon-trash-b.png</normaloff>:/menu/icons/1494232917_icon-trash-b.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QPushButton" name="captureImage">
           <property name="text">
@@ -114,7 +154,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>203</width>
+     <width>299</width>
      <height>21</height>
     </rect>
    </property>
