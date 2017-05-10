@@ -24,7 +24,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="Install">
           <property name="text">
            <string/>
           </property>
@@ -44,7 +44,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="Uninstall">
           <property name="text">
            <string/>
           </property>

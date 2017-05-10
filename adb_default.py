@@ -122,13 +122,24 @@ class default(object):
                     "adb shell am start -a android.intent.action.VIEW -d \"https://play.google.com/store/apps/details?id=" \
                     + cls.packageName + "\"", stderr=cmd.STDOUT, shell=True)
                 cls.touchByID("com.android.vending:id/buy_button") # 플레이스토어 설치버튼 터치
-                cls.touchByID("com.android.vending:id/continue_button") # 플레이스토어 팝업뷰>설치버튼 터치
+                try :
+                    cls.touchByID("com.android.vending:id/continue_button") # 플레이스토어 팝업뷰>설치버튼 터치 #TODO: 안뜨기도 함
+                except:
+                    pass
                 time.sleep(30)
-
+                CHK_imsi = {}
                 CHK_start = \
                 cmd.check_output("adb shell pm list package -f " + cls.packageName, stderr=cmd.STDOUT, shell=True) \
-                                    .decode("utf-8").split(":")[1].split("=")[0]
-                cmd.check_output("adb pull " + CHK_start + " test.apk", stderr=cmd.STDOUT, shell=True)
+                                    .decode("utf-8").split("\r\n")
+                CHK_start.remove('')
+                for imsi in range(0,len(CHK_start)):
+                    CHK_start[imsi] = CHK_start[imsi].split(":")[1]
+                    CHK_imsi[CHK_start[imsi].split("=")[1]] = CHK_start[imsi].split("=")[0]
+
+                imsi2 = CHK_imsi.get(cls.packageName)
+                command = "adb pull " + imsi2 + " test.apk"
+                cmd.check_output(command, stderr=cmd.STDOUT, shell=True)
+                time.sleep(10)
                 cls.run_apk("test.apk")
                 # cls.run_apk(filepath_old) #TODO : 출시버전의 apk 추출해서 packagename, startactivity 구하기
 
@@ -206,12 +217,13 @@ class default(object):
         os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
         os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
         os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
-        os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
         cls.check_time()
+        time.sleep(1)
         cls.device_info(None)
         changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
         os.system("ren test.png "+ changedName)
-        os.system("move " + changedName + " " +cls.today)
+        time.sleep(1)
+        os.system("move " + changedName + " " +cls.today) # 이거 안됨
 
     @classmethod
     def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
@@ -248,6 +260,7 @@ class default(object):
                 (0, "영상기록을 시작합니다.\n확인 : 영상기록 PC전송\n취소 : 영상기록삭제", "영상기록중", 1)
             if RecordCnt == 1: # 확인 : 기기 -> PC 로 영상전송
                 os.system("TASKKILL /F /IM cmd.exe /T")
+                # os.system("TASKKILL /F /FI \"WINDOWTITLE eq C:\\WINDOWS\\system32\\cmd.exe - adb shell *\" /T")
                 time.sleep(1)
                 cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
             else : # 취소 : 기기에서 삭제
@@ -275,14 +288,14 @@ if __name__ == "__main__":
     # test.uninstall_apk(filepath)
     # test.check_connect()
     # test.update(None,None)
-    # filepath_new = "alsong_4.0.7.3.apk"
-    # filepath_old = "Alsong_v3.810_1cha.apk"
-    # test.update(filepath_old,filepath_new)
+    filepath_new = "teamUP-teamup_store-release.apk"
+    filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
+    test.update(filepath_old,filepath_new)
     # time.sleep(30)
     # filepath = "alsong_4.0.7.3.apk"
     # test.run_info(filepath)
     # test.install_apk(filepath)
-    test.capture2image()
+    # test.capture2image()
     # try :
     #     test.capture2viedo()
     # except :
