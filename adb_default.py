@@ -4,7 +4,6 @@ import os
 import subprocess as cmd
 import time
 from xml.dom.minidom import parse
-from pywinauto import application
 
 
 class default(object):
@@ -101,6 +100,25 @@ class default(object):
 
     @classmethod
     def update(cls, filepath_old, filepath_new): #TODO: devices arg 전달필요
+        '''
+        :param filepath_old:
+        :param filepath_new:
+        :return:
+        '''
+        #TODO : 1. 플레이스토어 -> 셋업 / 2. 구셋업 -> 신셋업
+        '''
+        adb uninstall com.estsoft.alsong
+        ::adb shell am start -a android.intent.action.VIEW -d "https://play.google.com/store/apps/details?id=com.estsoft.alsong"
+        adb install  .\Alsong_v3.810_1cha.apk
+        adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.ui.AlsongStartActivity
+        echo 설정할 것들 설정하세요
+        pause
+        ::adb uninstall com.estsoft.alsong
+        adb install -r .\alsong_4.0.8.0_with_report.apk
+        adb shell am start -n com.estsoft.alsong/com.estsoft.alsong.SplashActivity
+        pause
+        '''
+
         try:
             cls.run_info(filepath_old)
             cmd.check_output("adb uninstall " + cls.packageName, stderr=cmd.STDOUT, shell=True)
@@ -250,7 +268,6 @@ class default(object):
                 cmd.check_output("adb shell mkdir /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
             except :
                 pass
-            app = application.Application()
             # New window cmd : start cmd/k command
             os.system("start /B start cmd.exe @cmd /k "
                       "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
@@ -264,6 +281,7 @@ class default(object):
                 time.sleep(1)
                 cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
             else : # 취소 : 기기에서 삭제
+                os.system("TASKKILL /F /IM cmd.exe /T")
                 cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
 
         cls.check_time()
@@ -276,21 +294,27 @@ if __name__ == "__main__":
     #'''
     # filepath = "alsong_4.0.7.3.apk"
     # filepath = "a.apk"
-    # filepath = "Alsong_v3.810_1cha.apk"
+    filepath = "alsong_4.0.8.0_with_report.apk"
+    # filepath = "alsong_4.0.7.3.apk"
     test = default()
     # test.run_info(filepath)
-    # test.uninstall_apk(filepath)
+    test.uninstall_apk(filepath)
     # test.adb_kill()
-    # test.install_apk(filepath)
+    test.install_apk(filepath)
     # test.run_apk(filepath)
     # test.reinstall_apk(filepath)
     # test.check_install()
     # test.uninstall_apk(filepath)
     # test.check_connect()
     # test.update(None,None)
-    filepath_new = "teamUP-teamup_store-release.apk"
-    filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
-    test.update(filepath_old,filepath_new)
+    # filepath_new = "teamUP-teamup_store-release.apk"
+    # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
+    # test.update(filepath_old,filepath_new)
+
+    # filepath_new = "alsong_1.5.0.0_1cha.apk"
+    # filepath_old = "alsong_4.0.8.0_with_report.apk"
+    # test.update(filepath_old, filepath_new)
+
     # time.sleep(30)
     # filepath = "alsong_4.0.7.3.apk"
     # test.run_info(filepath)
