@@ -7,6 +7,8 @@ from xml.dom.minidom import parse
 
 
 class default(object):
+    company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
+    home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
     def __init__(self):
         self.filepath = ""
         self.packageName = ""
@@ -16,8 +18,6 @@ class default(object):
         self.today = ""
         self.currentTime = ""
         self.deviceData = ""
-        self.company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
-        self.home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
         self.makedir()
 
     @classmethod
@@ -294,16 +294,23 @@ if __name__ == "__main__":
     # filepath = "alsong_4.0.7.3.apk"
     # filepath = "a.apk"
     # filepath = "teamUP-teamup_store-release-v3.6.0.1-133.apk"
-    filepath = "AlsongAndroid-4.0.8.2_2cha.apk"
+
     # filepath = "teamUP-teamup_store-release-v3.6.0.2-134.apk"
     # filepath = "teamUP-teamup_test-release-v3.6.0.2-134.apk"
     # filepath = "teamUP-cmc_store-release-v3.6.0.2-134.apk"
+
     # filepath = "alsong_4.0.8.0_with_report.apk"
+
+    # filepath = "Alsong_v3.810_1cha.apk"
+    # filepath = "AlsongAndroid-4.0.8.2_2cha.apk"
+
+    filepath ="AlzipAndroid-release-v1.3.7_2.apk"
+
     test = default()
     # test.run_info(filepath)
-    test.uninstall_apk(filepath)
+    # test.uninstall_apk(filepath)
     # test.adb_kill()
-    test.install_apk(filepath)
+    # test.install_apk(filepath)
     # test.run_apk(filepath)
     # test.reinstall_apk(filepath)
     # test.check_install()
@@ -313,11 +320,24 @@ if __name__ == "__main__":
     # filepath_new = "teamUP-teamup_store-release.apk"
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
     # test.update(filepath_old,filepath_new)
+#
+#     # TODO : 데이터 삭제
+    test.controlDevice(None, "adb shell pm clear "+ "com.estsoft.alzip")
 
-    # filepath_new = "alsong_1.5.0.0_1cha.apk"
-    # filepath_old = "alsong_4.0.8.0_with_report.apk"
-    # test.update(filepath_old, filepath_new)
-
+#     # TODO : 언어 변경 화면으로 이동
+#     test.controlDevice(None, "adb shell am start -n com.android.settings/.LanguageSettings")
+#
+#     # TODO : 현재화면 구하기 ( 커맨드창에서만 확인가능 )
+#     # test.controlDevice(None,"adb shell \"dumpsys activity | grep -E 'mCurrentFocus|mFocusedApp'\"")
+#
+#     # test.controlDevice(None,"adb shell am satrt -n com.android.settings/1000")
+#
+#     # filepath_new = "alsong_1.5.0.0_1cha.apk"
+#     # filepath_old = "alsong_4.0.8.0_with_report.apk"
+#     # filepath_old = "alsong_1.5.0.0_1cha.apk"
+#     # filepath_new = "AlsongAndroid-4.0.8.2_2cha.apk"
+#     # test.update(filepath_old, filepath_new)
+#
     # text = "controlDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicec" \
     #        "ontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDeviceco" \
     #        "ntrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecon" \
@@ -334,23 +354,26 @@ if __name__ == "__main__":
     #        "ontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDeviceco" \
     #        "ntrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevicecontrolDevice"
     # text = "https://docs.google.com/spreadsheets/d/1SeoAONbApwsWDIhGgFnJgeqoTHmZMO4WOfiQO34_y7s/edit#gid=1535606058"
+    # text = "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111122222"
+    #
+    # text = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012"
     # test.controlDevice(None,"adb shell input text " + text)
-
-
-    # time.sleep(30)
-    # filepath = "alsong_4.0.7.3.apk"
-    # test.run_info(filepath)
-    # test.install_apk(filepath)
-    # test.capture2image()
-    # try :
-    #     test.capture2viedo()
-    # except :
-    #     pass
-    # from cProfile import Profile
-    # from pstats import Stats
-    # profiler = Profile()
-    # profiler.runcall(test.capture2viedo)
-    # stats = Stats()
-    # stats.strip_dirs()
-    # stats.sort_stats('cumulative')
-    # stats.print_stats()
+#
+#
+#     # time.sleep(30)
+#     # filepath = "alsong_4.0.7.3.apk"
+#     # test.run_info(filepath)
+#     # test.install_apk(filepath)
+#     # test.capture2image()
+#     try :
+#         test.capture2viedo()
+#     except :
+#         pass
+#     # from cProfile import Profile
+#     # from pstats import Stats
+#     # profiler = Profile()
+#     # profiler.runcall(test.capture2viedo)
+#     # stats = Stats()
+#     # stats.strip_dirs()
+#     # stats.sort_stats('cumulative')
+#     # stats.print_stats()
