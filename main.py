@@ -1,6 +1,7 @@
 import sys
 import adb_default
 import main_ui
+import submain01
 from PyQt5 import QtWidgets
 
 
@@ -15,6 +16,7 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         # self.Install.clicked.connect(lambda: self.install_apk(filepath))
         self.captureImage.clicked.connect(self.capture2image)
         self.captureVideo.clicked.connect(self.capture2viedo)
+        self.ConnectedDevices.clicked.connect(lambda: submain01.SubWindow01.showSubWindow01(None))
         pass
 
 if __name__ == "__main__":

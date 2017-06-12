@@ -309,6 +309,10 @@ class default(object):
         os.system("ren test.mp4 " + changedName)
         os.system("move " + changedName + " " + cls.today)
 
+    @classmethod
+    def ConnectedDevices(cls):
+        pass
+
 if __name__ == "__main__":
     # '''
     # filepath = "alsong_4.0.7.3.apk"
@@ -325,6 +329,7 @@ if __name__ == "__main__":
     # filepath = "AlsongAndroid-4.0.8.2_2cha.apk"
     #
     # filepath ="AlzipAndroid-release-v1.3.7_2.apk"
+    filepath = "picnic-0.0.0.0-release.apk"
     #
     test = default()
     # test.run_info(filepath)
@@ -343,10 +348,14 @@ if __name__ == "__main__":
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
+    test.deleteData(None, "com.estsoft.picnic")
 
     # TODO : 언어 변경 화면으로 이동
     # test.controlDevice(None, "adb shell am start -n com.android.settings/.LanguageSettings")
-    test.goSetLanguagePage(None)
+    # test.goSetLanguagePage(None)
+
+    # TODO : 재부팅
+    # os.system("adb reboot")
 
     #TODO : 현재화면 구하기 ( 커맨드창에서만 확인가능 )
     # test.getCurrentActivity(None)
