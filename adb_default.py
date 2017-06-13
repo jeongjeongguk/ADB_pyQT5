@@ -329,13 +329,15 @@ if __name__ == "__main__":
     # filepath = "AlsongAndroid-4.0.8.2_2cha.apk"
     #
     # filepath ="AlzipAndroid-release-v1.3.7_2.apk"
-    filepath = "picnic-0.0.0.0-release.apk"
+    # filepath = "picnic-0.0.0.0-release.apk"
+    filepath = "picnic-0.0.0.1-release.apk"
     #
     test = default()
     # test.run_info(filepath)
-    # test.uninstall_apk(filepath)
+    test.uninstall_apk(filepath)
     # test.adb_kill()
-    # test.install_apk(filepath)
+    # os.system("timeout 5")
+    test.install_apk(filepath)
     # test.run_apk(filepath)
     # test.reinstall_apk(filepath)
     # test.check_install()
@@ -348,7 +350,7 @@ if __name__ == "__main__":
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
-    test.deleteData(None, "com.estsoft.picnic")
+    # test.deleteData(None, "com.estsoft.picnic")
 
     # TODO : 언어 변경 화면으로 이동
     # test.controlDevice(None, "adb shell am start -n com.android.settings/.LanguageSettings")

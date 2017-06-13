@@ -1,11 +1,12 @@
 import sys
 import adb_default
 import main_ui
+import adb_command_ui
 import submain01
 from PyQt5 import QtWidgets
 
 
-class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.default):
+class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_command_ui.Ui_Form, adb_default.default):
     def __init__(self):
         super(self.__class__, self).__init__()
         # self.connect()
@@ -16,8 +17,17 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         # self.Install.clicked.connect(lambda: self.install_apk(filepath))
         self.captureImage.clicked.connect(self.capture2image)
         self.captureVideo.clicked.connect(self.capture2viedo)
-        self.ConnectedDevices.clicked.connect(lambda: submain01.SubWindow01.showSubWindow01(None))
-        pass
+        self.ConnectedDevices.clicked.connect(self.showSubForm01)
+
+    def showSubForm01(self):
+        '''
+        https://www.google.co.kr/search?q=how+to+show+sub+form+in+main+window+button+at+python3+pyqt5&oq=how+to+show+sub+form+in+main+window+button+at+python3+pyqt5&aqs=chrome..69i57.30079j0j7&sourceid=chrome&ie=UTF-8
+        https://stackoverflow.com/questions/27567208/how-do-i-open-sub-window-after-i-click-on-button-on-main-screen-in-pyqt4
+        :return:
+        '''
+        subForm = submain01.SubWindow01(self)
+        subForm.show()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
@@ -25,5 +35,6 @@ if __name__ == "__main__":
     ui = MainWindow()
     ui.setupUi(Main)
     ui.connect()
+    # ui_sub =
     Main.show()
     sys.exit(app.exec_())
