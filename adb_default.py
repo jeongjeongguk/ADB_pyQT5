@@ -329,15 +329,17 @@ if __name__ == "__main__":
     # filepath = "AlsongAndroid-4.0.8.2_2cha.apk"
     #
     # filepath ="AlzipAndroid-release-v1.3.7_2.apk"
+
+    # filepath = "Picnic-0.0.0.0-debug.apk"
     # filepath = "picnic-0.0.0.0-release.apk"
     filepath = "picnic-0.0.0.1-release.apk"
     #
     test = default()
     # test.run_info(filepath)
-    test.uninstall_apk(filepath)
+    # test.uninstall_apk(filepath)
     # test.adb_kill()
     # os.system("timeout 5")
-    test.install_apk(filepath)
+    # test.install_apk(filepath)
     # test.run_apk(filepath)
     # test.reinstall_apk(filepath)
     # test.check_install()
@@ -361,6 +363,28 @@ if __name__ == "__main__":
 
     #TODO : 현재화면 구하기 ( 커맨드창에서만 확인가능 )
     # test.getCurrentActivity(None)
+
+    #TODO : 패키지 버전 확인
+    packageName = "com.estsoft.picnic"
+    test = cmd.check_output("adb shell \"dumpsys package {} | grep 'versionName'\"".format(packageName),
+                            stderr=cmd.STDOUT, shell=True)
+    test = test.decode("utf-8")
+    ctypes.windll.user32.MessageBoxW(0,  "버전 : {}".format(test), packageName, 0)
+
+    #TODO : 현재화면 프래그먼트 확인
+    # "adb shell dumpsys activity com.android.settings"
+    # test = cmd.check_output("adb shell \"dumpsys activity com.android.settings\"",
+    #                         stderr=cmd.STDOUT, shell=True)
+    # print(test)
+
+    #TODO : 메모리상태 확인
+    # "adb shell dumpsys meminfo android.my.app"
+    # pakage_name = "com.estsoft.alsong"
+    # test = cmd.check_output("adb shell \"dumpsys meminfo {}\"".format(pakage_name),
+    #                         stderr=cmd.STDOUT, shell=True)
+    # test = test.decode("utf-8")
+    # ctypes.windll.user32.MessageBoxW(0, test, "메모리 정보 :  {}".format(pakage_name), 0)
+
 
     # test.controlDevice(None,"adb shell am satrt -n com.android.settings/1000")
     #
