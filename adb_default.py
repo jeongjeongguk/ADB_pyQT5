@@ -208,10 +208,99 @@ class default(object):
 
     @staticmethod
     def getCurrentActivity(self):
+        # "adb shell dumpsys activity | grep -i run"
         test = cmd.check_output("adb shell \"dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'\"",
                                 stderr=cmd.STDOUT, shell=True)
         test = test.decode("utf-8")
         ctypes.windll.user32.MessageBoxW(0, test, "현재 화면정보", 0)
+
+    @staticmethod
+    def getAPKVersion(self, pakage_name):
+        '''
+        This function is to get selected package's version.
+        :param self:
+        :param pakage_name:
+        '''
+        test = cmd.check_output("adb shell \"dumpsys package {} | grep 'versionName'\"".format(pakage_name),
+                                stderr=cmd.STDOUT, shell=True)
+        test = test.decode("utf-8")
+        ctypes.windll.user32.MessageBoxW(0, "버전 : {}".format(test), pakage_name, 0)
+
+    @staticmethod
+    def getAPKUsingMemmory(self, pakage_name):
+        '''
+        순간적인 메모리 사용량 확인하는 함수
+        :param self:
+        :param pakage_name:
+        '''
+        os.system("start /B start cmd.exe @cmd /k "
+                  "adb shell \"dumpsys meminfo {}\"".format(pakage_name))
+        # 주석처리된 부분은 QT다이얼로그로 띄우는것. 스페이스간격이 보기 안좋음. 그냥 cmd창 새로 열어서 거기서 보는걸로.
+        # string = cmd.check_output("adb shell \"dumpsys meminfo {}\"".format(pakage_name),
+        #                         stderr=cmd.STDOUT, shell=True)
+        # string = string.decode("utf-8")
+        # print(string)
+        # from PyQt5 import QtWidgets
+        # app = QtWidgets.QApplication([])
+        #
+        # notifyDialog = QtWidgets.QDialog()
+        # notifyDialog.resize(1000, 300)
+        # layout = QtWidgets.QVBoxLayout(notifyDialog)
+        # scroll = QtWidgets.QScrollArea()
+        # scroll.setWidgetResizable(True)
+        # layout.addWidget(scroll)
+        #
+        # scrollContents = QtWidgets.QWidget()
+        # layout = QtWidgets.QVBoxLayout(scrollContents)
+        # scroll.setWidget(scrollContents)
+        #
+        # label = QtWidgets.QLabel()
+        # label.setText(string)
+        #
+        # layout.addWidget(label)
+        #
+        # notifyDialog.show()
+        # notifyDialog.raise_()
+        # app.exec_()
+
+    @staticmethod
+    def getAPKActivityStack(self, pakage_name):
+        '''
+        :param self:
+        :param pakage_name:
+        '''
+
+        # '''http://mydevromance.tistory.com/16" 참조'''
+        # "adb shell dumpsys activity com.estsoft.alsong"
+        # os.system("start /B start cmd.exe @cmd /k "
+        # "adb shell \"dumpsys activity {}\"".format(pakage_name))
+        string = cmd.check_output("adb shell \"dumpsys activity {}\"".format(pakage_name),
+                                stderr=cmd.STDOUT, shell=True)
+        string = string.decode("utf-8")
+        print(string)
+        from PyQt5 import QtWidgets
+        app = QtWidgets.QApplication([])
+
+        notifyDialog = QtWidgets.QDialog()
+        notifyDialog.resize(1000, 300)
+        layout = QtWidgets.QVBoxLayout(notifyDialog)
+        scroll = QtWidgets.QScrollArea()
+        scroll.setWidgetResizable(True)
+        layout.addWidget(scroll)
+
+        scrollContents = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(scrollContents)
+        scroll.setWidget(scrollContents)
+
+        label = QtWidgets.QLabel()
+        label.setText(string)
+
+        layout.addWidget(label)
+
+        notifyDialog.show()
+        notifyDialog.raise_()
+        app.exec_()
+
 
     @staticmethod
     def goSetLanguagePage(self):
@@ -361,30 +450,21 @@ if __name__ == "__main__":
     # TODO : 재부팅
     # os.system("adb reboot")
 
-    #TODO : 현재화면 구하기 ( 커맨드창에서만 확인가능 )
+    #TODO : 현재화면 구하기
     # test.getCurrentActivity(None)
 
     #TODO : 패키지 버전 확인
-    packageName = "com.estsoft.picnic"
-    test = cmd.check_output("adb shell \"dumpsys package {} | grep 'versionName'\"".format(packageName),
-                            stderr=cmd.STDOUT, shell=True)
-    test = test.decode("utf-8")
-    ctypes.windll.user32.MessageBoxW(0,  "버전 : {}".format(test), packageName, 0)
+    # packageName = "com.estsoft.picnic"
+    # test.getAPKVersion(None,packageName) #TODO : 처음연결시에, 반환되는 문자열이 연결정보임. 이거 필터링필요.
 
-    #TODO : 현재화면 프래그먼트 확인
-    # "adb shell dumpsys activity com.android.settings"
-    # test = cmd.check_output("adb shell \"dumpsys activity com.android.settings\"",
-    #                         stderr=cmd.STDOUT, shell=True)
-    # print(test)
+    #TODO : 패키지의 activity 호출 스택 확인
+    packageName = "com.estsoft.alsong"
+    test.getAPKActivityStack(None,packageName)
 
-    #TODO : 메모리상태 확인
-    # "adb shell dumpsys meminfo android.my.app"
-    # pakage_name = "com.estsoft.alsong"
-    # test = cmd.check_output("adb shell \"dumpsys meminfo {}\"".format(pakage_name),
-    #                         stderr=cmd.STDOUT, shell=True)
-    # test = test.decode("utf-8")
-    # ctypes.windll.user32.MessageBoxW(0, test, "메모리 정보 :  {}".format(pakage_name), 0)
 
+    #TODO : 메모리상태 확인packageName
+    # packageName = "com.estsoft.alsong"
+    # test.getAPKUsingMemmory(None, packageName)
 
     # test.controlDevice(None,"adb shell am satrt -n com.android.settings/1000")
     #
