@@ -17,7 +17,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
     def showSubWindow01(self):
         app = QtWidgets.QApplication(sys.argv)
         Sub01 = QtWidgets.QMainWindow()
-        Sub01 = QtWidgets.QMdiSubWindow()
+        # Sub01 = QtWidgets.QMdiSubWindow()
         ui = SubWindow01()
         ui.setupUi(Sub01)
         ui.connect()

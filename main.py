@@ -6,7 +6,7 @@ import submain01
 from PyQt5 import QtWidgets
 
 
-class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_command_ui.Ui_Form, adb_default.default):
+class MainWindow(QtWidgets.QMdiSubWindow , QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_command_ui.Ui_Form, adb_default.default):
     def __init__(self):
         super(self.__class__, self).__init__()
         # self.connect()
