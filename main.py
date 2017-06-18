@@ -11,6 +11,7 @@ class MainWindow(QtWidgets.QMdiSubWindow , QtWidgets.QMainWindow, main_ui.Ui_Mai
         super(self.__class__, self).__init__()
         # self.connect()
         self.makedir()
+        self.window2 = None # 이 부분이 있어야 클릭시 메인창이 안닫히고, subwinow가 새로 열림
 
     def connect(self):
         # filepath = "alsong_4.0.7.3.apk"
@@ -19,14 +20,19 @@ class MainWindow(QtWidgets.QMdiSubWindow , QtWidgets.QMainWindow, main_ui.Ui_Mai
         self.captureVideo.clicked.connect(self.capture2viedo)
         self.ConnectedDevices.clicked.connect(self.showSubForm01)
 
+    # def showSubForm01(self):
+    #     '''
+    #     https://www.google.co.kr/search?q=how+to+show+sub+form+in+main+window+button+at+python3+pyqt5&oq=how+to+show+sub+form+in+main+window+button+at+python3+pyqt5&aqs=chrome..69i57.30079j0j7&sourceid=chrome&ie=UTF-8
+    #     https://stackoverflow.com/questions/27567208/how-do-i-open-sub-window-after-i-click-on-button-on-main-screen-in-pyqt4
+    #     :return:
+    #     '''
+    #     subForm = submain01.SubWindow01(self)
+    #     subForm.show()
+
     def showSubForm01(self):
-        '''
-        https://www.google.co.kr/search?q=how+to+show+sub+form+in+main+window+button+at+python3+pyqt5&oq=how+to+show+sub+form+in+main+window+button+at+python3+pyqt5&aqs=chrome..69i57.30079j0j7&sourceid=chrome&ie=UTF-8
-        https://stackoverflow.com/questions/27567208/how-do-i-open-sub-window-after-i-click-on-button-on-main-screen-in-pyqt4
-        :return:
-        '''
-        subForm = submain01.SubWindow01(self)
-        subForm.show()
+        if self.window2 is None:
+            self.window2 = submain01.SubWindow01(self)
+        self.window2.show()
 
 
 if __name__ == "__main__":
