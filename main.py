@@ -41,6 +41,5 @@ if __name__ == "__main__":
     ui = MainWindow()
     ui.setupUi(Main)
     ui.connect()
-    # ui_sub =
     Main.show()
     sys.exit(app.exec_())

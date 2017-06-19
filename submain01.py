@@ -13,20 +13,17 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
+        self.connect()
 
     def connect(self):
-        pass
-
-    def showSubWindow01(self):
-        app = QtWidgets.QApplication(sys.argv)
-        Sub01 = QtWidgets.QMainWindow()
-        # Sub01 = QtWidgets.QMdiSubWindow()
-        ui = SubWindow01()
-        ui.setupUi(Sub01)
-        ui.connect()
-        Sub01.show()
-        sys.exit(app.exec_())
-        # self.close()
+        self.toolButton.clicked.connect(self.SelectSetupFile)
+        self.pushButton_2.clicked.connect(lambda : self.install_apk(self.lineEdit.text()))
 
 if __name__ == "__main__":
-    SubWindow01.showSubWindow01(None)
+    app = QtWidgets.QApplication(sys.argv)
+    Main = QtWidgets.QMainWindow()
+    ui = SubWindow01()
+    ui.setupUi(Main)
+    ui.connect()
+    Main.show()
+    sys.exit(app.exec_())

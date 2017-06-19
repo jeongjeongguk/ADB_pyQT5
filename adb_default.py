@@ -37,9 +37,12 @@ class default(object):
 
     @classmethod
     def install_apk(cls, filepath): # def install_apk(self, filepath, option): # option : r, b, ...
+        cls.run_info(filepath)
+        cls.uninstall_apk(filepath)
         if os.getcwd() != cls.company: os.chdir(cls.company)
         # TODO : error: more than one device/emulator 예외처리필요
         os.system("adb install -r " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
+        print(filepath)
         time.sleep(10)
         cls.run_apk(filepath)
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
@@ -349,7 +352,8 @@ class default(object):
         changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
         os.system("ren test.png "+ changedName)
         time.sleep(1)
-        os.system("move " + changedName + " " +cls.today) # 이거 안됨
+        os.system("move " + changedName + " " +cls.today) # 이거 안됨????
+        os.system("start " + cls.today)
 
     @classmethod
     def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
@@ -397,12 +401,30 @@ class default(object):
         os.system("cd %s"%path)
         os.system("ren test.mp4 " + changedName)
         os.system("move " + changedName + " " + cls.today)
+        os.system("start " + cls.today)
 
     @classmethod
     def ConnectedDevices(cls):
         pass
 
+
+    def SelectSetupFile(self):
+        '''
+        TODO: return으로 선택했던 apk경로, apk이름을 리턴할것. ( 이전에 설치했던 목록화면 표시위해 )
+        :param self:
+        :return:
+        '''
+        from PyQt5 import QtWidgets
+        self.fileDialog = QtWidgets.QFileDialog()
+        select = self.fileDialog.getOpenFileUrl(filter='*.apk')
+        path = str(select[0]).replace("PyQt5.QtCore.QUrl('file:///", "")
+        path = path.replace("')", "")
+        self.lineEdit.setText(path)
+        # print(path)
+        return  path
+
 if __name__ == "__main__":
+    from PyQt5 import QtWidgets
     # '''
     # filepath = "alsong_4.0.7.3.apk"
     # filepath = "a.apk"
@@ -421,7 +443,8 @@ if __name__ == "__main__":
 
     # filepath = "Picnic-0.0.0.0-debug.apk"
     # filepath = "picnic-0.0.0.0-release.apk"
-    filepath = "picnic-0.0.0.1-release.apk"
+    # filepath = "picnic-0.0.0.1-release.apk"
+    filepath = "app-debug.apk"
     #
     test = default()
     # test.run_info(filepath)
@@ -438,6 +461,7 @@ if __name__ == "__main__":
     # filepath_new = "teamUP-teamup_store-release.apk"
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
     # test.update(filepath_old,filepath_new)
+
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
@@ -458,8 +482,8 @@ if __name__ == "__main__":
     # test.getAPKVersion(None,packageName) #TODO : 처음연결시에, 반환되는 문자열이 연결정보임. 이거 필터링필요.
 
     #TODO : 패키지의 activity 호출 스택 확인
-    packageName = "com.estsoft.alsong"
-    test.getAPKActivityStack(None,packageName)
+    # packageName = "com.estsoft.alsong"
+    # test.getAPKActivityStack(None,packageName)
 
 
     #TODO : 메모리상태 확인packageName
@@ -501,10 +525,10 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
-    # try :
-    #     test.capture2viedo()
-    # except :
-    #     pass
+    try :
+        test.capture2viedo()
+    except :
+        pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()

@@ -127,6 +127,20 @@ class Ui_Form(object):
         self.pushButton_7.setText(_translate("Form", "날짜변경"))
         self.pushButton_8.setText(_translate("Form", "도움말"))
 
+    #     self.connect()
+    #
+    # def connect(self):
+    #     self.toolButton.clicked.connect(self.SelectSetupFile) #toolButton
+    #     pass
+    #
+    # def SelectSetupFile(self):
+    #     self.fileDialog = QtWidgets.QFileDialog()
+    #     select = self.fileDialog.getOpenFileUrl(filter='*.apk')
+    #     path = str(select[0]).replace("PyQt5.QtCore.QUrl('file:///", "")
+    #     path = path.replace("')", "")
+    #     # self.lineEdit.setText(path)
+    #     print(path)
+
 
 if __name__ == "__main__":
     import sys
