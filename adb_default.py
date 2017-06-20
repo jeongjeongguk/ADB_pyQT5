@@ -39,7 +39,7 @@ class default(object):
     def install_apk(cls, filepath): # def install_apk(self, filepath, option): # option : r, b, ...
         cls.run_info(filepath)
         cls.uninstall_apk(filepath)
-        if os.getcwd() != cls.company: os.chdir(cls.company)
+        # if os.getcwd() != cls.company: os.chdir(cls.company)
         # TODO : error: more than one device/emulator 예외처리필요
         os.system("adb install -r " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
         print(filepath)
@@ -51,7 +51,7 @@ class default(object):
     @classmethod
     def run_info(cls, filepath):
         cls.filepath = filepath
-        if os.getcwd() != cls.company: os.chdir(cls.company)
+        # if os.getcwd() != cls.company: os.chdir(cls.company)
         test = cmd.check_output("aapt dump badging " + filepath + " | findstr package",
                                 stderr=cmd.STDOUT, shell=True)
         cls.packageName = test.decode("utf-8").split(" ")[1].split("'")[1]
@@ -417,7 +417,10 @@ class default(object):
                 (0, "영상기록을 시작합니다.\n확인 : 영상기록 PC전송\n취소 : 영상기록삭제", "영상기록중", 1)
             if RecordCnt == 1: # 확인 : 기기 -> PC 로 영상전송
                 os.system("TASKKILL /F /IM cmd.exe /T")
-                # os.system("TASKKILL /F /FI \"WINDOWTITLE eq C:\\WINDOWS\\system32\\cmd.exe - adb shell *\" /T")
+                # powershell 기반으로 main.exe가 실행되면 괜찮음?? win7 x86 sp1 ent / win10 x64 ent 에서 g5 7.0으로 확인
+                # os.system("TASKKILL /F /FI "
+                #           "\"WINDOWTITLE eq C:\WINDOWS\system32\cmd.exe - "
+                #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4\" /T")
                 time.sleep(1)
                 cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
             else : # 취소 : 기기에서 삭제
@@ -486,7 +489,7 @@ class default(object):
         help_text = \
             "출처 : http://www.dreamy.pe.kr/zbxe/CodeClip/163972 \n" \
             "[Usage]\n" \
-            "~~~"
+            "1. https://developer.android.com/studio/run/oem-usb.html?hl=ko 에서 기기별드라이버설치"
 
         ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", 0)
 
@@ -532,7 +535,7 @@ if __name__ == "__main__":
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
     # test.update(filepath_old,filepath_new)
     # test.show_help_subform01(None)
-    test.list_ins_program(None)
+    # test.list_ins_program(None)
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
@@ -596,10 +599,10 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
-    # try :
-    #     test.capture2viedo()
-    # except :
-    #     pass
+    try :
+        test.capture2viedo()
+    except :
+        pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
