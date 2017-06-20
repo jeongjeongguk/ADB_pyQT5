@@ -5,10 +5,10 @@ import subprocess as cmd
 import time
 from xml.dom.minidom import parse
 
-
 class default(object):
     company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
     home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
+
     def __init__(self):
         self.filepath = ""
         self.packageName = ""
@@ -25,10 +25,10 @@ class default(object):
         try:
             # \r\n 제거는 윈도우10 x64 Enterprise 1607 기준
             List_misi = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True) \
-                                            .decode("utf-8") \
-                                            .replace("List of devices attached", "") \
-                                            .replace("\r\n", "") \
-                                            .replace("device", "")
+                .decode("utf-8") \
+                .replace("List of devices attached", "") \
+                .replace("\r\n", "") \
+                .replace("device", "")
             cls.ConnectDevices = List_misi.split("	")
             cls.ConnectDevices.remove("")
             return len(cls.ConnectDevices)
@@ -59,6 +59,7 @@ class default(object):
             test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
                                     stderr=cmd.STDOUT, shell=True)
             cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
+            return cls.packageName, cls.startActivity
         except:
             # TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
             # ?????? 언제 안구해지지? 런쳐액티버티 가렸을때 못찾음 -> 파싱으로 찾기
@@ -149,8 +150,8 @@ class default(object):
                 time.sleep(30)
                 CHK_imsi = {}
                 CHK_start = \
-                cmd.check_output("adb shell pm list package -f " + cls.packageName, stderr=cmd.STDOUT, shell=True) \
-                                    .decode("utf-8").split("\r\n")
+                    cmd.check_output("adb shell pm list package -f " + cls.packageName, stderr=cmd.STDOUT, shell=True) \
+                        .decode("utf-8").split("\r\n")
                 CHK_start.remove('')
                 for imsi in range(0,len(CHK_start)):
                     CHK_start[imsi] = CHK_start[imsi].split(":")[1]
@@ -198,14 +199,16 @@ class default(object):
     # command set : "adb reboot", "adb start-server", "adb kill-server", ... etc
     @staticmethod
     def controlDevice(self, command):
-        os.system(command)
+        os.system("adb " + command)
 
-    @staticmethod
-    def deleteData(self, package_name):
-        try :
-            os.system("adb shell pm clear "+ package_name)
+    @classmethod
+    # staticmethod를 submain01에서 불러다가 쓸려니까 언제 호출되는지 모르겠지만, 응답이 너무 느려서 변경함
+    def deleteData(cls, filepath):
+        cls.run_info(filepath)
+        try:
+            os.system("adb shell pm clear " + cls.packageName)
             # test = cmd.check_output("adb shell pm clear " + package_name, stderr=cmd.STDOUT, shell=True)
-            ctypes.windll.user32.MessageBoxW(0, package_name + "의 앱데이터가 삭제되었습니다.", package_name, 0)
+            ctypes.windll.user32.MessageBoxW(0, cls.packageName + "의 앱데이터가 삭제되었습니다.", cls.packageName, 0)
         except:
             ctypes.windll.user32.MessageBoxW(0, "패키지명으로 설치된 앱이 확인되지 않습니다.", "패키지명 확인필요", 0)
 
@@ -216,6 +219,7 @@ class default(object):
                                 stderr=cmd.STDOUT, shell=True)
         test = test.decode("utf-8")
         ctypes.windll.user32.MessageBoxW(0, test, "현재 화면정보", 0)
+
 
     @staticmethod
     def getAPKVersion(self, pakage_name):
@@ -278,7 +282,7 @@ class default(object):
         # os.system("start /B start cmd.exe @cmd /k "
         # "adb shell \"dumpsys activity {}\"".format(pakage_name))
         string = cmd.check_output("adb shell \"dumpsys activity {}\"".format(pakage_name),
-                                stderr=cmd.STDOUT, shell=True)
+                                  stderr=cmd.STDOUT, shell=True)
         string = string.decode("utf-8")
         print(string)
         from PyQt5 import QtWidgets
@@ -309,6 +313,25 @@ class default(object):
     def goSetLanguagePage(self):
         os.system("adb shell am start -n com.android.settings/.LanguageSettings")
 
+    @staticmethod
+    def goSetTimePage(self):
+        # 4.4, 7.0 기기에서는 아래커맨드 안된다
+        # os.system("adb shell am start -n com.android.settings/.DateTimeSettingsSetupWizard")
+        # os.system("adb shell am start -n com.android.settings/.Settings\$DateTimeSettings")
+        # os.system("adb shell am start -n com.android.settings/.DateTimeSettings")
+        os.system("adb shell am start -n com.android.settings/.Settings\$DateTimeSettingsActivity")
+        pass
+
+    @staticmethod
+    def goPowerUsageSummaryPage(self):
+        # am start -S com.android.settings/.Settings\$PowerUsageSummaryActivity
+        # am start -a android.intent.action.POWER_USAGE_SUMMARY
+        os.system("adb shell am start -n com.android.settings/.Settings\$PowerUsageSummaryActivity")
+
+    @staticmethod
+    def goDevelopPage(self):
+        os.system("adb shell am start -S com.android.settings/.Settings\$DevelopmentSettingsActivity")
+
     @classmethod
     def makedir(cls):
         cls.today = datetime.datetime.now().strftime("%y%m%d")
@@ -338,6 +361,11 @@ class default(object):
         # print(cls.deviceData)
 
     @classmethod
+    def open_capture_folder(cls):
+        cls.check_time()
+        os.system("start " + cls.today)
+
+    @classmethod
     def capture2image(cls):#TODO : 기기 잠금화면 상태유무 확인후, 잠금해제 메소드 추가 필요
         cls.check_connect()
         os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
@@ -363,7 +391,7 @@ class default(object):
             # print(ConnectedDevicesCnt)
             # print(cls.deviceData)
             ctypes.windll.user32.MessageBoxW \
-            (0, "현재 %i대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n%s" %(ConnectedDevicesCnt, cls.deviceData), "연결된 기기", 0)
+                (0, "현재 %i대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n%s" %(ConnectedDevicesCnt, cls.deviceData), "연결된 기기", 0)
         else :
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
@@ -423,6 +451,48 @@ class default(object):
         # print(path)
         return  path
 
+    @staticmethod
+    def list_ins_program(self):
+        # adb shell pm list package
+        string = cmd.check_output("adb shell pm list package", stderr=cmd.STDOUT, shell=True)
+        string = string.decode("utf-8")
+        print(string)
+        from PyQt5 import QtWidgets
+        app = QtWidgets.QApplication([])
+
+        notifyDialog = QtWidgets.QDialog()
+        notifyDialog.resize(1000, 300)
+        layout = QtWidgets.QVBoxLayout(notifyDialog)
+        scroll = QtWidgets.QScrollArea()
+        scroll.setWidgetResizable(True)
+        layout.addWidget(scroll)
+
+        scrollContents = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout(scrollContents)
+        scroll.setWidget(scrollContents)
+
+        label = QtWidgets.QLabel()
+        label.setText(string)
+
+        layout.addWidget(label)
+
+        notifyDialog.show()
+        notifyDialog.raise_()
+        app.exec_()
+        pass
+
+    @staticmethod
+    def show_help_subform01(self):
+        help_text = \
+            "출처 : http://www.dreamy.pe.kr/zbxe/CodeClip/163972 \n" \
+            "[Usage]\n" \
+            "~~~"
+
+        ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", 0)
+
+        # http://pythoncentral.io/pyside-pyqt-tutorial-the-qlistwidget/
+        # https://stackoverflow.com/questions/31380457/add-right-click-functionality-to-listwidget-in-pyqt4
+
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
     # '''
@@ -461,7 +531,8 @@ if __name__ == "__main__":
     # filepath_new = "teamUP-teamup_store-release.apk"
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
     # test.update(filepath_old,filepath_new)
-
+    # test.show_help_subform01(None)
+    test.list_ins_program(None)
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
@@ -482,7 +553,7 @@ if __name__ == "__main__":
     # test.getAPKVersion(None,packageName) #TODO : 처음연결시에, 반환되는 문자열이 연결정보임. 이거 필터링필요.
 
     #TODO : 패키지의 activity 호출 스택 확인
-    # packageName = "com.estsoft.alsong"
+    # packageName = "com.android.settings"
     # test.getAPKActivityStack(None,packageName)
 
 
@@ -525,10 +596,10 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
-    try :
-        test.capture2viedo()
-    except :
-        pass
+    # try :
+    #     test.capture2viedo()
+    # except :
+    #     pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
