@@ -31,7 +31,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    Main = QtWidgets.QMainWindow()
+    Main = QtWidgets.QWidget()
     ui = SubWindow01()
     ui.setupUi(Main)
     ui.connect()

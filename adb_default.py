@@ -536,6 +536,7 @@ if __name__ == "__main__":
     # test.update(filepath_old,filepath_new)
     # test.show_help_subform01(None)
     # test.list_ins_program(None)
+    test.goDevelopPage(None)
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
@@ -599,10 +600,10 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
-    try :
-        test.capture2viedo()
-    except :
-        pass
+    # try :
+    #     test.capture2viedo()
+    # except :
+    #     pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
