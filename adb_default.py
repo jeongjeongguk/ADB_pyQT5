@@ -487,6 +487,8 @@ class default(object):
     @staticmethod
     def show_help_subform01(self):
         help_text = \
+            "def controlDevice(self, command):\n" \
+            "   os.system(\"adb \" + command)\n" \
             "출처 : http://www.dreamy.pe.kr/zbxe/CodeClip/163972 \n" \
             "[Usage]\n" \
             "1. https://developer.android.com/studio/run/oem-usb.html?hl=ko 에서 기기별드라이버설치"
