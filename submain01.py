@@ -20,7 +20,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         self.pushButton.clicked.connect(
             lambda: self.label_4.setText(_translate("Form", self.run_info(self.lineEdit.text())[1])))
         self.pushButton_2.clicked.connect(lambda: self.install_apk(self.lineEdit.text()))
-        self.pushButton_3.clicked.connect(lambda: self.deleteData(self.lineEdit.text()))
+        self.pushButton_3.clicked.connect(lambda: self.deleteData("path", self.lineEdit.text()))
         self.pushButton_4.clicked.connect(lambda: self.run_apk(self.lineEdit.text()))
         self.pushButton_5.clicked.connect(lambda: self.controlDevice(None, "reboot"))
         self.pushButton_6.clicked.connect(lambda: self.goSetLanguagePage(None))

@@ -38,7 +38,7 @@ class default(object):
     @classmethod
     def install_apk(cls, filepath): # def install_apk(self, filepath, option): # option : r, b, ...
         cls.run_info(filepath)
-        cls.uninstall_apk(filepath)
+        cls.uninstall_apk("path",filepath)
         # if os.getcwd() != cls.company: os.chdir(cls.company)
         # TODO : error: more than one device/emulator 예외처리필요
         os.system("adb install -r " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
@@ -71,8 +71,11 @@ class default(object):
         os.system("adb shell am start -n " + cls.packageName +"/"+cls.startActivity)
 
     @classmethod
-    def uninstall_apk(cls,filepath):
-        cls.run_info(filepath)
+    def uninstall_apk(cls, *args):
+        if args[0] == "path" :
+            cls.run_info(args[1])
+        elif args[0] == "packageName" :
+            cls.packageName = args[1]
         os.system("adb uninstall " + cls.packageName)
         cls.check_install()
 
@@ -100,6 +103,20 @@ class default(object):
             except:
                 ctypes.windll.user32.MessageBoxW \
                     (0, "선택한 설치파일의 경로 및 파일명을 확인해주세요.\n(영문,숫자만 가능)", "설치확인", 0)
+
+    @classmethod
+    def link2release(cls, *args):
+        if args[0] == "path" :
+            cls.run_info(args[1])
+        elif args[0] == "packageName" :
+            cls.packageName = args[1]
+
+        os.system(
+            "adb "
+            "shell am start -a android.intent.action.VIEW -d "
+            "\"https://play.google.com/store/apps/details?id=\""
+            + cls.packageName
+        )
 
     @classmethod
     def update(cls, filepath_old, filepath_new): #TODO: devices arg 전달필요
@@ -203,8 +220,12 @@ class default(object):
 
     @classmethod
     # staticmethod를 submain01에서 불러다가 쓸려니까 언제 호출되는지 모르겠지만, 응답이 너무 느려서 변경함
-    def deleteData(cls, filepath):
-        cls.run_info(filepath)
+    def deleteData(cls, *args):
+        if args[0] == "path" :
+            cls.run_info(args[1])
+        elif args[0] == "packageName" :
+            cls.packageName = args[1]
+
         try:
             os.system("adb shell pm clear " + cls.packageName)
             # test = cmd.check_output("adb shell pm clear " + package_name, stderr=cmd.STDOUT, shell=True)
@@ -357,16 +378,18 @@ class default(object):
                                      stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
         model = cmd.check_output("adb shell " + select_device + "getprop ro.product.model",
                                  stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
-        cls.deviceData = model + "_" + os_ver + "_API" + api_level
+        cls.deviceData = model + "_" + os_ver + "_API_" + api_level
         # print(cls.deviceData)
 
     @classmethod
     def open_capture_folder(cls):
+        cls.makedir()
         cls.check_time()
         os.system("start " + cls.today)
 
     @classmethod
     def capture2image(cls):#TODO : 기기 잠금화면 상태유무 확인후, 잠금해제 메소드 추가 필요
+        cls.makedir()
         cls.check_connect()
         os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
         os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
@@ -385,6 +408,7 @@ class default(object):
 
     @classmethod
     def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
+        cls.makedir()
         ConnectedDevicesCnt = cls.check_connect()
         if ConnectedDevicesCnt > 0 :
             cls.device_info(None)
@@ -395,11 +419,11 @@ class default(object):
         else :
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
-        # TODO : 4.4 이상일때에만 영상녹화하고, 메시지다이얼로그의 '녹화끝','취소'리턴받으면 녹화중지시키고 영상뺴오기
-        device_api = cls.deviceData.split("_")[1]
+        # TODO : API 19 이상일때에만 영상녹화하고, 메시지다이얼로그의 '녹화끝','취소'리턴받으면 녹화중지시키고 영상뺴오기
+        device_api = cls.deviceData.split("_")[3]
         device_api = device_api.split("I")[0].replace("\r","")
-        videoEnableOSver = 4.4
-        # print("연결된 기기의 OS 버전은 " + device_api)
+        videoEnableOSver = 19
+        # print("연결된 기기의 OS API은 " + device_api)
         if float(device_api) < videoEnableOSver :
             ctypes.windll.user32.MessageBoxW(0, "선택된 기기에서는 녹화가 되지 않습니다.", "녹화지원안됨", 0)
         else:
@@ -409,8 +433,13 @@ class default(object):
             except :
                 pass
             # New window cmd : start cmd/k command
+
             os.system("start /B start cmd.exe @cmd /k "
                       "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
+
+            # os.system("start /B start powershell.exe @powershell /k "
+            #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
+
             path = os.getcwd().replace("\\","/").replace("\r","").replace("\n","")
             time.sleep(1)
             RecordCnt = ctypes.windll.user32.MessageBoxW \
@@ -459,30 +488,44 @@ class default(object):
         # adb shell pm list package
         string = cmd.check_output("adb shell pm list package", stderr=cmd.STDOUT, shell=True)
         string = string.decode("utf-8")
-        print(string)
-        from PyQt5 import QtWidgets
-        app = QtWidgets.QApplication([])
+        string = string.replace("package:","")
+        Installed_app_List = string.split("\r\n")
+        test_list = []
+        for Cnt in range(len(Installed_app_List)):
+            if "estsoft" in Installed_app_List[Cnt]:
+                test_list.append(Installed_app_List[Cnt])
+            else :
+                pass
 
-        notifyDialog = QtWidgets.QDialog()
-        notifyDialog.resize(1000, 300)
-        layout = QtWidgets.QVBoxLayout(notifyDialog)
-        scroll = QtWidgets.QScrollArea()
-        scroll.setWidgetResizable(True)
-        layout.addWidget(scroll)
+        # print(Installed_app_List) # 설치된 모든 패키지 리스트
+        # print(test_list)
 
-        scrollContents = QtWidgets.QWidget()
-        layout = QtWidgets.QVBoxLayout(scrollContents)
-        scroll.setWidget(scrollContents)
+        # 설치된 패키지들 바로 확인하고 싶을때에만 사용
+        # print(string) # 설치된 모든 패키지들이 하나의 스트링인 상태
+        # from PyQt5 import QtWidgets
+        # app = QtWidgets.QApplication([])
+        #
+        # notifyDialog = QtWidgets.QDialog()
+        # notifyDialog.resize(1000, 300)
+        # layout = QtWidgets.QVBoxLayout(notifyDialog)
+        # scroll = QtWidgets.QScrollArea()
+        # scroll.setWidgetResizable(True)
+        # layout.addWidget(scroll)
+        #
+        # scrollContents = QtWidgets.QWidget()
+        # layout = QtWidgets.QVBoxLayout(scrollContents)
+        # scroll.setWidget(scrollContents)
+        #
+        # label = QtWidgets.QLabel()
+        # label.setText(string)
+        #
+        # layout.addWidget(label)
+        #
+        # notifyDialog.show()
+        # notifyDialog.raise_()
+        # app.exec_()
+        return test_list
 
-        label = QtWidgets.QLabel()
-        label.setText(string)
-
-        layout.addWidget(label)
-
-        notifyDialog.show()
-        notifyDialog.raise_()
-        app.exec_()
-        pass
 
     @staticmethod
     def show_help_subform01(self):
@@ -494,6 +537,17 @@ class default(object):
             "1. https://developer.android.com/studio/run/oem-usb.html?hl=ko 에서 기기별드라이버설치"
 
         ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", 0)
+
+    @staticmethod
+    def show_help_subform02(self):
+         help_text = \
+             "리스트에서, 앱 패키지명을 선택후,\n" \
+             "앱삭제/데이터삭제/출시버전 버튼을 클릭하세요\n" \
+             "앱삭제 이후, 갱신버튼을 누르면 삭제유무확인가능합니다.\n" \
+             "출시버전 버튼은 해당 패키지명으로 구글플레이스토어에서 \n" \
+             "검색한 결과를 보여줍니다."
+
+         ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", 0)
 
         # http://pythoncentral.io/pyside-pyqt-tutorial-the-qlistwidget/
         # https://stackoverflow.com/questions/31380457/add-right-click-functionality-to-listwidget-in-pyqt4
@@ -537,8 +591,8 @@ if __name__ == "__main__":
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
     # test.update(filepath_old,filepath_new)
     # test.show_help_subform01(None)
-    # test.list_ins_program(None)
-    test.goDevelopPage(None)
+    test.list_ins_program(None)
+    # test.goDevelopPage(None)
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
