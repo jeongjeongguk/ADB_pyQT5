@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="HelpStarting">
+    <file>icons/developer_option.jpg</file>
+    <file>icons/usb_debuging.jpg</file>
+  </qresource>
+</RCC>

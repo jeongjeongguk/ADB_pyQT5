@@ -2,8 +2,8 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QProcess
 
-import main_ui, adb_command_ui, installedList_ui
-import submain01, submain02
+import main_ui, adb_command_ui, installedList_ui, optionSrc_ui
+import submain01, submain02, optionSrc
 import adb_default
 
 import subprocess
@@ -18,6 +18,7 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         super(self.__class__, self).__init__()
         self.window2 = None # 설치창
         self.window3 = None # 설치된 앱리스트창
+        self.opitonForm = None # 설정안내창
 
     def connect(self):
         self.Install.clicked.connect(self.show_subform01)
@@ -25,6 +26,7 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         self.captureImage.clicked.connect(self.capture2image)
         self.captureVideo.clicked.connect(self.capture2viedo)
         self.ConnectedDevices.clicked.connect(self.open_capture_folder)
+        self.option.clicked.connect(self.show_optionform)
 
     def show_subform01(self):
         if self.window2 is None:
@@ -38,6 +40,11 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         if self.window3 is None:
             self.window3 = submain02.SubWindow02(self)
         self.window3.show()
+
+    def show_optionform(self):
+        if self.opitonForm is None:
+            self.opitonForm = optionSrc.windowForm(self)
+        self.opitonForm.show()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

@@ -1,4 +1,4 @@
-import sys, os
+import sys, ctypes
 
 import installedList_ui
 import adb_default
@@ -9,7 +9,12 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.connect()
-        self.listup()
+        try :
+            self.listup()
+        except :
+            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", 0)
+            pass
+            # raise Exception('연결된 기기가 없습니다. ') #TODO : Exception 에 대한 Main에서 처리.
 
     def connect(self):
         '''
@@ -25,6 +30,7 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
             lambda : self.deleteData("packageName", self.listWidget.selectedItems()[0].text())
         )
         # 출시버전
+
         self.pushButton_3.clicked.connect(
             lambda : self.link2release("packageName", self.listWidget.selectedItems()[0].text())
         )
@@ -61,6 +67,5 @@ if __name__ == "__main__":
     ui = SubWindow02()
     ui.setupUi(Main)
     ui.connect()
-    ui.listup()
     Main.show()
     sys.exit(app.exec_())
