@@ -9,12 +9,7 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.connect()
-        try :
-            self.listup()
-        except :
-            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", 0)
-            pass
-            # raise Exception('연결된 기기가 없습니다. ') #TODO : Exception 에 대한 Main에서 처리.
+        self.listup()
 
     def connect(self):
         '''
@@ -22,17 +17,28 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
         '''
         # 앱 삭제, listWidget.selectedItems()의 반환값은 선택된 항목들 리스트.
         self.pushButton.clicked.connect(
-            lambda : self.uninstall_apk("packageName", self.listWidget.selectedItems()[0].text())
+            lambda :
+            self.uninstall_apk("packageName", self.listWidget.selectedItems()[0].text())
+            if self.listWidget.selectedItems() != []
+            else ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n리스트에서 앱을 선택하세요.", "리스트확인요청", 0)
         )
 
         # 데이터 삭제
         self.pushButton_2.clicked.connect(
-            lambda : self.deleteData("packageName", self.listWidget.selectedItems()[0].text())
+            # lambda : self.deleteData("packageName", self.listWidget.selectedItems()[0].text()) # it's ok. old_ver.
+            lambda :
+            self.deleteData("packageName", self.listWidget.selectedItems()[0].text())
+            if self.listWidget.selectedItems() != []
+            else ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n리스트에서 앱을 선택하세요.", "리스트확인요청", 0)
+            # lambda : print(self.listWidget.selectedItems()) # it returns []
         )
         # 출시버전
 
         self.pushButton_3.clicked.connect(
-            lambda : self.link2release("packageName", self.listWidget.selectedItems()[0].text())
+            lambda :
+            self.link2release("packageName", self.listWidget.selectedItems()[0].text())
+            if self.listWidget.selectedItems() != []
+            else ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n리스트에서 앱을 선택하세요.", "리스트확인요청", 0)
         )
         '''
        Traceback (most recent call last):
@@ -49,10 +55,11 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
     def listup(self):
         self.listWidget.clear() # clear list
         InstProgramInfo = self.list_ins_program(None)
-        for index in range(len(InstProgramInfo)):
-            self.listWidget.addItem(InstProgramInfo[index])
-        # print(InstProgramInfo)
-
+        if InstProgramInfo != -1 :
+            for index in range(len(InstProgramInfo)):
+                self.listWidget.addItem(InstProgramInfo[index])
+        else :
+            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", 0)
 
 if __name__ == "__main__":
     # app = QtWidgets.QApplication(sys.argv)

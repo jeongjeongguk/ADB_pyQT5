@@ -486,46 +486,48 @@ class default(object):
     @staticmethod
     def list_ins_program(self):
         # adb shell pm list package
-        string = cmd.check_output("adb shell pm list package", stderr=cmd.STDOUT, shell=True)
-        string = string.decode("utf-8")
-        string = string.replace("package:","")
-        Installed_app_List = string.split("\r\n")
-        test_list = []
-        for Cnt in range(len(Installed_app_List)):
-            if "estsoft" in Installed_app_List[Cnt]:
-                test_list.append(Installed_app_List[Cnt])
-            else :
-                pass
+        try :
+            string = cmd.check_output("adb shell pm list package", stderr=cmd.STDOUT, shell=True)
+            string = string.decode("utf-8")
+            string = string.replace("package:", "")
+            Installed_app_List = string.split("\r\n")
+            test_list = []
+            for Cnt in range(len(Installed_app_List)):
+                if "estsoft" in Installed_app_List[Cnt]:
+                    test_list.append(Installed_app_List[Cnt])
+                else:
+                    pass
+            # 설치된 패키지들 바로 확인하고 싶을때에만 사용
+            # print(string) # 설치된 모든 패키지들이 하나의 스트링인 상태
+            # from PyQt5 import QtWidgets
+            # app = QtWidgets.QApplication([])
+            #
+            # notifyDialog = QtWidgets.QDialog()
+            # notifyDialog.resize(1000, 300)
+            # layout = QtWidgets.QVBoxLayout(notifyDialog)
+            # scroll = QtWidgets.QScrollArea()
+            # scroll.setWidgetResizable(True)
+            # layout.addWidget(scroll)
+            #
+            # scrollContents = QtWidgets.QWidget()
+            # layout = QtWidgets.QVBoxLayout(scrollContents)
+            # scroll.setWidget(scrollContents)
+            #
+            # label = QtWidgets.QLabel()
+            # label.setText(string)
+            #
+            # layout.addWidget(label)
+            #
+            # notifyDialog.show()
+            # notifyDialog.raise_()
+            # app.exec_()
 
-        # print(Installed_app_List) # 설치된 모든 패키지 리스트
-        # print(test_list)
+            # print(Installed_app_List) # 설치된 모든 패키지 리스트
+            # print(test_list)
 
-        # 설치된 패키지들 바로 확인하고 싶을때에만 사용
-        # print(string) # 설치된 모든 패키지들이 하나의 스트링인 상태
-        # from PyQt5 import QtWidgets
-        # app = QtWidgets.QApplication([])
-        #
-        # notifyDialog = QtWidgets.QDialog()
-        # notifyDialog.resize(1000, 300)
-        # layout = QtWidgets.QVBoxLayout(notifyDialog)
-        # scroll = QtWidgets.QScrollArea()
-        # scroll.setWidgetResizable(True)
-        # layout.addWidget(scroll)
-        #
-        # scrollContents = QtWidgets.QWidget()
-        # layout = QtWidgets.QVBoxLayout(scrollContents)
-        # scroll.setWidget(scrollContents)
-        #
-        # label = QtWidgets.QLabel()
-        # label.setText(string)
-        #
-        # layout.addWidget(label)
-        #
-        # notifyDialog.show()
-        # notifyDialog.raise_()
-        # app.exec_()
-        return test_list
-
+            return test_list
+        except :
+            return -1
 
     @staticmethod
     def show_help_subform01(self):
