@@ -19,11 +19,7 @@ class Ui_Form(object):
         Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(500, 500))
         Form.setMaximumSize(QtCore.QSize(500, 500))
-        self.layoutWidget = QtWidgets.QWidget(Form)
-        self.layoutWidget.setGeometry(QtCore.QRect(0, 10, 500, 500))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout = QtWidgets.QHBoxLayout(Form)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tabWidget = QtWidgets.QTabWidget(Form)
         self.tabWidget.setEnabled(True)
@@ -81,12 +77,12 @@ class Ui_Form(object):
 "<td style=\" vertical-align:bottom; padding-left:3; padding-right:3; padding-top:2; padding-bottom:2;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'arial,sans,sans-serif\'; font-size:13px;\">삼성</span></p></td>\n"
 "<td style=\" vertical-align:bottom; padding-left:3; padding-right:3; padding-top:2; padding-bottom:2;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://goo.gl/t8dJVS\"><span style=\" font-family:\'arial,sans,sans-serif\'; text-decoration: underline; color:#0000ff;\">https://goo.gl/t8dJVS</span></a></p></td></tr>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://goo.gl/x6Drhh\"><span style=\" text-decoration: underline; color:#0000ff;\">https://goo.gl/x6Drhh</span></a></p></td></tr>\n"
 "<tr>\n"
 "<td style=\" vertical-align:bottom; padding-left:3; padding-right:3; padding-top:2; padding-bottom:2;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'arial,sans,sans-serif\'; font-size:13px;\">LG</span></p></td>\n"
 "<td style=\" vertical-align:bottom; padding-left:3; padding-right:3; padding-top:2; padding-bottom:2;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://goo.gl/cwkzxn\"><span style=\" font-family:\'arial,sans,sans-serif\'; text-decoration: underline; color:#0000ff;\">https://goo.gl/cwkzxn</span></a></p></td></tr>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://goo.gl/GKGMxJ\"><span style=\" text-decoration: underline; color:#0000ff;\">https://goo.gl/GKGMxJ</span></a></p></td></tr>\n"
 "<tr>\n"
 "<td style=\" vertical-align:bottom; padding-left:3; padding-right:3; padding-top:2; padding-bottom:2;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'arial,sans,sans-serif\'; font-size:13px;\">OEM</span></p></td>\n"
