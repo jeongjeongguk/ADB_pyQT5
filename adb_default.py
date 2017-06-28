@@ -33,16 +33,18 @@ class default(object):
             cls.ConnectDevices.remove("")
             return len(cls.ConnectDevices)
         except:
-            return 0
+            return -1
 
     @classmethod
     def install_apk(cls, filepath): # def install_apk(self, filepath, option): # option : r, b, ...
         cls.run_info(filepath)
+
         cls.uninstall_apk("path",filepath)
         # if os.getcwd() != cls.company: os.chdir(cls.company)
         # TODO : error: more than one device/emulator 예외처리필요
         os.system("adb install -r " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
-        print(filepath)
+
+        #print(filepath)
         time.sleep(10)
         cls.run_apk(filepath)
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
@@ -390,21 +392,25 @@ class default(object):
     @classmethod
     def capture2image(cls):#TODO : 기기 잠금화면 상태유무 확인후, 잠금해제 메소드 추가 필요
         cls.makedir()
-        cls.check_connect()
-        os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
-        os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
+        ConnectedDevicesCnt = cls.check_connect()
+        if ConnectedDevicesCnt != 0 :
+            os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
+            os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
 
-        os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
-        os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
-        os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
-        cls.check_time()
-        time.sleep(1)
-        cls.device_info(None)
-        changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
-        os.system("ren test.png "+ changedName)
-        time.sleep(1)
-        os.system("move " + changedName + " " +cls.today) # 이거 안됨????
-        os.system("start " + cls.today)
+            os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
+            os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
+            os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
+            cls.check_time()
+            time.sleep(1)
+            cls.device_info(None)
+            changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
+            os.system("ren test.png "+ changedName)
+            time.sleep(1)
+            os.system("move " + changedName + " " +cls.today) # 이거 안됨????
+            os.system("start " + cls.today)
+        else :
+            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", 0)
+            # return  -1
 
     @classmethod
     def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
@@ -419,6 +425,7 @@ class default(object):
         else :
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
+            return -1
         # TODO : API 19 이상일때에만 영상녹화하고, 메시지다이얼로그의 '녹화끝','취소'리턴받으면 녹화중지시키고 영상뺴오기
         device_api = cls.deviceData.split("_")[3]
         device_api = device_api.split("I")[0].replace("\r","")
@@ -477,9 +484,16 @@ class default(object):
         from PyQt5 import QtWidgets
         self.fileDialog = QtWidgets.QFileDialog()
         select = self.fileDialog.getOpenFileUrl(filter='*.apk')
-        path = str(select[0]).replace("PyQt5.QtCore.QUrl('file:///", "")
-        path = path.replace("')", "")
-        self.lineEdit.setText(path)
+        print(select)
+        # (PyQt5.QtCore.QUrl(''), '')
+        # (PyQt5.QtCore.QUrl('file:///C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/alsong_1.5.0.0_1cha.apk'), '*.apk')
+        path = str(select[0])
+        if path == "PyQt5.QtCore.QUrl('')" :
+            path = ""
+        else :
+            path = str(select[0]).replace("PyQt5.QtCore.QUrl('file:///", "")
+            path = path.replace("')", "")
+        # self.lineEdit.setText(path)
         # print(path)
         return  path
 
@@ -528,6 +542,15 @@ class default(object):
             return test_list
         except :
             return -1
+
+    @classmethod
+    def getVersion(cls, *args):
+        '''
+        adb shell dumpsys package my.package | grep versionName
+        >> adb shell dumpsys package my.package | findstr "versionName"
+        :param args:
+        :return:
+        '''
 
     @staticmethod
     def show_help_subform01(self):
@@ -596,7 +619,7 @@ if __name__ == "__main__":
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
     # test.update(filepath_old,filepath_new)
     # test.show_help_subform01(None)
-    test.list_ins_program(None)
+    # test.list_ins_program(None)
     # test.goDevelopPage(None)
 
     # TODO : 데이터 삭제

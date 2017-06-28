@@ -31,7 +31,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -67,14 +67,14 @@
       <item>
        <widget class="QPushButton" name="pushButton_2">
         <property name="text">
-         <string>설치</string>
+         <string>삭제후 설치</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_3">
         <property name="text">
-         <string>데이터삭제</string>
+         <string>업뎃설치</string>
         </property>
        </widget>
       </item>
