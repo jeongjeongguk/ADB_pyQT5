@@ -373,6 +373,13 @@ class default(object):
 
     @classmethod
     def device_info(cls, select_device): #TODO : 여려기기 연결되어있을때에, 기기를 선택해서 기기별 리스트에 정보저장필요
+        '''
+        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        text = p.stdout.read()
+        retcode = p.wait()
+        :param select_device:
+        :return:
+        '''
         select_device = ""  # TODO : delete this line
         os_ver = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.release",
                                   stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
@@ -381,6 +388,7 @@ class default(object):
         model = cmd.check_output("adb shell " + select_device + "getprop ro.product.model",
                                  stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
         cls.deviceData = model + "_" + os_ver + "_API_" + api_level
+
         # print(cls.deviceData)
 
     @classmethod
@@ -398,7 +406,15 @@ class default(object):
             os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
 
             os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
-            os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
+
+            # os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
+            #TODO : textMovingRatio 를 구분해서, 이를 window에 출력하기. -> 중간에 UI그리는 함수로 점프.??
+            movePNG = cmd.Popen("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png",
+                             stdout=cmd.PIPE, stderr=cmd.STDOUT)
+            textMovingRatio = movePNG.stdout.read().decode("utf-8").split("\r\n")
+            for Cnt in range(len(textMovingRatio)):
+                print(textMovingRatio[Cnt])
+
             os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
             cls.check_time()
             time.sleep(1)
@@ -683,7 +699,7 @@ if __name__ == "__main__":
     # filepath = "alsong_4.0.7.3.apk"
     # test.run_info(filepath)
     # test.install_apk(filepath)
-    # test.capture2image()
+    test.capture2image()
     # try :
     #     test.capture2viedo()
     # except :
