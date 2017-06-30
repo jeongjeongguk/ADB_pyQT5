@@ -304,32 +304,36 @@ class default(object):
         # "adb shell dumpsys activity com.estsoft.alsong"
         # os.system("start /B start cmd.exe @cmd /k "
         # "adb shell \"dumpsys activity {}\"".format(pakage_name))
+
+        # adb shell dumpsys activity com.estsoft.alsong > ./Desktop/alsong_activity_data.txt
         string = cmd.check_output("adb shell \"dumpsys activity {}\"".format(pakage_name),
                                   stderr=cmd.STDOUT, shell=True)
         string = string.decode("utf-8")
         print(string)
-        from PyQt5 import QtWidgets
-        app = QtWidgets.QApplication([])
-
-        notifyDialog = QtWidgets.QDialog()
-        notifyDialog.resize(1000, 300)
-        layout = QtWidgets.QVBoxLayout(notifyDialog)
-        scroll = QtWidgets.QScrollArea()
-        scroll.setWidgetResizable(True)
-        layout.addWidget(scroll)
-
-        scrollContents = QtWidgets.QWidget()
-        layout = QtWidgets.QVBoxLayout(scrollContents)
-        scroll.setWidget(scrollContents)
-
-        label = QtWidgets.QLabel()
-        label.setText(string)
-
-        layout.addWidget(label)
-
-        notifyDialog.show()
-        notifyDialog.raise_()
-        app.exec_()
+        
+        # 아래 활성화하면, 다이얼로그로 표시해준다
+        # from PyQt5 import QtWidgets
+        # app = QtWidgets.QApplication([])
+        # 
+        # notifyDialog = QtWidgets.QDialog()
+        # notifyDialog.resize(1000, 300)
+        # layout = QtWidgets.QVBoxLayout(notifyDialog)
+        # scroll = QtWidgets.QScrollArea()
+        # scroll.setWidgetResizable(True)
+        # layout.addWidget(scroll)
+        # 
+        # scrollContents = QtWidgets.QWidget()
+        # layout = QtWidgets.QVBoxLayout(scrollContents)
+        # scroll.setWidget(scrollContents)
+        # 
+        # label = QtWidgets.QLabel()
+        # label.setText(string)
+        # 
+        # layout.addWidget(label)
+        # 
+        # notifyDialog.show()
+        # notifyDialog.raise_()
+        # app.exec_()
 
 
     @staticmethod
@@ -650,20 +654,30 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     #TODO : 현재화면 구하기
-    # test.getCurrentActivity(None)
+    test.getCurrentActivity(None)
 
     #TODO : 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
     # test.getAPKVersion(None,packageName) #TODO : 처음연결시에, 반환되는 문자열이 연결정보임. 이거 필터링필요.
 
     #TODO : 패키지의 activity 호출 스택 확인
-    # packageName = "com.android.settings"
+    # packageName = "com.estsoft.alsong"
     # test.getAPKActivityStack(None,packageName)
 
 
     #TODO : 메모리상태 확인packageName
     # packageName = "com.estsoft.alsong"
     # test.getAPKUsingMemmory(None, packageName)
+
+    #TODO : 타켓/최소 sdk버전 확인
+    '''
+    aapt list -a .\4.0.16.1.apk | findstr "SdkVersion"
+    A: android:minSdkVersion(0x0101020c)=(type 0x10)0xe
+    A: android:targetSdkVersion(0x01010270)=(type 0x10)0x19
+    '''
+    '''
+    https://developer.xamarin.com/guides/android/application_fundamentals/understanding_android_api_levels/
+    '''
 
     # test.controlDevice(None,"adb shell am satrt -n com.android.settings/1000")
     #
@@ -699,7 +713,7 @@ if __name__ == "__main__":
     # filepath = "alsong_4.0.7.3.apk"
     # test.run_info(filepath)
     # test.install_apk(filepath)
-    test.capture2image()
+    # test.capture2image()
     # try :
     #     test.capture2viedo()
     # except :
