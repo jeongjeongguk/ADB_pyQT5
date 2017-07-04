@@ -4,6 +4,7 @@ import os
 import subprocess as cmd
 import time
 from xml.dom.minidom import parse
+from decorator import decorator
 
 class default(object):
     company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
@@ -42,13 +43,23 @@ class default(object):
         cls.uninstall_apk("path",filepath)
         # if os.getcwd() != cls.company: os.chdir(cls.company)
         # TODO : error: more than one device/emulator 예외처리필요
-        os.system("adb install -r " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
+        ctypes.windll.user32.MessageBoxW \
+            (0, "패키지명 : %s \n'확인'을 클릭하시면, 설치를 시작합니다.\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "설치시작확인", 0)
+        os.system("adb install " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
+        ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
 
         #print(filepath)
-        time.sleep(10)
-        cls.run_apk(filepath)
+        # time.sleep(10)
+        # cls.run_apk(filepath)
+        # cls.check_install() # 타이밍이 너무 늦음
+
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
         #TODO : 위 내용관련한 처리필요
+
+        #TODO : Failed to install C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/4.0.16.1.apk: Failure [INSTALL_PARSE_FAILED_NO_CERTIFICATES: Failed to collect certificates from /data/app/vmdl490955904.tmp/base.apk using APK Signature Scheme v2: SHA-256 digest of contents did not verify]
+        #-----> 최신버전 설치후에 이전버전 덮어쓰기 설치시도해서 설치실패후, 최신버전 재설치할려다가 발생된 메시지 : TODO : 처리필요
+
+
 
     @classmethod
     def run_info(cls, filepath):
@@ -79,13 +90,19 @@ class default(object):
         elif args[0] == "packageName" :
             cls.packageName = args[1]
         os.system("adb uninstall " + cls.packageName)
-        cls.check_install()
+        # cls.check_install()
 
     @classmethod
     def reinstall_apk(cls, filepath):
         cls.run_info(filepath)
+        # TODO : 버전이 설치된 버전보다 낮을 경우에 대한 처리가 필요함.
+        ctypes.windll.user32.MessageBoxW \
+            (0, "패키지명 : %s \n'확인'을 클릭하시면, 설치를 시작합니다.\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "설치시작확인", 0)
         os.system("adb install -r " + filepath)
-        cls.run_apk(filepath)
+        ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
+        # time.sleep(10)
+        # cls.run_apk(filepath)
+        # cls.check_install() # 타이밍이 너무 늦음
 
     @classmethod
     def check_install(cls):
@@ -257,6 +274,7 @@ class default(object):
         ctypes.windll.user32.MessageBoxW(0, "버전 : {}".format(test), pakage_name, 0)
 
     @staticmethod
+    # @accepts(str)
     def getAPKUsingMemmory(self, pakage_name):
         '''
         순간적인 메모리 사용량 확인하는 함수
@@ -621,14 +639,15 @@ if __name__ == "__main__":
     # filepath = "Picnic-0.0.0.0-debug.apk"
     # filepath = "picnic-0.0.0.0-release.apk"
     # filepath = "picnic-0.0.0.1-release.apk"
-    filepath = "app-debug.apk"
+    # filepath = "app-debug.apk"
+    filepath = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "4.0.16.1.apk"
     #
     test = default()
     # test.run_info(filepath)
     # test.uninstall_apk(filepath)
     # test.adb_kill()
     # os.system("timeout 5")
-    # test.install_apk(filepath)
+    test.install_apk(filepath)
     # test.run_apk(filepath)
     # test.reinstall_apk(filepath)
     # test.check_install()
@@ -654,7 +673,7 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     #TODO : 현재화면 구하기
-    test.getCurrentActivity(None)
+    # test.getCurrentActivity(None)
 
     #TODO : 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
@@ -667,7 +686,8 @@ if __name__ == "__main__":
 
     #TODO : 메모리상태 확인packageName
     # packageName = "com.estsoft.alsong"
-    # test.getAPKUsingMemmory(None, packageName)
+    # packageName = 4
+    # test.getAPKUsingMemmory(packageName)
 
     #TODO : 타켓/최소 sdk버전 확인
     '''

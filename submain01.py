@@ -31,7 +31,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
             lambda: self.install_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
         )
         self.pushButton_3.clicked.connect(
-            lambda: self.deleteData("path", self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
+            lambda: self.reinstall_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
         )
         self.pushButton_4.clicked.connect(
             lambda: self.run_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
