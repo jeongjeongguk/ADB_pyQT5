@@ -36,7 +36,6 @@ class default(object):
     @classmethod
     def install_apk(cls, filepath): # def install_apk(self, filepath, option): # option : r, b, ...
         cls.run_info(filepath)
-
         cls.uninstall_apk("path",filepath)
         # if os.getcwd() != cls.company: os.chdir(cls.company)
         # TODO : error: more than one device/emulator 예외처리필요
