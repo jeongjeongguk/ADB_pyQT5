@@ -39,6 +39,7 @@ class default(object):
         :param filepath:
         :return:
         '''
+        print("test")
         cls.run_info(filepath)
         cls.uninstall_apk("path",filepath)
         # if os.getcwd() != cls.company: os.chdir(cls.company)
