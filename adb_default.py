@@ -4,7 +4,6 @@ import os
 import subprocess as cmd
 import time
 from xml.dom.minidom import parse
-from decorator import decorator
 
 class default(object):
     def __init__(self):
@@ -583,6 +582,7 @@ class default(object):
         adb shell dumpsys package my.package | grep versionName
         >> adb shell dumpsys package my.package | findstr "versionName"
         :param args:
+
         :return:
         '''
 
@@ -636,14 +636,14 @@ if __name__ == "__main__":
     # filepath = "picnic-0.0.0.0-release.apk"
     # filepath = "picnic-0.0.0.1-release.apk"
     # filepath = "app-debug.apk"
-    filepath = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "4.0.16.1.apk"
+    # filepath = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "4.0.16.1.apk"
     #
-    test = default()
+    # test = default()
     # test.run_info(filepath)
     # test.uninstall_apk(filepath)
     # test.adb_kill()
     # os.system("timeout 5")
-    test.install_apk(filepath)
+    # test.install_apk(filepath)
     # test.run_apk(filepath)
     # test.reinstall_apk(filepath)
     # test.check_install()
@@ -656,6 +656,13 @@ if __name__ == "__main__":
     # test.show_help_subform01(None)
     # test.list_ins_program(None)
     # test.goDevelopPage(None)
+
+    # TODO : 프로파일링
+    # import cProfile
+    # cProfile.run('test.show_help_subform02(None)')
+    import doctest
+    doctest.testmod()
+
 
     # TODO : 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
