@@ -7,9 +7,6 @@ from xml.dom.minidom import parse
 from decorator import decorator
 
 class default(object):
-    company = "C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\apks"
-    home = "C:\\Users\\Administrator\\PycharmProjects\\androidADB\\apks"
-
     def __init__(self):
         self.filepath = ""
         self.packageName = ""
