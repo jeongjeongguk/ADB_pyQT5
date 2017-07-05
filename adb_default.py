@@ -34,6 +34,11 @@ class default(object):
 
     @classmethod
     def install_apk(cls, filepath): # def install_apk(self, filepath, option): # option : r, b, ...
+        '''
+
+        :param filepath:
+        :return:
+        '''
         cls.run_info(filepath)
         cls.uninstall_apk("path",filepath)
         # if os.getcwd() != cls.company: os.chdir(cls.company)
