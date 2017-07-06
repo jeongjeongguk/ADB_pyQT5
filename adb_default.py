@@ -33,26 +33,25 @@ class default(object):
             return -1
 
     @classmethod
-    def install_apk(cls, filepath): # def install_apk(self, filepath, option): # option : r, b, ...
+    def install_apk(cls, filepath, option): # def install_apk(self, filepath, option): # option : r, b, ...
         '''
-
         :param filepath:
         :return:
         '''
-        print("test")
-        cls.run_info(filepath)
-        cls.uninstall_apk("path",filepath)
-        # if os.getcwd() != cls.company: os.chdir(cls.company)
-        # TODO : error: more than one device/emulator 예외처리필요
-        ctypes.windll.user32.MessageBoxW \
-            (0, "패키지명 : %s \n'확인'을 클릭하시면, 설치를 시작합니다.\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "설치시작확인", 0)
-        os.system("adb install " + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
-        ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
-
-        #print(filepath)
-        # time.sleep(10)
-        # cls.run_apk(filepath)
-        # cls.check_install() # 타이밍이 너무 늦음
+        fileCheck = cls.run_info(filepath)
+        if  fileCheck[0]:
+            userChoice = ctypes.windll.user32.MessageBoxW \
+                (0, "패키지명 : %s \n"
+                    "\n'확인'을 클릭하시면, 설치를 시작합니다."
+                    "\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "설치 시작확인", 1)
+            if userChoice == 1 :
+                if option == "" : cls.uninstall_apk("path", filepath)
+                os.system("adb install " + option + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
+                ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
+            else :
+                ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", 0)
+        else :
+            ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", 0)
 
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
         #TODO : 위 내용관련한 처리필요
@@ -61,10 +60,12 @@ class default(object):
         #-----> 최신버전 설치후에 이전버전 덮어쓰기 설치시도해서 설치실패후, 최신버전 재설치할려다가 발생된 메시지 : TODO : 처리필요
 
 
-
     @classmethod
     def run_info(cls, filepath):
-        cls.filepath = filepath
+        if os.path.isfile(filepath) :
+            cls.filepath = filepath
+        else :
+            return False, "Check path or file", "Check path or file"
         # if os.getcwd() != cls.company: os.chdir(cls.company)
         test = cmd.check_output("aapt dump badging " + filepath + " | findstr package",
                                 stderr=cmd.STDOUT, shell=True)
@@ -73,7 +74,7 @@ class default(object):
             test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
                                     stderr=cmd.STDOUT, shell=True)
             cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
-            return cls.packageName, cls.startActivity
+            return True, cls.packageName, cls.startActivity
         except:
             # TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
             # ?????? 언제 안구해지지? 런쳐액티버티 가렸을때 못찾음 -> 파싱으로 찾기
@@ -95,15 +96,16 @@ class default(object):
 
     @classmethod
     def reinstall_apk(cls, filepath):
-        cls.run_info(filepath)
+        fileCheck = cls.run_info(filepath)
         # TODO : 버전이 설치된 버전보다 낮을 경우에 대한 처리가 필요함.
-        ctypes.windll.user32.MessageBoxW \
-            (0, "패키지명 : %s \n'확인'을 클릭하시면, 설치를 시작합니다.\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "설치시작확인", 0)
-        os.system("adb install -r " + filepath)
-        ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
-        # time.sleep(10)
-        # cls.run_apk(filepath)
-        # cls.check_install() # 타이밍이 너무 늦음
+        if fileCheck == True:
+            ctypes.windll.user32.MessageBoxW \
+                (0, "패키지명 : %s \n'확인'을 클릭하시면, 설치를 시작합니다.\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "업데이트 설치 시작확인", 0)
+            os.system("adb install -r " + filepath)
+            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
+        else:
+            ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", 0)
+
 
     @classmethod
     def check_install(cls):
@@ -623,7 +625,8 @@ class default(object):
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
     # '''
-    # filepath = "alsong_4.0.7.3.apk"
+    filepath = "alsong_4.0.7.3.apk"
+    print(os.path.isfile(filepath))
     # filepath = "a.apk"
     # filepath = "teamUP-teamup_store-release-v3.6.0.1-133.apk"
     #
@@ -642,8 +645,8 @@ if __name__ == "__main__":
     # filepath = "picnic-0.0.0.0-release.apk"
     # filepath = "picnic-0.0.0.1-release.apk"
     # filepath = "app-debug.apk"
-    # filepath = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "4.0.16.1.apk"
-    #
+    filepath = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "4.0.16.1.apk"
+    print(os.path.isfile(filepath))
     # test = default()
     # test.run_info(filepath)
     # test.uninstall_apk(filepath)
@@ -666,8 +669,8 @@ if __name__ == "__main__":
     # TODO : 프로파일링
     # import cProfile
     # cProfile.run('test.show_help_subform02(None)')
-    import doctest
-    doctest.testmod()
+    # import doctest
+    # doctest.testmod()
 
 
     # TODO : 데이터 삭제
