@@ -18,21 +18,31 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         self.toolButton.clicked.connect(self.setAPKpath) #TODO : 파일익스플로러에서 취소클릭시, 제거할 스트링 넘기지않도록 처리.
         self.pushButton.clicked.connect(
             lambda :
-            self.label_3.setText(_translate("Form", self.run_info(self.lineEdit.text())[0]))
+            self.label_3.setText(_translate("Form", self.run_info(self.lineEdit.text())[1]))
             if self.lineEdit.text() != "" else self.exceptionMessage()
         )
         self.pushButton.clicked.connect(
             lambda:
-            self.label_4.setText(_translate("Form", self.run_info(self.lineEdit.text())[1]))
+            self.label_4.setText(_translate("Form", self.run_info(self.lineEdit.text())[2]))
             if self.lineEdit.text() != ""
             else self.label_3.setText(_translate("Form", "None"))
         )
         self.pushButton_2.clicked.connect(
-            lambda: self.install_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
+            lambda:
+            self.install_apk(self.lineEdit.text(),"")
+            if self.lineEdit.text() != ""
+            else self.exceptionMessage()
         )
+        # self.pushButton_3.clicked.connect(
+        #     lambda: self.reinstall_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
+        # )
         self.pushButton_3.clicked.connect(
-            lambda: self.reinstall_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
+            lambda:
+            self.install_apk(self.lineEdit.text(), "-r ")
+            if self.lineEdit.text() != ""
+            else self.exceptionMessage()
         )
+
         self.pushButton_4.clicked.connect(
             lambda: self.run_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
         )
