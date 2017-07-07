@@ -11,6 +11,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         # self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setupUi(self)
         self.connect()
+        self.commandListup()
 
     def connect(self):
         #TODO : staticmethod는 기능함수에서 -1로 리턴하고, -1일때 예외처리. UI값읽어오는것은, UI값 비정상인 상태를 lambda 삼항연산으로 처리.
@@ -62,7 +63,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         self.comboBox.lineEdit().returnPressed.connect(
             lambda: self.controlDevice(None, self.comboBox.currentText()) if self.comboBox.currentText() != ""
             else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", 0)
-        )
+        ) # 엔터키입력시에도, 버튼을 클릭했을때와 동일한 함수를 연결.
 
     def setAPKpath(self):
         path = self.SelectSetupFile()
@@ -72,6 +73,19 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
     def exceptionMessage(self):
         ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n...을 클릭해서 apk파일을 선택하세요.", "파일확인요청", 0)
 
+    def commandListup(self):
+        List = [
+            ("shell_prompt", "adb shell"),
+            ("reboot", "adb reboot"),
+            ("key_home", "adb shell input keyevent KEYCODE_HOME"),
+            ("key_back", "adb shell input keyevent KEYCODE_BACK"),
+            ("key_option", "adb shell input keyevent KEYCODE_MENU"),
+            ("key_power", "adb shell input keyevent KEYCODE_POWER")
+        ]
+
+        for command in range(0,len(List)):
+            self.comboBox.addItem(List[command][1])
+        return List
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
@@ -79,5 +93,11 @@ if __name__ == "__main__":
     ui = SubWindow01()
     ui.setupUi(Main)
     ui.connect()
+    # ui.commandListup() #submain01만 확인할때는 주석제거, main에서 submain01호출할때는 정상적으로 리스트추가됨
     Main.show()
     sys.exit(app.exec_())
+
+    # print(SubWindow01.commandListup(None))
+    # print(type(SubWindow01.commandListup(None)[0][1]))
+    # print(SubWindow01.commandListup(None)[0][0])
+    # print(SubWindow01.commandListup(None)[0][1])
