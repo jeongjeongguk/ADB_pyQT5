@@ -13,6 +13,12 @@ import subprocess
 UI   : main_ui.Ui_MainWindow, adb_command_ui.Ui_Form, installedList_ui.Ui_Form
 기능 : adb_default.default
 '''
+#TODO : UI 중력뭉개질떄 추가할것
+'''
+self.widget = QtWidgets.QWidget(Form)
+self.widget.setGeometry(QtCore.QRect(10, 10, 322, 157))
+self.widget.setObjectName("widget")
+'''
 class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.default):
     def __init__(self):
         super(self.__class__, self).__init__()

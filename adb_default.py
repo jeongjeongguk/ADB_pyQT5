@@ -40,10 +40,11 @@ class default(object):
         '''
         fileCheck = cls.run_info(filepath)
         if  fileCheck[0]:
+            title = "설치 시작확인" if option == "" else "덮어쓰기설치 시작확인"
             userChoice = ctypes.windll.user32.MessageBoxW \
                 (0, "패키지명 : %s \n"
                     "\n'확인'을 클릭하시면, 설치를 시작합니다."
-                    "\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "설치 시작확인", 1)
+                    "\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, title, 1)
             if userChoice == 1 :
                 if option == "" : cls.uninstall_apk("path", filepath)
                 os.system("adb install " + option + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
@@ -238,7 +239,7 @@ class default(object):
     # command set : "adb reboot", "adb start-server", "adb kill-server", ... etc
     @staticmethod
     def controlDevice(self, command):
-        os.system("adb " + command)
+        os.system("start /B start cmd.exe @cmd /k " + command)
 
     @classmethod
     # staticmethod를 submain01에서 불러다가 쓸려니까 언제 호출되는지 모르겠지만, 응답이 너무 느려서 변경함

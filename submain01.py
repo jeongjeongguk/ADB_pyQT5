@@ -46,12 +46,21 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         self.pushButton_4.clicked.connect(
             lambda: self.run_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
         )
-        self.pushButton_5.clicked.connect(lambda: self.controlDevice(None, "reboot"))
+        self.pushButton_5.clicked.connect(lambda: self.controlDevice(None, "adb reboot"))
         self.pushButton_6.clicked.connect(lambda: self.goSetLanguagePage(None))
         self.pushButton_7.clicked.connect(lambda: self.goSetTimePage(None))
         self.pushButton_8.clicked.connect(lambda: self.show_help_subform01(None)) # 도움말 ㅋㅋ
+        # lineEdit : self.lineEdit.text()
+        # comboBox : self.comboBox.currentText()
         self.pushButton_9.clicked.connect(
-            lambda: self.controlDevice(self.lineEdit_2.text()) if self.lineEdit_2.text() != ""
+            lambda: self.controlDevice(None, self.comboBox.currentText()) if self.comboBox.currentText() != ""
+            else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", 0)
+        )
+        # lineEdit : self.lineEdit.returnPressed.connect(self.pushButton_9)
+        # comboBox : self.comboBox.lineEdit().returnPressed.connect()
+        # comboBox 에서 엔터입력시 포커스 이동 : self.comboBox.lineEdit().returnPressed.connect(self.pushButton_9.setFocus)
+        self.comboBox.lineEdit().returnPressed.connect(
+            lambda: self.controlDevice(None, self.comboBox.currentText()) if self.comboBox.currentText() != ""
             else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", 0)
         )
 
