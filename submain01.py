@@ -65,6 +65,8 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
             else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", 0)
         ) # 엔터키입력시에도, 버튼을 클릭했을때와 동일한 함수를 연결.
 
+
+
     def setAPKpath(self):
         path = self.SelectSetupFile()
         print(path)
@@ -73,18 +75,22 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
     def exceptionMessage(self):
         ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n...을 클릭해서 apk파일을 선택하세요.", "파일확인요청", 0)
 
+    def check_command(self):
+
+        return command
+
     def commandListup(self):
         List = [
-            ("shell_prompt", "adb shell"),
-            ("reboot", "adb reboot"),
-            ("key_home", "adb shell input keyevent KEYCODE_HOME"),
-            ("key_back", "adb shell input keyevent KEYCODE_BACK"),
-            ("key_option", "adb shell input keyevent KEYCODE_MENU"),
-            ("key_power", "adb shell input keyevent KEYCODE_POWER")
+            "[쉘]adb shell",
+            "[재부팅]adb reboot",
+            "[홈버튼]adb shell input keyevent KEYCODE_HOME",
+            "[back버튼]adb shell input keyevent KEYCODE_BACK",
+            "[메뉴버튼]adb shell input keyevent KEYCODE_MENU",
+            "[전원버튼]adb shell input keyevent KEYCODE_POWER"
         ]
 
         for command in range(0,len(List)):
-            self.comboBox.addItem(List[command][1])
+            self.comboBox.addItem(List[command])
         return List
 
 if __name__ == "__main__":

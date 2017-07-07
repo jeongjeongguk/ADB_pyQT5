@@ -140,6 +140,7 @@ class Ui_Form(object):
         self.pushButton_7.setText(_translate("Form", "날짜변경"))
         self.pushButton_8.setText(_translate("Form", "도움말"))
 
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

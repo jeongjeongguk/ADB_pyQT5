@@ -243,7 +243,9 @@ class default(object):
             (0, "[입력하신 명령어] \n"
                 "{}\n\n"
                 "실행하시겠습니까?".format(command), "명령어 확인", 1)
-        if userChoice == 1: os.system("start /B start cmd.exe @cmd /k " + command)
+        if userChoice == 1:
+            if command[0] == "[" : command = command.split("]")[1]
+            os.system("start /B start cmd.exe @cmd /k " + command)
 
     @classmethod
     # staticmethod를 submain01에서 불러다가 쓸려니까 언제 호출되는지 모르겠지만, 응답이 너무 느려서 변경함
