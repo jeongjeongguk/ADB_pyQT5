@@ -596,10 +596,30 @@ class default(object):
         '''
         adb shell dumpsys package my.package | grep versionName
         >> adb shell dumpsys package my.package | findstr "versionName"
-        :param args:
+        :param args[0] = packageName_selected
+        :param args[1] = packageName_compared
+
+        arg[0]
+        > submain01 : 설치된 apk의 버전을 확인
+        > submain02 : 설치된 apk의 버전을 확인
+
+        arg[1]
+        > submain01 : 설치할(선택된) apk의 버전을 확인
 
         :return:
         '''
+        if args[0] != "" :
+            if args[0].split(".")[0] == "com":
+                Version = cmd.check_output("adb shell dumpsys package {} | findstr 'versionName'".format(args[0])
+                                           , stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
+                if args[1].split(".")[0] == "com":
+                    # CmpVersion = cmd.check_output("adb shell dumpsys package {} | findstr 'versionName'".format(args[1])
+                    #                               , stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
+                    CmpVersion = cmd.check_output("aapt bad~~~~~ | findstr ~~~")
+                    return Version, CmpVersion
+            return Version
+        else :
+            ctypes.windll.user32.MessageBoxW(0, "패키지가 선택되지 않았습니다.", "도움말", 0)
 
     @staticmethod
     def show_help_subform01(self):
