@@ -19,6 +19,10 @@ class Ui_Form(object):
         Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(342, 204))
         Form.setMaximumSize(QtCore.QSize(342, 204))
+
+        Form.setWindowFlags(
+            QtCore.Qt.Window | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.CustomizeWindowHint)
+
         self.layoutWidget = QtWidgets.QWidget(Form)
         self.layoutWidget.setGeometry(QtCore.QRect(0, 10, 341, 194))
         self.layoutWidget.setObjectName("layoutWidget")
