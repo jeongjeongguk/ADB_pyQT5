@@ -12,6 +12,7 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
         self.listup()
 
     def connect(self):
+        #TODO : 연결이 중간에 끊어진 상황과, 해당 패키지명이 설치되지 않은상황 처리필요
         '''
         : button과 기능함수을 연결해주는 함수
         '''

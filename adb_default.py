@@ -68,6 +68,7 @@ class default(object):
         else :
             return False, "Check path or file", "Check path or file"
         # if os.getcwd() != cls.company: os.chdir(cls.company)
+        # TODO : 패키지명으로 들어올때, 연결이 중간에 끊어진 상황 처리 필요
         test = cmd.check_output("aapt dump badging " + filepath + " | findstr package",
                                 stderr=cmd.STDOUT, shell=True)
         cls.packageName = test.decode("utf-8").split(" ")[1].split("'")[1]
@@ -88,11 +89,15 @@ class default(object):
 
     @classmethod
     def uninstall_apk(cls, *args):
-        if args[0] == "path" :
-            cls.run_info(args[1])
-        elif args[0] == "packageName" :
-            cls.packageName = args[1]
-        os.system("adb uninstall " + cls.packageName)
+        try :
+            if args[0] == "path" :
+                cls.run_info(args[1])
+            elif args[0] == "packageName" :
+                cls.packageName = args[1]
+            os.system("adb uninstall " + cls.packageName)
+        except :
+            ctypes.windll.user32.MessageBoxW(0, "PC와 연결을 확인해주세요.", "연결끊김", 0)
+
         # cls.check_install()
 
     @classmethod
@@ -269,19 +274,6 @@ class default(object):
                                 stderr=cmd.STDOUT, shell=True)
         test = test.decode("utf-8")
         ctypes.windll.user32.MessageBoxW(0, test, "현재 화면정보", 0)
-
-
-    @staticmethod
-    def getAPKVersion(self, pakage_name):
-        '''
-        This function is to get selected package's version.
-        :param self:
-        :param pakage_name:
-        '''
-        test = cmd.check_output("adb shell \"dumpsys package {} | grep 'versionName'\"".format(pakage_name),
-                                stderr=cmd.STDOUT, shell=True)
-        test = test.decode("utf-8")
-        ctypes.windll.user32.MessageBoxW(0, "버전 : {}".format(test), pakage_name, 0)
 
     @staticmethod
     # @accepts(str)
@@ -608,18 +600,34 @@ class default(object):
 
         :return:
         '''
-        if args[0] != "" :
+        if args[0] != "" : #TODO : 패키지명은 선택되어서 옴. 그러나 그 패키지가 설치된 상태에서만 아래로 가야함
             if args[0].split(".")[0] == "com":
-                Version = cmd.check_output("adb shell dumpsys package {} | findstr 'versionName'".format(args[0])
-                                           , stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
-                if args[1].split(".")[0] == "com":
-                    # CmpVersion = cmd.check_output("adb shell dumpsys package {} | findstr 'versionName'".format(args[1])
-                    #                               , stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
-                    CmpVersion = cmd.check_output("aapt bad~~~~~ | findstr ~~~")
-                    return Version, CmpVersion
-            return Version
+                try :
+                    dumpsys_result = cmd.check_output("adb shell dumpsys package {}".format(args[0])
+                                                      , stderr=cmd.STDOUT, shell=True).decode("utf-8").split("\r\n")
+                    for data in dumpsys_result:
+                        if "versionName" in data :
+                            version = data
+                            version = version.split("=")[1]
+    
+                    if os.path.isfile(args[1]):
+                        dumpsys_result = cmd.check_output("aapt d badging {}".format(args[1])
+                                                          , stderr=cmd.STDOUT, shell=True).decode("utf-8").split("\r\n")
+                        for data in dumpsys_result:
+                            if "pack" in data :
+                                CmpVersion = data
+                                CmpVersion = CmpVersion.split(" ")[3].split("'")[1].split("'")[0]
+                        return version, CmpVersion
+    
+                    return version
+                except :
+                    ctypes.windll.user32.MessageBoxW(0, "리스트갱신버튼을 클릭해주세요.", "확인요청", 0)
         else :
             ctypes.windll.user32.MessageBoxW(0, "패키지가 선택되지 않았습니다.", "도움말", 0)
+
+        # return args[0], args[1] # ok.
+        # return type(args[0]), type(args[1]) # str
+
 
     @staticmethod
     def show_help_subform01(self):
@@ -653,7 +661,7 @@ if __name__ == "__main__":
     from PyQt5 import QtWidgets
     # '''
     filepath = "alsong_4.0.7.3.apk"
-    print(os.path.isfile(filepath))
+    # print(os.path.isfile(filepath))
     # filepath = "a.apk"
     # filepath = "teamUP-teamup_store-release-v3.6.0.1-133.apk"
     #
@@ -672,9 +680,11 @@ if __name__ == "__main__":
     # filepath = "picnic-0.0.0.0-release.apk"
     # filepath = "picnic-0.0.0.1-release.apk"
     # filepath = "app-debug.apk"
-    filepath = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "4.0.16.1.apk"
-    print(os.path.isfile(filepath))
-    # test = default()
+    filepath = ""
+    filepath2 = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "4..16.1.apk"
+    # print(os.path.isfile(filepath))
+    test = default()
+    print(test.getVersion(filepath,filepath2))
     # test.run_info(filepath)
     # test.uninstall_apk(filepath)
     # test.adb_kill()
