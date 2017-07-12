@@ -40,15 +40,26 @@ class default(object):
         '''
         fileCheck = cls.run_info(filepath)
         if  fileCheck[0]:
-            title = "설치 시작확인" if option == "" else "덮어쓰기설치 시작확인"
+            if option == "" :
+                title = "설치 시작확인"
+                version = cls.getVersion(cls.packageName, "")
+                message = "버전 : {}\n".format(version)
+            else :
+                title = "덮어쓰기설치 시작확인"
+                OldVersion, NewVersion = cls.getVersion(cls.packageName, filepath)
+                message = "설치된 버전 : {}\n설치할 버전 : {}\n".format(OldVersion, NewVersion)
+
             userChoice = ctypes.windll.user32.MessageBoxW \
-                (0, "패키지명 : %s \n"
-                    "\n'확인'을 클릭하시면, 설치를 시작합니다."
-                    "\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, title, 1)
-            if userChoice == 1 :
-                if option == "" : cls.uninstall_apk("path", filepath)
-                os.system("adb install " + option + filepath) #TODO: 인스톨 여기에요~~~~~~~~~~~~~~~~~~~~~~
-                ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
+                        (
+                            0,  "패키지명 : {} \n"
+                                "{}"
+                                "\n'확인'을 클릭하시면, 설치를 시작합니다."
+                                "\n기기에따라 최대 20초가량 소요됩니다.".format(cls.packageName, message), title, 1
+                        )
+
+            if userChoice == 1:
+                if option == "": cls.uninstall_apk("path", filepath)
+                os.system("adb install " + option + filepath)
             else :
                 ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", 0)
         else :
