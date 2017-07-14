@@ -18,7 +18,7 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
         # TODO : 추가한것
         Form.setWindowFlags(
-            QtCore.Qt.Window | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.CustomizeWindowHint)
+            QtCore.Qt.Window | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.CustomizeWindowHint)
         # ---------
         Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(342, 182))
@@ -30,8 +30,9 @@ class Ui_Form(object):
         self.widget = QtWidgets.QWidget(Form)
         self.widget.setGeometry(QtCore.QRect(10, 10, 322, 157))
         self.widget.setObjectName("widget")
-        # ---------
-        self.verticalLayout = QtWidgets.QVBoxLayout(Form)
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        # --------------
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")

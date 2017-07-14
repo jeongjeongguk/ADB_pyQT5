@@ -56,6 +56,22 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         self.opitonForm.show()
 
 if __name__ == "__main__":
+    import wmi
+
+    c = wmi.WMI()
+    serviceToStart = 'Administrator'  # example
+    for service in c.Win32_Service(Name=serviceToStart):
+        service.StartService()
+
+    import win32api
+
+    win32api.ShellExecute(0,  # parent window
+                          "runas",  # need this to force UAC to act
+                          "C:\\python27\\python.exe",
+                          "c:\\path\\to\\script.py",
+                          "C:\\python27",  # base dir
+                          1)  # window visibility - 1: visible, 0: background
+
     app = QtWidgets.QApplication(sys.argv)
     Main = QtWidgets.QMainWindow()
     ui = MainWindow()

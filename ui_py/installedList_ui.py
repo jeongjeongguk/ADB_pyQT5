@@ -16,6 +16,10 @@ class Ui_Form(object):
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
+        # TODO : 추가한것
+        Form.setWindowFlags(
+            QtCore.Qt.Window | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.CustomizeWindowHint)
+        # ---------
         Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(342, 204))
         Form.setMaximumSize(QtCore.QSize(342, 204))

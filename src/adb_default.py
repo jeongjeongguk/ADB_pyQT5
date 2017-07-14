@@ -5,6 +5,9 @@ import subprocess as cmd
 import time
 from xml.dom.minidom import parse
 
+import sys
+
+
 class default(object):
     def __init__(self):
         self.filepath = ""

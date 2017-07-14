@@ -10,6 +10,24 @@
     <height>101</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>299</width>
+    <height>101</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>299</width>
+    <height>101</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>ADB GUI</string>
   </property>
@@ -148,16 +166,6 @@
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>299</width>
-     <height>21</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

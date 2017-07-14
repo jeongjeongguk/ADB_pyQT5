@@ -25,4 +25,4 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=True , icon='C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\icons\\Main.ico')
+          console=True , icon='C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\ui\\icons\\Main.ico')
