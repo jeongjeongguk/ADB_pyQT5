@@ -409,11 +409,13 @@ class default(object):
     @classmethod
     def makedir(cls):
         cls.today = datetime.datetime.now().strftime("%y%m%d")
-        check_folder = cmd.call("dir " + cls.today, stderr=cmd.STDOUT, shell=True)
+        check_folder = cmd.call("dir " + cls.today, stderr=cmd.STDOUT, shell=False)
         if check_folder != False:
-            os.system("mkdir " + cls.today)
+            try:
+                cmd.call("mkdir " + cls.today, stderr=cmd.STDOUT, shell=False)
+            except:
+                ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치입니다.","경로확인요청", 0)
             ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", 0)
-            # print("make directory " + cls.today)
         else:
             ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : "+ cls.today, "스크린샷 저장경로안내", 0)
 
@@ -444,7 +446,9 @@ class default(object):
 
     @classmethod
     def open_capture_folder(cls):
-        cls.makedir()
+        chkValue = cls.makedir()
+        if chkValue == -1 :
+            return None
         cls.check_time()
         os.system("start " + cls.today)
 
@@ -458,13 +462,14 @@ class default(object):
 
             os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
 
-            # os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
+            os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
+
             #TODO : textMovingRatio 를 구분해서, 이를 window에 출력하기. -> 중간에 UI그리는 함수로 점프.??
-            movePNG = cmd.Popen("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png",
-                             stdout=cmd.PIPE, stderr=cmd.STDOUT)
-            textMovingRatio = movePNG.stdout.read().decode("utf-8").split("\r\n")
-            for Cnt in range(len(textMovingRatio)):
-                print(textMovingRatio[Cnt])
+            # movePNG = cmd.Popen("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png",
+            #                  stdout=cmd.PIPE, stderr=cmd.STDOUT)
+            # textMovingRatio = movePNG.stdout.read().decode("utf-8").split("\r\n")
+            # for Cnt in range(len(textMovingRatio)):
+            #     print(textMovingRatio[Cnt])
 
             os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
             cls.check_time()
@@ -551,7 +556,7 @@ class default(object):
         from PyQt5 import QtWidgets
         self.fileDialog = QtWidgets.QFileDialog()
         select = self.fileDialog.getOpenFileUrl(filter='*.apk')
-        print(select)
+        # print(select)
         # (PyQt5.QtCore.QUrl(''), '')
         # (PyQt5.QtCore.QUrl('file:///C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/alsong_1.5.0.0_1cha.apk'), '*.apk')
         path = str(select[0])

@@ -70,7 +70,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
 
     def setAPKpath(self):
         path = self.SelectSetupFile()
-        print(path)
+        # print(path)
         self.lineEdit.setText(path)
 
     def exceptionMessage(self):
