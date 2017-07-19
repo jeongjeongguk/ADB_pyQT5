@@ -409,13 +409,15 @@ class default(object):
     @classmethod
     def makedir(cls):
         cls.today = datetime.datetime.now().strftime("%y%m%d")
-        check_folder = cmd.call("dir " + cls.today, stderr=cmd.STDOUT, shell=False)
-        if check_folder != False:
-            try:
-                cmd.call("mkdir " + cls.today, stderr=cmd.STDOUT, shell=False)
-            except:
-                ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치입니다.","경로확인요청", 0)
-            ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", 0)
+        check_folder = os.path.exists(cls.today)
+        if check_folder == False:
+            try :
+                cmd.call("mkdir " + cls.today, stderr=None, shell=True)
+                # cmd.call("mkdir " + cls.today, stderr=None, shell=False) # except Test
+                ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", 0)
+            except :
+                ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치에서 프로그램이 실행되었습니다.", "실행파일 경로확인요청", 0)
+                return -1
         else:
             ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : "+ cls.today, "스크린샷 저장경로안내", 0)
 
@@ -454,9 +456,9 @@ class default(object):
 
     @classmethod
     def capture2image(cls):#TODO : 기기 잠금화면 상태유무 확인후, 잠금해제 메소드 추가 필요
-        cls.makedir()
         ConnectedDevicesCnt = cls.check_connect()
-        if ConnectedDevicesCnt != 0 :
+        if ConnectedDevicesCnt > 0 :
+            cls.makedir()
             os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
             os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
 
@@ -481,14 +483,15 @@ class default(object):
             os.system("move " + changedName + " " +cls.today) # 이거 안됨????
             os.system("start " + cls.today)
         else :
-            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", 0)
+            ctypes.windll.user32.MessageBoxW \
+                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
             # return  -1
 
     @classmethod
     def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
-        cls.makedir()
         ConnectedDevicesCnt = cls.check_connect()
         if ConnectedDevicesCnt > 0 :
+            cls.makedir()
             cls.device_info(None)
             # print(ConnectedDevicesCnt)
             # print(cls.deviceData)

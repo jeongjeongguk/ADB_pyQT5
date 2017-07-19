@@ -1,6 +1,8 @@
 import sys
-src_path = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
-sys.path.insert(0, src_path)
+# src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
+# sys.path.insert(0, src_path_company)
+src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
+sys.path.insert(0, src_path_home)
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QProcess
