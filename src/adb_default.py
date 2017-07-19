@@ -5,9 +5,6 @@ import subprocess as cmd
 import time
 from xml.dom.minidom import parse
 
-import sys
-
-
 class default(object):
     def __init__(self):
         self.filepath = ""
@@ -113,6 +110,7 @@ class default(object):
     def run_apk(cls,filepath):
         cls.run_info(filepath)
         os.system("adb shell am start -n " + cls.packageName +"/"+cls.startActivity)
+        ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
 
     @classmethod
     def uninstall_apk(cls, *args):
@@ -122,6 +120,7 @@ class default(object):
             elif args[0] == "packageName" :
                 cls.packageName = args[1]
             os.system("adb uninstall " + cls.packageName)
+            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", 0)
         except :
             ctypes.windll.user32.MessageBoxW(0, "PC와 연결을 확인해주세요.", "연결끊김", 0)
 
@@ -161,17 +160,20 @@ class default(object):
 
     @classmethod
     def link2release(cls, *args):
-        if args[0] == "path" :
-            cls.run_info(args[1])
-        elif args[0] == "packageName" :
-            cls.packageName = args[1]
+        try :
+            if args[0] == "path" :
+                cls.run_info(args[1])
+            elif args[0] == "packageName" :
+                cls.packageName = args[1]
 
-        os.system(
-            "adb "
-            "shell am start -a android.intent.action.VIEW -d "
-            "\"https://play.google.com/store/apps/details?id=\""
-            + cls.packageName
-        )
+            os.system(
+                "adb "
+                "shell am start -a android.intent.action.VIEW -d "
+                "\"https://play.google.com/store/apps/details?id=\""
+                + cls.packageName
+            )
+        except IndexError:
+            ctypes.windll.user32.MessageBoxW(0, "리스트 갱신이 필요합니다.\n리스트갱신버튼을 클릭하세요.", "리스트확인요청", 0)
 
     @classmethod
     def update(cls, filepath_old, filepath_new): #TODO: devices arg 전달필요

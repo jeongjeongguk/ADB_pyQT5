@@ -5,9 +5,8 @@ src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
 sys.path.insert(0, src_path_home)
 
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QProcess
 
-import main_ui, adb_command_ui, installedList_ui, optionSrc_ui
+import main_ui
 import submain01, submain02, optionSrc
 import adb_default
 
@@ -33,7 +32,7 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
 
     def connect(self):
         self.Install.clicked.connect(self.show_subform01)
-        self.Uninstall.clicked.connect(self.show_subform02) #TODO : 설치된 앱들 리스트뷰
+        self.Uninstall.clicked.connect(self.show_subform02)
         self.captureImage.clicked.connect(self.capture2image)
         self.captureVideo.clicked.connect(self.capture2viedo)
         self.ConnectedDevices.clicked.connect(self.open_capture_folder)

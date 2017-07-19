@@ -5,7 +5,7 @@ src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
 sys.path.insert(0, src_path_home)
 import installedList_ui
 import adb_default
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
 
 class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.default):
     def __init__(self, parent=None):
@@ -36,8 +36,8 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
             else self.exceptionMessage()
             # lambda : print(self.listWidget.selectedItems()) # it returns []
         )
-        # 출시버전
 
+        # 출시버전
         self.pushButton_3.clicked.connect(
             lambda :
             self.link2release("packageName", self.listWidget.selectedItems()[0].text())

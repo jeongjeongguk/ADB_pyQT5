@@ -85,6 +85,8 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
     def commandListup(self):
         List = [
             "[쉘]adb shell",
+            "[PC ADB kill]adb kill-server",
+            "[PC ADB start]adb start-server",
             "[재부팅]adb reboot",
             "[홈버튼]adb shell input keyevent KEYCODE_HOME",
             "[back버튼]adb shell input keyevent KEYCODE_BACK",

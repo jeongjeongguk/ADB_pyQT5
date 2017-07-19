@@ -8,9 +8,19 @@ if __name__ == "__main__":
 
     import win32api,os
 
+    # Company
+    # win32api.ShellExecute(0,  # parent window
+    #                       "runas",  # need this to force UAC to act
+    #                       "C:\\Python35-32\\python3.exe "+os.getcwd()+"\\main.py",
+    #                       None,
+    #                       "C:\\Python35-32",  # base dir
+    #                       1)  # window visibility - 1: visible, 0: background
+
+    # Home
     win32api.ShellExecute(0,  # parent window
                           "runas",  # need this to force UAC to act
-                          "C:\\Python35-32\\python3.exe "+os.getcwd()+"\\main.py",
+                          # "E:\Program Files (x86)\Python35-32\\python.exe {}\\main.py".format(os.getcwd()),
+                          "notepad.exe",
                           None,
-                          "C:\\Python35-32",  # base dir
-                          1)  # window visibility - 1: visible, 0: background
+                          "notepad.exe",  # base dir
+                          0)  # window visibility - 1: visible, 0: background
