@@ -87,24 +87,30 @@ class default(object):
 
     @classmethod
     def run_info(cls, filepath):
-        if os.path.isfile(filepath) :
-            cls.filepath = filepath
-        else :
-            return False, "Check path or file", "Check path or file"
-        # if os.getcwd() != cls.company: os.chdir(cls.company)
-        # TODO : 패키지명으로 들어올때, 연결이 중간에 끊어진 상황 처리 필요
-        test = cmd.check_output("aapt dump badging " + filepath + " | findstr package",
-                                stderr=cmd.STDOUT, shell=True)
-        cls.packageName = test.decode("utf-8").split(" ")[1].split("'")[1]
-        try:
-            test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
+        ConnectedDevicesCnt = cls.check_connect()
+        if ConnectedDevicesCnt > 0:
+            if os.path.isfile(filepath) :
+                cls.filepath = filepath
+            else :
+                return False, "Check path or file", "Check path or file"
+            # if os.getcwd() != cls.company: os.chdir(cls.company)
+            # TODO : 패키지명으로 들어올때, 연결이 중간에 끊어진 상황 처리 필요
+            test = cmd.check_output("aapt dump badging " + filepath + " | findstr package",
                                     stderr=cmd.STDOUT, shell=True)
-            cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
-            return True, cls.packageName, cls.startActivity
-        except:
-            # TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
-            # ?????? 언제 안구해지지? 런쳐액티버티 가렸을때 못찾음 -> 파싱으로 찾기
-            pass
+            cls.packageName = test.decode("utf-8").split(" ")[1].split("'")[1]
+            try:
+                test = cmd.check_output("aapt dump badging " + filepath + " | findstr launchable",
+                                        stderr=cmd.STDOUT, shell=True)
+                cls.startActivity = test.decode("utf-8").split(" ")[1].split("'")[1]
+                return True, cls.packageName, cls.startActivity
+            except:
+                # TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
+                # ?????? 언제 안구해지지? 런쳐액티버티 가렸을때 못찾음 -> 파싱으로 찾기
+                pass
+        else:
+            ctypes.windll.user32.MessageBoxW \
+                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", 0)
+            return False
 
     @classmethod
     def run_apk(cls,filepath):

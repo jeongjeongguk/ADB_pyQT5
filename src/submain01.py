@@ -1,8 +1,8 @@
 import sys, os, ctypes
-# src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
-# sys.path.insert(0, src_path_company)
-src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
-sys.path.insert(0, src_path_home)
+src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
+sys.path.insert(0, src_path_company)
+# src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
+# sys.path.insert(0, src_path_home)
 import adb_command_ui
 import adb_default
 from PyQt5 import QtWidgets, QtCore
@@ -79,7 +79,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n...을 클릭해서 apk파일을 선택하세요.", "파일확인요청", 0)
 
     def check_command(self):
-
+        command = None #TODO : check command
         return command
 
     def commandListup(self):
