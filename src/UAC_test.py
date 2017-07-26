@@ -1,26 +1,31 @@
+import ctypes
+import os
+import sys
+
+this = os.path.abspath(sys.argv[0])
+
+
+class UAC:
+    def __init__(self):
+        try:
+            self.UACStatus = ctypes.windll.shell32.IsUserAnAdmin()
+        except Exception as error:
+            print("Unable to retrieve UAC Elevation level: %s" % error)
+            self.UACStatus = 0
+
+    def get(self):
+        print("UAC Level: %s" % self.UACStatus)
+        return bool(self.UACStatus)
+
+    def set(self):
+        if not self.get():
+            try:
+                ctypes.windll.shell32.ShellExecuteW(None, "runas", this, "", None, 1)
+            except Exception as error:
+                print("Unable to request UAC Elevation: %s" % error)
+
+
 if __name__ == "__main__":
-    import wmi
-
-    c = wmi.WMI()
-    serviceToStart = 'Administrator'  # example
-    for service in c.Win32_Service(Name=serviceToStart):
-        service.StartService()
-
-    import win32api,os
-
-    # Company
-    # win32api.ShellExecute(0,  # parent window
-    #                       "runas",  # need this to force UAC to act
-    #                       "C:\\Python35-32\\python3.exe "+os.getcwd()+"\\main.py",
-    #                       None,
-    #                       "C:\\Python35-32",  # base dir
-    #                       1)  # window visibility - 1: visible, 0: background
-
-    # Home
-    win32api.ShellExecute(0,  # parent window
-                          "runas",  # need this to force UAC to act
-                          # "E:\Program Files (x86)\Python35-32\\python.exe {}\\main.py".format(os.getcwd()),
-                          "notepad.exe",
-                          None,
-                          "notepad.exe",  # base dir
-                          0)  # window visibility - 1: visible, 0: background
+    print(this)
+    Elevation = UAC()
+    Elevation.set()

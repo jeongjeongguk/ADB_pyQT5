@@ -5,13 +5,13 @@ import subprocess as cmd
 import time
 from xml.dom.minidom import parse
 
-class default(object):
+class defaultADB(object) :
     def __init__(self):
         self.filepath = ""
         self.packageName = ""
         self.startActivity = ""
         self.ConnectDevices = []
-        #self.DisconnectDevices = []
+        # self.DisconnectDevices = []
         self.today = ""
         self.currentTime = ""
         self.deviceData = ""
@@ -739,7 +739,7 @@ if __name__ == "__main__":
     filepath = ""
     filepath2 = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "Picnic-test-release-v0.0.0.5-1.apk"
     # print(os.path.isfile(filepath))
-    test = default()
+    test = defaultADB()
 
     # print(test.getVersion(filepath,filepath2))
     # test.run_info(filepath)
