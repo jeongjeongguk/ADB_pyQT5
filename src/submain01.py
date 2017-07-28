@@ -8,7 +8,7 @@ import adb_default
 from PyQt5 import QtWidgets, QtCore
 
 
-class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.default):
+class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.defaultADB):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
         # self.setAttribute(QtCore.Qt.WA_DeleteOnClose)

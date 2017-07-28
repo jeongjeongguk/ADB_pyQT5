@@ -7,7 +7,7 @@ import installedList_ui
 import adb_default
 from PyQt5 import QtWidgets
 
-class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.default):
+class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.defaultADB):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
