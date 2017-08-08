@@ -1,13 +1,13 @@
-import sys
+import sys,os, datetime
 src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
 sys.path.insert(0, src_path_company)
 # src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
 # sys.path.insert(0, src_path_home)
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 
 import main_ui
-import submain01, submain02, optionSrc
+import submain01, submain02, submain03, optionSrc
 import adb_default
 
 import subprocess
@@ -28,14 +28,17 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         super(self.__class__, self).__init__()
         self.window2 = None # 설치창
         self.window3 = None # 설치된 앱리스트창
+        self.window4 = None # 캡쳐한 파일들 편집창
         self.opitonForm = None # 설정안내창
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def connect(self):
         self.Install.clicked.connect(self.show_subform01)
         self.Uninstall.clicked.connect(self.show_subform02)
-        self.captureImage.clicked.connect(self.capture2image)
-        self.captureVideo.clicked.connect(self.capture2viedo)
-        self.ConnectedDevices.clicked.connect(self.open_capture_folder)
+        self.captureImage.clicked.connect(self.call_capture2image)
+        self.captureVideo.clicked.connect(self.call_capture2viedo)
+        # self.ConnectedDevices.clicked.connect(self.open_capture_folder)
+        self.ConnectedDevices.clicked.connect(self.show_subform03)
         self.option.clicked.connect(self.show_optionform)
 
     def show_subform01(self):
@@ -51,10 +54,27 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
             self.window3 = submain02.SubWindow02(self)
         self.window3.show()
 
+    def show_subform03(self):
+        today = datetime.datetime.now().strftime("%y%m%d")
+        path = os.getcwd() + "\\{}".format(today)
+        if self.window4 is None:
+            self.window4 = submain03.SubWindow03(path)
+        self.window4.show()
+
     def show_optionform(self):
         if self.opitonForm is None:
             self.opitonForm = optionSrc.windowForm(self)
         self.opitonForm.show()
+
+    def call_capture2image(self):
+        self.captureImage.setEnabled(False)
+        self.capture2image()
+        self.captureImage.setEnabled(True)
+
+    def call_capture2viedo(self):
+        self.captureVideo.setEnabled(False)
+        self.capture2viedo()
+        self.captureVideo.setEnabled(True)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
