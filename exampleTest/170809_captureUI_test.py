@@ -4,15 +4,20 @@ src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
 src_path = src_path_company if os.path.exists(src_path_company) else src_path_home
 sys.path.insert(0, src_path)
 
+# 테스트폴더내 작업으로 인해 adb_default.py경로추가 (src폴더내로 이동시 제거필)
+src_path_test = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\src'
+sys.path.insert(0, src_path_test)
+
 import capture_ui
 import adb_default
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QWidget, QFileSystemModel, QTreeView, QVBoxLayout, QApplication, QLabel, QLineEdit, QGridLayout, QGraphicsScene
+from PyQt5.QtWidgets import QWidget, QFileSystemModel, QTreeView, QVBoxLayout, QApplication, QLabel, QLineEdit, QGridLayout
 from PyQt5.QtGui import QPixmap
+
 from PIL import Image, ImageQt
+
 import win32com.shell.shell as win32shell
 
-set_foreground_flag = 0x00001000
 class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.defaultADB):
     def __init__(self, path, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
@@ -23,6 +28,7 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.indexRoot = self.model.index(self.model.rootPath())
         self.treeView.setModel(self.model)
         self.treeView.setRootIndex(self.indexRoot)
+
         self.connect()
 
     def connect(self):
@@ -39,11 +45,9 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
 
         # TODO: 실행하는거 말고, graphicView에 그리는걸로 변경필요
         # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
-        try :
-            img = Image.open(filePath)
-            self.display_image(img)
-        except:
-            ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", set_foreground_flag)
+
+        img = Image.open('170725_134312_SM-G925S_6.0.1_API_23.png')
+        self.display_image(img)
 
     def display_image(self, img):
         self.scene.clear()
