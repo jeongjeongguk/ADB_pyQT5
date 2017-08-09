@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         # self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-
+        # TODO : 위 1줄 삭제하고, 아래 2줄 추가한거. QTDesigner에서 처리방법 확인필요
         self.scene = QtWidgets.QGraphicsScene()
         self.graphicsView = QtWidgets.QGraphicsView(self.scene)
 
