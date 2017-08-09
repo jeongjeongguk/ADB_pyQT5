@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>751</width>
+    <height>618</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>751</width>
+    <height>618</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>파일경로</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>파일이름</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_2"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTreeView" name="treeView"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>새 캡쳐</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>저장</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>복사</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_4">
+          <property name="text">
+           <string>공유하기</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>펜</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>도형</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>잉크색</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_5">
+          <property name="text">
+           <string>지우개</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGraphicsView" name="graphicsView"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>751</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_F">
+    <property name="title">
+     <string>파일(F)</string>
+    </property>
+    <addaction name="action"/>
+    <addaction name="action_2"/>
+    <addaction name="action_3"/>
+    <addaction name="separator"/>
+    <addaction name="action_5"/>
+   </widget>
+   <widget class="QMenu" name="menu_E">
+    <property name="title">
+     <string>편집(E)</string>
+    </property>
+    <addaction name="action_7"/>
+    <addaction name="action_8"/>
+    <addaction name="action_9"/>
+   </widget>
+   <widget class="QMenu" name="menu_T">
+    <property name="title">
+     <string>도구(T)</string>
+    </property>
+    <widget class="QMenu" name="menu_F_2">
+     <property name="title">
+      <string>도형(F)</string>
+     </property>
+     <addaction name="action_13"/>
+     <addaction name="action_14"/>
+     <addaction name="action_15"/>
+     <addaction name="action_16"/>
+    </widget>
+    <widget class="QMenu" name="menu_L">
+     <property name="title">
+      <string>펜(L)</string>
+     </property>
+     <addaction name="action1pt"/>
+     <addaction name="action2pt"/>
+     <addaction name="action3pt"/>
+     <addaction name="action4pt"/>
+     <addaction name="action5pt"/>
+     <addaction name="action6pt"/>
+    </widget>
+    <addaction name="menu_L"/>
+    <addaction name="menu_F_2"/>
+    <addaction name="separator"/>
+    <addaction name="action_I"/>
+    <addaction name="separator"/>
+    <addaction name="action_R"/>
+    <addaction name="action_Q"/>
+    <addaction name="separator"/>
+    <addaction name="action_G"/>
+   </widget>
+   <widget class="QMenu" name="menu_S">
+    <property name="title">
+     <string>공유하기(S)</string>
+    </property>
+    <addaction name="action_6"/>
+    <addaction name="action_17"/>
+   </widget>
+   <widget class="QMenu" name="menu_H">
+    <property name="title">
+     <string>도움말(H)</string>
+    </property>
+   </widget>
+   <addaction name="menu_F"/>
+   <addaction name="menu_E"/>
+   <addaction name="menu_T"/>
+   <addaction name="menu_S"/>
+   <addaction name="menu_H"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action">
+   <property name="text">
+    <string>새 캡처</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>저장</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>다른 이름으로 저장</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>종료</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>팀업 대화방선택</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>실행취소</string>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="text">
+    <string>다시실행</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>복사</string>
+   </property>
+  </action>
+  <action name="action_I">
+   <property name="text">
+    <string>잉크 색(I)</string>
+   </property>
+  </action>
+  <action name="action_R">
+   <property name="text">
+    <string>지우개(R)</string>
+   </property>
+  </action>
+  <action name="action_Q">
+   <property name="text">
+    <string>모든 잉크 지우기(Q)</string>
+   </property>
+  </action>
+  <action name="action_G">
+   <property name="text">
+    <string>그림판으로 내보내기(G)</string>
+   </property>
+  </action>
+  <action name="action_13">
+   <property name="text">
+    <string>선</string>
+   </property>
+  </action>
+  <action name="action_14">
+   <property name="text">
+    <string>화살표</string>
+   </property>
+  </action>
+  <action name="action_15">
+   <property name="text">
+    <string>사각형</string>
+   </property>
+  </action>
+  <action name="action_16">
+   <property name="text">
+    <string>원</string>
+   </property>
+  </action>
+  <action name="action1pt">
+   <property name="text">
+    <string>1pt</string>
+   </property>
+  </action>
+  <action name="action2pt">
+   <property name="text">
+    <string>2pt</string>
+   </property>
+  </action>
+  <action name="action3pt">
+   <property name="text">
+    <string>3pt</string>
+   </property>
+  </action>
+  <action name="action4pt">
+   <property name="text">
+    <string>4pt</string>
+   </property>
+  </action>
+  <action name="action5pt">
+   <property name="text">
+    <string>5pt</string>
+   </property>
+  </action>
+  <action name="action6pt">
+   <property name="text">
+    <string>6pt</string>
+   </property>
+  </action>
+  <action name="action_17">
+   <property name="text">
+    <string>팀업 로그인</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
