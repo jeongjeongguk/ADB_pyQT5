@@ -23,10 +23,16 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.indexRoot = self.model.index(self.model.rootPath())
         self.treeView.setModel(self.model)
         self.treeView.setRootIndex(self.indexRoot)
+        self.scene = QtWidgets.QGraphicsScene()
+        self.graphicsView.setScene(self.scene)
         self.connect()
 
+
     def connect(self):
-        self.treeView.clicked.connect(self.on_treeView_clicked)
+        self.treeView.doubleClicked.connect(self.on_treeView_clicked)
+        # self.treeView.itemDoubleClicked.connect(self.on_treeView_clicked)
+        # self.treeView.doubleClicked.connect(self.on_treeView_clicked)
+        # self.treeview.connect("cursor-changed", self.on_treeView_clicked)
 
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def on_treeView_clicked(self, index):
@@ -37,8 +43,6 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.lineEdit_2.setText(fileName)
         self.lineEdit.setText(filePath)
 
-        # TODO: 실행하는거 말고, graphicView에 그리는걸로 변경필요
-        # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
         try :
             img = Image.open(filePath)
             self.display_image(img)
@@ -48,15 +52,25 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
     def display_image(self, img):
         self.scene.clear()
         w, h = img.size
+        #
+        # pix = QPixmap(img)
+        # self.m_item = PixmapItem(pix)
+        # self.m_scene.addItem(self.m_item.pixmap_item)
+        # self.m_ui.graphicsView.setScene(self.m_scene)
+
         self.imgQ = ImageQt.ImageQt(img)  # we need to hold reference to imgQ, or it will crash
         pixMap = QPixmap.fromImage(self.imgQ)
         self.scene.addPixmap(pixMap)
         self.graphicsView.fitInView(0,0,w,h,1)
         self.scene.update()
 
+
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setApplicationName('FileView')
-    ui = SubWindow03("C:\\")
+    testPath = "C:/Users/Jeongkuk/PycharmProjects/androidADB/src/"
+    # ui = SubWindow03("C:\\")
+    ui = SubWindow03(testPath)
     ui.show()
     sys.exit(app.exec_())

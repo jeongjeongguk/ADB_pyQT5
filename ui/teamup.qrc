@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>icons/if_ic_refresh_48px_352439.ico</file>
+    <file>icons/if_Rounded-06_2024632.ico</file>
+    <file>icons/Option.png</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,18 @@
+<RCC>
+  <qresource prefix="button">
+    <file>icons/Folder.png</file>
+    <file>icons/mspaint_0001.ico</file>
+    <file>icons/TeamUP_0000.ico</file>
+    <file>icons/Capture_image.png</file>
+    <file>icons/ALCapture_0007.ico</file>
+    <file>icons/ALCapture_0009.ico</file>
+    <file>icons/ALCapture_0010.ico</file>
+    <file>icons/ALCapture_0012.ico</file>
+    <file>icons/ALCapture_0013.ico</file>
+    <file>icons/ALCapture_0015.ico</file>
+    <file>icons/ALCapture_0016.ico</file>
+    <file>icons/ALCapture_0018.ico</file>
+    <file>icons/ALCapture_0019.ico</file>
+    <file>icons/ALCapture_0021.ico</file>
+  </qresource>
+</RCC>
