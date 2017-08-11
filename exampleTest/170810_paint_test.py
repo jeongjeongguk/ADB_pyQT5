@@ -332,14 +332,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def maybeSave(self):
         if self.scribbleArea.isModified():
-            ret = QtGui.QMessageBox.warning(self, "Scribble",
+            ret = QtWidgets.QMessageBox.warning(self, "Scribble",
                 "The image has been modified.\n"
                 "Do you want to save your changes?",
-                QtGui.QMessageBox.Save | QtGui.QMessageBox.Discard |
-                QtGui.QMessageBox.Cancel)
-            if ret == QtGui.QMessageBox.Save:
+                                                QtWidgets.QMessageBox.Save |
+                                                QtWidgets.QMessageBox.Discard |
+                                                QtWidgets.QMessageBox.Cancel)
+            if ret == QtWidgets.QMessageBox.Save:
                 return self.saveFile('png')
-            elif ret == QtGui.QMessageBox.Cancel:
+            elif ret == QtWidgets.QMessageBox.Cancel:
                 return False
 
         return True
@@ -347,7 +348,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def saveFile(self, fileFormat):
         initialPath = QtCore.QDir.currentPath() + '/untitled.' + fileFormat
 
-        fileName = QtGui.QFileDialog.getSaveFileName(self, "Save As",
+        fileName = QtWidgets.QFileDialog.getSaveFileName(self, "Save As",
             initialPath,
             "%s Files (*.%s);;All Files (*)" % (fileFormat.upper(), fileFormat))
         if fileName:
