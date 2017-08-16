@@ -61,54 +61,55 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_7">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="contextMenuPolicy">
-             <enum>Qt::CustomContextMenu</enum>
-            </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="capture.qrc">
-              <normaloff>:/button/icons/Capture_image.png</normaloff>:/button/icons/Capture_image.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="autoRepeat">
-             <bool>false</bool>
-            </property>
-            <property name="default">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>새 캡처 </string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QToolButton" name="NewCapture">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>새 캡쳐</string>
+          </property>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/Capture_image.png</normaloff>:/button/icons/Capture_image.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="Line" name="line">
@@ -118,170 +119,29 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QPushButton" name="pushButton_2">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="capture.qrc">
-              <normaloff>:/button/icons/ALCapture_0019.ico</normaloff>
-              <normalon>:/button/icons/ALCapture_0021.ico</normalon>:/button/icons/ALCapture_0019.ico</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>저장</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="capture.qrc">
-              <normaloff>:/button/icons/ALCapture_0007.ico</normaloff>:/button/icons/ALCapture_0007.ico</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>복사</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <widget class="QPushButton" name="pushButton_4">
-            <property name="whatsThis">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="capture.qrc">
-              <normaloff>:/button/icons/TeamUP_0000.ico</normaloff>:/button/icons/TeamUP_0000.ico</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>25</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>공유</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <widget class="QPushButton" name="pushButton_5">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="capture.qrc">
-              <normaloff>:/button/icons/ALCapture_0012.ico</normaloff>:/button/icons/ALCapture_0012.ico</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>지우개</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="baseSize">
+         <widget class="QToolButton" name="Save">
+          <property name="minimumSize">
            <size>
-            <width>0</width>
-            <height>0</height>
+            <width>51</width>
+            <height>54</height>
            </size>
           </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
           </property>
-          <property name="inputMethodHints">
-           <set>Qt::ImhNone</set>
+          <property name="mouseTracking">
+           <bool>true</bool>
           </property>
-          <property name="editable">
-           <bool>false</bool>
+          <property name="text">
+           <string>저장</string>
           </property>
-          <property name="insertPolicy">
-           <enum>QComboBox::NoInsert</enum>
-          </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/ALCapture_0019.ico</normaloff>
+            <normalon>:/button/icons/ALCapture_0021.ico</normalon>:/button/icons/ALCapture_0019.ico</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -289,49 +149,290 @@
             <height>30</height>
            </size>
           </property>
-          <property name="duplicatesEnabled">
-           <bool>false</bool>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
           </property>
-          <property name="frame">
-           <bool>false</bool>
+          <property name="autoRaise">
+           <bool>true</bool>
           </property>
-          <property name="modelColumn">
-           <number>0</number>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="Copy">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
           </property>
-          <item>
-           <property name="text">
-            <string>펜</string>
-           </property>
-           <property name="icon">
-            <iconset resource="capture.qrc">
-             <normaloff>:/button/icons/ALCapture_0016.ico</normaloff>:/button/icons/ALCapture_0016.ico</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>도형</string>
-           </property>
-           <property name="icon">
-            <iconset resource="capture.qrc">
-             <normaloff>:/button/icons/ALCapture_0013.ico</normaloff>
-             <normalon>:/button/icons/ALCapture_0015.ico</normalon>:/button/icons/ALCapture_0013.ico</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>잉크색</string>
-           </property>
-           <property name="icon">
-            <iconset resource="capture.qrc">
-             <normaloff>:/button/icons/mspaint_0001.ico</normaloff>:/button/icons/mspaint_0001.ico</iconset>
-           </property>
-          </item>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>복사</string>
+          </property>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/ALCapture_0007.ico</normaloff>:/button/icons/ALCapture_0007.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="Share">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="text">
+           <string>공유</string>
+          </property>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/TeamUP_0000.ico</normaloff>:/button/icons/TeamUP_0000.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="Pen">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>펜</string>
+          </property>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/ALCapture_0018.ico</normaloff>:/button/icons/ALCapture_0018.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+          <property name="arrowType">
+           <enum>Qt::NoArrow</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="quadrangle">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>도형</string>
+          </property>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/ALCapture_0015.ico</normaloff>:/button/icons/ALCapture_0015.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="Eraser">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>지우개</string>
+          </property>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/ALCapture_0012.ico</normaloff>:/button/icons/ALCapture_0012.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="Color">
+          <property name="minimumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>51</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>잉크색</string>
+          </property>
+          <property name="icon">
+           <iconset resource="capture.qrc">
+            <normaloff>:/button/icons/mspaint_0001.ico</normaloff>:/button/icons/mspaint_0001.ico</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
       </item>
       <item>
        <widget class="QGraphicsView" name="graphicsView">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
         <property name="whatsThis">
          <string/>
         </property>
@@ -503,31 +604,52 @@
    </property>
   </action>
   <action name="action1pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>1pt</string>
    </property>
   </action>
   <action name="action2pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>2pt</string>
    </property>
   </action>
   <action name="action3pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>3pt</string>
    </property>
   </action>
   <action name="action4pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>4pt</string>
    </property>
   </action>
   <action name="action5pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>5pt</string>
    </property>
   </action>
   <action name="action6pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>6pt</string>
    </property>

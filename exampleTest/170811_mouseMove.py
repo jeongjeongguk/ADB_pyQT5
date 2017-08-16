@@ -10,6 +10,12 @@ class MyGraphicsView(QtWidgets.QGraphicsView):
     def mouseMoveEvent(self, event):
         print('mouseMoveEvent: pos {}'.format(event.pos()))
 
+    def mousePressEvent(self, event):
+        print("hi")
+
+    def mouseReleaseEvent(self, event):
+        print("hello")
+
 class Window(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
