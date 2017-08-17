@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>751</width>
+    <height>618</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>751</width>
+    <height>618</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>CaptureEdit</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="capture.qrc">
+    <normaloff>:/button/icons/Folder.png</normaloff>:/button/icons/Folder.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>파일경로</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>파일이름</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_2"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTreeView" name="treeView"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QGraphicsView" name="graphicsView">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="whatsThis">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action">
+   <property name="text">
+    <string>새 캡처</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>저장</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>다른 이름으로 저장</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>종료</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>팀업 대화방선택</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>실행취소</string>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="text">
+    <string>다시실행</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>복사</string>
+   </property>
+  </action>
+  <action name="action_I">
+   <property name="text">
+    <string>잉크 색(I)</string>
+   </property>
+  </action>
+  <action name="action_R">
+   <property name="text">
+    <string>지우개(R)</string>
+   </property>
+  </action>
+  <action name="action_Q">
+   <property name="text">
+    <string>모든 잉크 지우기(Q)</string>
+   </property>
+  </action>
+  <action name="action_G">
+   <property name="text">
+    <string>그림판으로 내보내기(G)</string>
+   </property>
+  </action>
+  <action name="action_13">
+   <property name="text">
+    <string>선</string>
+   </property>
+  </action>
+  <action name="action_14">
+   <property name="text">
+    <string>화살표</string>
+   </property>
+  </action>
+  <action name="action_15">
+   <property name="text">
+    <string>사각형</string>
+   </property>
+  </action>
+  <action name="action_16">
+   <property name="text">
+    <string>원</string>
+   </property>
+  </action>
+  <action name="action1pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1pt</string>
+   </property>
+  </action>
+  <action name="action2pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>2pt</string>
+   </property>
+  </action>
+  <action name="action3pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>3pt</string>
+   </property>
+  </action>
+  <action name="action4pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>4pt</string>
+   </property>
+  </action>
+  <action name="action5pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>5pt</string>
+   </property>
+  </action>
+  <action name="action6pt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>6pt</string>
+   </property>
+  </action>
+  <action name="action_17">
+   <property name="text">
+    <string>팀업 로그인</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>읽어보세요</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="capture.qrc"/>
+ </resources>
+ <connections/>
+</ui>

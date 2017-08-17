@@ -7,12 +7,10 @@ sys.path.insert(0, src_path)
 import capture_ui
 import adb_default
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QWidget, QFileSystemModel, QTreeView, QVBoxLayout, QApplication, QLabel, QLineEdit, QGridLayout, QGraphicsScene, QGraphicsLineItem,QGraphicsView
-from PyQt5.QtGui import QPixmap, QImage, QMouseEvent, QPainter
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QFileSystemModel, QTreeView, QVBoxLayout, QApplication, QLabel, QLineEdit, QGridLayout, QGraphicsScene
+from PyQt5.QtGui import QPixmap
 from PIL import Image, ImageQt
 import win32com.shell.shell as win32shell
-import paint
 
 set_foreground_flag = 0x00001000
 class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.defaultADB):
@@ -29,37 +27,8 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.graphicsView.setScene(self.scene)
         self.connect()
 
-        self.scribbling = False
-
     def connect(self):
-        self.treeView.doubleClicked.connect(self.on_treeView_clicked)
-
-    def mousePressEvent(self, event):
-        # https://doc.qt.io/qt-5/qmouseevent.html#QMouseEvent-3 참고할것.
-        if event.button() == Qt.LeftButton and self.scribbling == False:
-            # print("왼쪽")
-            # print(self._start)
-            self._start = event.pos()
-            self.scribbling = True
-        elif event.button() == Qt.RightButton :
-            print("오른쪽")
-        elif event.button() == Qt.LeftButton and self.scribbling:
-            # print("다음번 왼쪽클릭")
-            # print(self._end)
-            self._end = event.pos()
-            self.scribbling = False
-
-
-    def drawLineTo(self, endPoint):
-        painter = QPainter(self.image)
-        painter.setPen(QPen(self.myPenColor, self.myPenWidth, Qt.SolidLine,
-                            Qt.RoundCap, Qt.RoundJoin))
-        painter.drawLine(self.lastPoint, endPoint)
-        self.modified = True
-
-        rad = self.myPenWidth / 2 + 2
-        self.update(QRect(self.lastPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad))
-        self.lastPoint = QPoint(endPoint)
+        self.treeView.clicked.connect(self.on_treeView_clicked)
 
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def on_treeView_clicked(self, index):
@@ -70,7 +39,9 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.lineEdit_2.setText(fileName)
         self.lineEdit.setText(filePath)
 
-        try:
+        # TODO: 실행하는거 말고, graphicView에 그리는걸로 변경필요
+        # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
+        try :
             img = Image.open(filePath)
             self.display_image(img)
         except:
@@ -79,13 +50,11 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
     def display_image(self, img):
         self.scene.clear()
         w, h = img.size
-        self.imgQ = ImageQt.ImageQt(img)
+        self.imgQ = ImageQt.ImageQt(img)  # we need to hold reference to imgQ, or it will crash
         pixMap = QPixmap.fromImage(self.imgQ)
         self.scene.addPixmap(pixMap)
         self.graphicsView.fitInView(0,0,w,h,1)
         self.scene.update()
-
-
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
