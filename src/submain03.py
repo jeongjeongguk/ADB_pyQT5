@@ -1,8 +1,7 @@
 import sys, ctypes, os
-src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
-src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
-src_path = src_path_company if os.path.exists(src_path_company) else src_path_home
-sys.path.insert(0, src_path)
+currentPaths = os.getcwd()
+currentPathsSet = currentPaths.replace("src","ui_py")
+sys.path.insert(0, currentPathsSet)
 
 import capture_ui
 import adb_default
@@ -11,8 +10,8 @@ from PyQt5.QtWidgets import QWidget, QFileSystemModel, QTreeView, QVBoxLayout, Q
 from PyQt5.QtGui import QPixmap
 from PIL import Image, ImageQt
 import win32com.shell.shell as win32shell
+import consts_string
 
-set_foreground_flag = 0x00001000
 class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.defaultADB):
     def __init__(self, path, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
@@ -45,7 +44,7 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
             img = Image.open(filePath)
             self.display_image(img)
         except:
-            ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", consts_string.show_flag.foreground.value)
 
     def display_image(self, img):
         self.scene.clear()

@@ -1,14 +1,14 @@
-import sys,os, datetime
-src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
-sys.path.insert(0, src_path_company)
-# src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
-# sys.path.insert(0, src_path_home)
+import sys, ctypes, os, datetime
+currentPaths = os.getcwd()
+currentPathsSet = currentPaths.replace("src","ui_py")
+sys.path.insert(0, currentPathsSet)
 
 from PyQt5 import QtWidgets, QtCore
 
 import main_ui
 import submain01, submain02, submain03, optionSrc
 import adb_default
+import consts_string
 
 import subprocess
 

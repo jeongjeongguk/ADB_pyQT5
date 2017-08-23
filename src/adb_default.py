@@ -3,8 +3,7 @@ import subprocess as cmd
 import win32com.shell.shell as win32shell
 from xml.dom.minidom import parse
 import win32api
-
-set_foreground_flag = 0x00001000
+import consts_string
 
 class defaultADB(object) :
     def __init__(self):
@@ -55,7 +54,7 @@ class defaultADB(object) :
                               "같거나 높은 버전으로만 덮어쓰기 설치가 가능합니다.\n"\
                                 .format(OldVersion, NewVersion)
                 else:
-                    ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", set_foreground_flag)
+                    ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
                     return None
 
             userChoice = ctypes.windll.user32.MessageBoxW \
@@ -63,7 +62,7 @@ class defaultADB(object) :
                             0,  "패키지명 : {} \n"
                                 "{}"
                                 "\n'확인'을 클릭하시면, 설치를 시작합니다."
-                                "\n기기에따라 최대 20초가량 소요됩니다.".format(cls.packageName, message), title, 1 | set_foreground_flag
+                                "\n기기에따라 최대 20초가량 소요됩니다.".format(cls.packageName, message), title, 1 | consts_string.show_flag.foreground.value
                         )
             # https://msdn.microsoft.com/en-us/library/ms645505(VS.85).aspx
 
@@ -72,13 +71,13 @@ class defaultADB(object) :
                 if ConnectedDevicesCnt != 0:
                     if option == "": cls.uninstall_apk("path", filepath)
                     os.system("adb install " + option + filepath)
-                    ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", set_foreground_flag)
+                    ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
                 else:
-                    ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", set_foreground_flag)
+                    ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
             else :
-                ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", set_foreground_flag)
+                ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", consts_string.show_flag.foreground.value)
         else :
-            ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", consts_string.show_flag.foreground.value)
 
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
         #TODO : 위 내용관련한 처리필요
@@ -111,7 +110,7 @@ class defaultADB(object) :
                 pass
         else:
             ctypes.windll.user32.MessageBoxW \
-                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", set_foreground_flag)
+                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
             # win32api.MessageBox(0, 'hello', 'title', 0x00001000)
             return False, "None", "None"
 
@@ -119,7 +118,7 @@ class defaultADB(object) :
     def run_apk(cls,filepath):
         if cls.run_info(filepath)[0] :
             os.system("adb shell am start -n " + cls.packageName +"/"+cls.startActivity)
-            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
         else:
             pass
 
@@ -131,9 +130,9 @@ class defaultADB(object) :
             elif args[0] == "packageName" :
                 cls.packageName = args[1]
             os.system("adb uninstall " + cls.packageName)
-            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "삭제완료", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "삭제완료", consts_string.show_flag.foreground.value)
         except :
-            ctypes.windll.user32.MessageBoxW(0, "PC와 연결을 확인해주세요.", "연결끊김", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "PC와 연결을 확인해주세요.", "연결끊김", consts_string.show_flag.foreground.value)
 
         # cls.check_install()
 
@@ -143,11 +142,11 @@ class defaultADB(object) :
         # TODO : 버전이 설치된 버전보다 낮을 경우에 대한 처리가 필요함.
         if fileCheck == True:
             ctypes.windll.user32.MessageBoxW \
-                (0, "패키지명 : %s \n'확인'을 클릭하시면, 설치를 시작합니다.\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "업데이트 설치 시작확인", set_foreground_flag)
+                (0, "패키지명 : %s \n'확인'을 클릭하시면, 설치를 시작합니다.\n기기에따라 최대 20초가량 소요됩니다." % cls.packageName, "업데이트 설치 시작확인", consts_string.show_flag.foreground.value)
             os.system("adb install -r " + filepath)
-            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
         else:
-            ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", consts_string.show_flag.foreground.value)
 
 
     @classmethod
@@ -159,15 +158,15 @@ class defaultADB(object) :
             # print("installed program")
             if test != None :
                 ctypes.windll.user32.MessageBoxW \
-                    (0, "패키지명 : %s \n설치유무 : 설치됨" % cls.packageName, "설치확인", set_foreground_flag)
+                    (0, "패키지명 : %s \n설치유무 : 설치됨" % cls.packageName, "설치확인", consts_string.show_flag.foreground.value)
         except:
             # print("Not installed program")
             try:
                 ctypes.windll.user32.MessageBoxW \
-                    (0, "패키지명 : %s \n설치유무 : 설치안됨" %cls.packageName, "설치확인", set_foreground_flag)
+                    (0, "패키지명 : %s \n설치유무 : 설치안됨" %cls.packageName, "설치확인", consts_string.show_flag.foreground.value)
             except:
                 ctypes.windll.user32.MessageBoxW \
-                    (0, "선택한 설치파일의 경로 및 파일명을 확인해주세요.\n(영문,숫자만 가능)", "설치확인", set_foreground_flag)
+                    (0, "선택한 설치파일의 경로 및 파일명을 확인해주세요.\n(영문,숫자만 가능)", "설치확인", consts_string.show_flag.foreground.value)
 
     @classmethod
     def link2release(cls, *args):
@@ -184,7 +183,7 @@ class defaultADB(object) :
                 + cls.packageName
             )
         except IndexError:
-            ctypes.windll.user32.MessageBoxW(0, "리스트 갱신이 필요합니다.\n리스트갱신버튼을 클릭하세요.", "리스트확인요청", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "리스트 갱신이 필요합니다.\n리스트갱신버튼을 클릭하세요.", "리스트확인요청", consts_string.show_flag.foreground.value)
 
     @classmethod
     def update(cls, filepath_old, filepath_new): #TODO: devices arg 전달필요
@@ -219,7 +218,7 @@ class defaultADB(object) :
         CHK_ANYDevice = cls.check_connect() #check_any_connect_device
         # print(CHK_ANYDevice)
         if CHK_ANYDevice == 0 :
-            ctypes.windll.user32.MessageBoxW(0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
         else :
             try :
                 cls.run_info(filepath_old) #알송기준 : com.estsoft.alsong
@@ -249,12 +248,12 @@ class defaultADB(object) :
                 cls.run_apk("test.apk")
                 # cls.run_apk(filepath_old) #TODO : 출시버전의 apk 추출해서 packagename, startactivity 구하기
 
-                ctypes.windll.user32.MessageBoxW(0, "구버전에서 설정할 내용들 설정하세요.", "설정안내", set_foreground_flag)
+                ctypes.windll.user32.MessageBoxW(0, "구버전에서 설정할 내용들 설정하세요.", "설정안내", consts_string.show_flag.foreground.value)
                 time.sleep(120)
                 cls.reinstall_apk(filepath_new)
 
             except cmd.CalledProcessError :
-                ctypes.windll.user32.MessageBoxW(0, "다수의 기기가 연결되어있습니다.", "테스트기기 선택필요", set_foreground_flag)
+                ctypes.windll.user32.MessageBoxW(0, "다수의 기기가 연결되어있습니다.", "테스트기기 선택필요", consts_string.show_flag.foreground.value)
 
     @staticmethod
     def exportXML():
@@ -287,7 +286,7 @@ class defaultADB(object) :
         userChoice = ctypes.windll.user32.MessageBoxW \
             (0, "[입력하신 명령어] \n"
                 "{}\n\n"
-                "실행하시겠습니까?".format(command), "명령어 확인", 1|set_foreground_flag)
+                "실행하시겠습니까?".format(command), "명령어 확인", 1|consts_string.show_flag.foreground.value)
         if userChoice == 1:
             if command[0] == "[" : command = command.split("]")[1]
             os.system("start /B start cmd.exe @cmd /k " + command)
@@ -303,9 +302,9 @@ class defaultADB(object) :
         try:
             os.system("adb shell pm clear " + cls.packageName)
             # test = cmd.check_output("adb shell pm clear " + package_name, stderr=cmd.STDOUT, shell=True)
-            ctypes.windll.user32.MessageBoxW(0, cls.packageName + "의 앱데이터가 삭제되었습니다.", cls.packageName, set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, cls.packageName + "의 앱데이터가 삭제되었습니다.", cls.packageName, consts_string.show_flag.foreground.value)
         except:
-            ctypes.windll.user32.MessageBoxW(0, "패키지명으로 설치된 앱이 확인되지 않습니다.", "패키지명 확인필요", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "패키지명으로 설치된 앱이 확인되지 않습니다.", "패키지명 확인필요", consts_string.show_flag.foreground.value)
 
     @staticmethod
     def getCurrentActivity(self):
@@ -313,7 +312,7 @@ class defaultADB(object) :
         test = cmd.check_output("adb shell \"dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'\"",
                                 stderr=cmd.STDOUT, shell=True)
         test = test.decode("utf-8")
-        ctypes.windll.user32.MessageBoxW(0, test, "현재 화면정보", set_foreground_flag)
+        ctypes.windll.user32.MessageBoxW(0, test, "현재 화면정보", consts_string.show_flag.foreground.value)
 
     @staticmethod
     # @accepts(str)
@@ -427,12 +426,12 @@ class defaultADB(object) :
             try :
                 cmd.call("mkdir " + cls.today, stderr=None, shell=True)
                 # cmd.call("mkdir " + cls.today, stderr=None, shell=False) # except Test
-                ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", set_foreground_flag)
+                ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", consts_string.show_flag.foreground.value)
             except :
-                ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치에서 프로그램이 실행되었습니다.", "실행파일 경로확인요청", set_foreground_flag)
+                ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치에서 프로그램이 실행되었습니다.", "실행파일 경로확인요청", consts_string.show_flag.foreground.value)
                 return -1
         else:
-            ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : "+ cls.today, "스크린샷 저장경로안내", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : "+ cls.today, "스크린샷 저장경로안내", consts_string.show_flag.foreground.value)
 
     @classmethod
     def check_time(cls):
@@ -503,7 +502,7 @@ class defaultADB(object) :
             os.system("start " + cls.today)
         else :
             ctypes.windll.user32.MessageBoxW \
-                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", set_foreground_flag)
+                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
             # return  -1
 
     @classmethod
@@ -515,10 +514,10 @@ class defaultADB(object) :
             # print(ConnectedDevicesCnt)
             # print(cls.deviceData)
             ctypes.windll.user32.MessageBoxW \
-                (0, "현재 %i대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n%s" %(ConnectedDevicesCnt, cls.deviceData), "연결된 기기", set_foreground_flag)
+                (0, "현재 %i대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n%s" %(ConnectedDevicesCnt, cls.deviceData), "연결된 기기", consts_string.show_flag.foreground.value)
         else :
             ctypes.windll.user32.MessageBoxW \
-                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", set_foreground_flag)
+                (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
             return -1
         # TODO : API 19 이상일때에만 영상녹화하고, 메시지다이얼로그의 '녹화끝','취소'리턴받으면 녹화중지시키고 영상뺴오기
         device_api = cls.deviceData.split("_")[3]
@@ -526,7 +525,7 @@ class defaultADB(object) :
         videoEnableOSver = 19
         # print("연결된 기기의 OS API은 " + device_api)
         if float(device_api) < videoEnableOSver :
-            ctypes.windll.user32.MessageBoxW(0, "선택된 기기에서는 녹화가 되지 않습니다.", "녹화지원안됨", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "선택된 기기에서는 녹화가 되지 않습니다.", "녹화지원안됨", consts_string.show_flag.foreground.value)
         else:
             try :
                 cmd.check_output("adb shell rm -r /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
@@ -547,7 +546,7 @@ class defaultADB(object) :
             path = os.getcwd().replace("\\","/").replace("\r","").replace("\n","")
             time.sleep(1)
             RecordCnt = ctypes.windll.user32.MessageBoxW \
-                (0, "영상기록을 시작합니다.\n확인 : 영상기록 PC전송\n취소 : 영상기록삭제", "영상기록중", 1|set_foreground_flag)
+                (0, "영상기록을 시작합니다.\n확인 : 영상기록 PC전송\n취소 : 영상기록삭제", "영상기록중", 1|consts_string.show_flag.foreground.value)
             if RecordCnt == 1: # 확인 : 기기 -> PC 로 영상전송
                 os.system("TASKKILL /F /IM cmd.exe /T")
                 # powershell 기반으로 main.exe가 실행되면 괜찮음?? win7 x86 sp1 ent / win10 x64 ent 에서 g5 7.0으로 확인
@@ -680,7 +679,7 @@ class defaultADB(object) :
 
                 return version
             except :
-                ctypes.windll.user32.MessageBoxW(0, "리스트갱신버튼을 클릭해주세요.", "확인요청", set_foreground_flag)
+                ctypes.windll.user32.MessageBoxW(0, "리스트갱신버튼을 클릭해주세요.", "확인요청", consts_string.show_flag.foreground.value)
                 return None
         elif (args[0] != "") & os.path.isfile(args[0]):
             dumpsys_result = cmd.check_output("aapt d badging {}".format(args[0])
@@ -691,7 +690,7 @@ class defaultADB(object) :
                     version = version.split(" ")[3].split("'")[1].split("'")[0]
             return version
         else:
-            ctypes.windll.user32.MessageBoxW(0, "패키지가 선택되지 않았습니다.", "도움말", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "패키지가 선택되지 않았습니다.", "도움말", consts_string.show_flag.foreground.value)
 
         # return args[0], args[1] # ok.
         # return type(args[0]), type(args[1]) # str
@@ -706,7 +705,7 @@ class defaultADB(object) :
             "[Usage]\n" \
             "1. https://developer.android.com/studio/run/oem-usb.html?hl=ko 에서 기기별드라이버설치"
 
-        ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", set_foreground_flag)
+        ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", consts_string.show_flag.foreground.value)
 
     @staticmethod
     def show_help_subform02(self):
@@ -720,7 +719,7 @@ class defaultADB(object) :
              "> 출시버전 버튼은 해당 패키지명으로 구글플레이스토어에서 \n" \
              "  검색한 결과를 보여줍니다."
 
-         ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", set_foreground_flag)
+         ctypes.windll.user32.MessageBoxW(0, help_text, "도움말", consts_string.show_flag.foreground.value)
 
         # http://pythoncentral.io/pyside-pyqt-tutorial-the-qlistwidget/
         # https://stackoverflow.com/questions/31380457/add-right-click-functionality-to-listwidget-in-pyqt4

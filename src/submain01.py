@@ -1,12 +1,11 @@
-import sys, os, ctypes
-src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
-src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
-src_path = src_path_company if os.path.exists(src_path_company) else src_path_home
-sys.path.insert(0, src_path)
+import sys, ctypes, os
+currentPaths = os.getcwd()
+currentPathsSet = currentPaths.replace("src","ui_py")
+sys.path.insert(0, currentPathsSet)
 import adb_command_ui
 import adb_default
 from PyQt5 import QtWidgets, QtCore
-set_foreground_flag = 0x00001000
+import consts_string
 
 class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.defaultADB):
     def __init__(self, parent=None):
@@ -59,14 +58,14 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         # comboBox : self.comboBox.currentText()
         self.pushButton_9.clicked.connect(
             lambda: self.controlDevice(None, self.comboBox.currentText()) if self.comboBox.currentText() != ""
-            else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", set_foreground_flag)
+            else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", consts_string.show_flag.foreground.value)
         )
         # lineEdit : self.lineEdit.returnPressed.connect(self.pushButton_9)
         # comboBox : self.comboBox.lineEdit().returnPressed.connect()
         # comboBox 에서 엔터입력시 포커스 이동 : self.comboBox.lineEdit().returnPressed.connect(self.pushButton_9.setFocus)
         self.comboBox.lineEdit().returnPressed.connect(
             lambda: self.controlDevice(None, self.comboBox.currentText()) if self.comboBox.currentText() != ""
-            else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", set_foreground_flag)
+            else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", consts_string.show_flag.foreground.value)
         ) # 엔터키입력시에도, 버튼을 클릭했을때와 동일한 함수를 연결.
 
 
@@ -77,7 +76,7 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         self.lineEdit.setText(path)
 
     def exceptionMessage(self):
-        ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n...을 클릭해서 apk파일을 선택하세요.", "파일확인요청", set_foreground_flag)
+        ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n...을 클릭해서 apk파일을 선택하세요.", "파일확인요청", consts_string.show_flag.foreground.value)
 
     def check_command(self):
         command = None #TODO : check command

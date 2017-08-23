@@ -1,12 +1,12 @@
 import sys, ctypes, os
-src_path_company = 'C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\ui_py'
-src_path_home = 'C:\\Users\Administrator\PycharmProjects\\androidADB\\ui_py'
-src_path = src_path_company if os.path.exists(src_path_company) else src_path_home
-sys.path.insert(0, src_path)
+currentPaths = os.getcwd()
+currentPathsSet = currentPaths.replace("src","ui_py")
+sys.path.insert(0, currentPathsSet)
 import installedList_ui
 import adb_default
 from PyQt5 import QtWidgets
-set_foreground_flag = 0x00001000
+import consts_string
+
 class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.defaultADB):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
@@ -61,7 +61,7 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
             ctypes.windll.user32.MessageBoxW(0,
                                              "선택된 앱 : {}\n확인된 버전 : {}"
                                              .format(self.listWidget.selectedItems()[0].text(),self.getVersion(self.listWidget.selectedItems()[0].text(), ""))
-                                             , "버전확인", set_foreground_flag)
+                                             , "버전확인", consts_string.show_flag.foreground.value)
 
             # print(self.getVersion(self.listWidget.selectedItems()[0].text(), ""))
             if self.listWidget.selectedItems() != []
@@ -75,10 +75,10 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
             for index in range(len(InstProgramInfo)):
                 self.listWidget.addItem(InstProgramInfo[index])
         else :
-            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", set_foreground_flag)
+            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
 
     def exceptionMessage(self):
-        ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n리스트에서 앱을 선택하세요.", "리스트확인요청", set_foreground_flag)
+        ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n리스트에서 앱을 선택하세요.", "리스트확인요청", consts_string.show_flag.foreground.value)
 
 
 if __name__ == "__main__":
