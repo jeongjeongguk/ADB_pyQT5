@@ -20,7 +20,7 @@ UI   : main_ui.Ui_MainWindow, adb_command_ui.Ui_Form, installedList_ui.Ui_Form
 #TODO : UI 중력뭉개질떄 추가할것
 '''
 self.widget = QtWidgets.QWidget(Form)
-self.widget.setGeometry(QtCore.QRect(10, 10, 322, 157))
+self.widget.setGeometry(QtCore.QRect(10, 10, 322, 157)) # 이부분이 필요한거다
 self.widget.setObjectName("widget")
 '''
 class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defaultADB):
