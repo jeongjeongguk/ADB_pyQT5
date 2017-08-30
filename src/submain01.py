@@ -69,7 +69,6 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         ) # 엔터키입력시에도, 버튼을 클릭했을때와 동일한 함수를 연결.
 
 
-
     def setAPKpath(self):
         path = self.SelectSetupFile()
         # print(path)

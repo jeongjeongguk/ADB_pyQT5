@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>299</width>
+    <width>342</width>
     <height>101</height>
    </rect>
   </property>
@@ -18,13 +18,13 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>299</width>
+    <width>342</width>
     <height>101</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>299</width>
+    <width>342</width>
     <height>101</height>
    </size>
   </property>
@@ -42,9 +42,20 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="Install">
+         <widget class="QToolButton" name="Install">
+          <property name="font">
+           <font>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>설치,실행,날짜/언어</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <property name="text">
-           <string/>
+           <string>Cmd</string>
           </property>
           <property name="icon">
            <iconset resource="icon.qrc">
@@ -56,15 +67,27 @@
             <height>30</height>
            </size>
           </property>
-          <property name="flat">
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="Uninstall">
+         <widget class="QToolButton" name="Uninstall">
+          <property name="toolTip">
+           <string>앱리스트/삭제,데이터삭제,버전</string>
+          </property>
           <property name="text">
-           <string/>
+           <string>AppList</string>
           </property>
           <property name="icon">
            <iconset resource="icon.qrc">
@@ -76,15 +99,24 @@
             <height>30</height>
            </size>
           </property>
-          <property name="flat">
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="captureImage">
+         <widget class="QToolButton" name="captureImage">
+          <property name="toolTip">
+           <string>현재 화면캡처</string>
+          </property>
           <property name="text">
-           <string/>
+           <string>Capture</string>
           </property>
           <property name="icon">
            <iconset resource="icon.qrc">
@@ -96,15 +128,24 @@
             <height>30</height>
            </size>
           </property>
-          <property name="flat">
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="captureVideo">
+         <widget class="QToolButton" name="captureVideo">
+          <property name="toolTip">
+           <string>화면동작 녹화</string>
+          </property>
           <property name="text">
-           <string/>
+           <string>Record</string>
           </property>
           <property name="icon">
            <iconset resource="icon.qrc">
@@ -112,19 +153,28 @@
           </property>
           <property name="iconSize">
            <size>
-            <width>25</width>
-            <height>25</height>
+            <width>30</width>
+            <height>30</height>
            </size>
           </property>
-          <property name="flat">
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="ConnectedDevices">
+         <widget class="QToolButton" name="ConnectedDevices">
+          <property name="toolTip">
+           <string>캡처/녹화 파일확인</string>
+          </property>
           <property name="text">
-           <string/>
+           <string>Capture</string>
           </property>
           <property name="icon">
            <iconset resource="icon.qrc">
@@ -136,15 +186,24 @@
             <height>30</height>
            </size>
           </property>
-          <property name="flat">
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="option">
+         <widget class="QToolButton" name="option">
+          <property name="toolTip">
+           <string>도움말</string>
+          </property>
           <property name="text">
-           <string/>
+           <string>Help</string>
           </property>
           <property name="icon">
            <iconset resource="icon.qrc">
@@ -156,7 +215,13 @@
             <height>30</height>
            </size>
           </property>
-          <property name="flat">
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+          <property name="autoRaise">
            <bool>true</bool>
           </property>
          </widget>
