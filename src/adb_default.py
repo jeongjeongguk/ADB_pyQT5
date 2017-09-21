@@ -496,7 +496,12 @@ class defaultADB(object) :
             time.sleep(1)
             cls.device_info(None)
             changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
-            os.system("ren test.png "+ changedName)
+            # os.system("ren test.png "+ changedName)
+            #resize
+            org_image = os.getcwd() + "\\test.png"
+            new_image = os.getcwd() + "\\"+ changedName
+            cls.capture_down_size(org_image, new_image, 30, 85)
+
             time.sleep(1)
             os.system("move " + changedName + " " +cls.today) # 이거 안됨????
             os.system("start " + cls.today)
@@ -504,6 +509,15 @@ class defaultADB(object) :
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
             # return  -1
+
+    @classmethod
+    def capture_down_size(cls, orgfile, newfile, size_per, jpeg_quaility_per):
+        from PIL import Image
+        img = Image.open(orgfile)
+        downPer = size_per / 100
+        resize = (int(img.width * downPer), int(img.height * downPer))
+        img = img.resize(resize)
+        img.save(newfile, 'jpeg', quality=jpeg_quaility_per)
 
     @classmethod
     def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
@@ -570,7 +584,6 @@ class defaultADB(object) :
     @classmethod
     def ConnectedDevices(cls):
         pass
-
 
     def SelectSetupFile(self):
         '''
@@ -695,7 +708,6 @@ class defaultADB(object) :
         # return args[0], args[1] # ok.
         # return type(args[0]), type(args[1]) # str
 
-
     @staticmethod
     def show_help_subform01(self):
         help_text = \
@@ -784,9 +796,9 @@ if __name__ == "__main__":
     # filepath = "picnic-0.0.0.1-release.apk"
     # filepath = "app-debug.apk"
     filepath = ""
-    filepath2 = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "Picnic-test-release-v0.0.0.5-1.apk"
+    # filepath2 = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "Picnic-test-release-v0.0.0.5-1.apk"
     # print(os.path.isfile(filepath))
-    # test = defaultADB()
+    test = defaultADB()
 
     # print(test.getVersion(filepath,filepath2))
     # test.run_info(filepath)
@@ -835,7 +847,8 @@ if __name__ == "__main__":
 
     #TODO : 패키지의 activity 호출 스택 확인
     # packageName = "com.estsoft.picnic.test"
-    # test.getAPKActivityStack(None,packageName)
+    packageName = "com.estsoft.alsong"
+    test.getAPKActivityStack(None,packageName)
 
 
     #TODO : 메모리상태 확인packageName
