@@ -549,13 +549,14 @@ class defaultADB(object) :
             # New window cmd : start cmd/k command
 
             win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' +
-                      "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
+                      "adb shell screenrecord --time-limit 1800 --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
             # os.system("start /B start cmd.exe @cmd /k "
             #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
 
             # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + "adb shell rm -r /mnt/sdcard/ScreenCapture")
             # os.system("start /B start powershell.exe @powershell /k "
             #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
+
 
             path = os.getcwd().replace("\\","/").replace("\r","").replace("\n","")
             time.sleep(1)
@@ -847,8 +848,8 @@ if __name__ == "__main__":
 
     #TODO : 패키지의 activity 호출 스택 확인
     # packageName = "com.estsoft.picnic.test"
-    packageName = "com.estsoft.alsong"
-    test.getAPKActivityStack(None,packageName)
+    # packageName = "com.estsoft.alsong"
+    # test.getAPKActivityStack(None,packageName)
 
 
     #TODO : 메모리상태 확인packageName
@@ -901,10 +902,10 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
-    # try :
-    #     test.capture2viedo()
-    # except :
-    #     pass
+    try :
+        test.capture2viedo()
+    except :
+        pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
