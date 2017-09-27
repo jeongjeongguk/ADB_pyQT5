@@ -68,6 +68,15 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
             else self.exceptionMessage()
         )
 
+        # Monkey Test
+        self.MonkeyTest.clicked.connect(
+            lambda:
+            # print(self.listWidget.selectedItems()[0].text())
+            self.controlDevice(None, "adb shell monkey -p {} -v --throttle 100 1200".format(self.listWidget.selectedItems()[0].text()))
+            if self.listWidget.selectedItems() != []
+            else self.exceptionMessage()
+        )
+
     def listup(self):
         self.listWidget.clear() # clear list
         InstProgramInfo = self.list_ins_program(None)

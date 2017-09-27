@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>342</width>
-    <height>204</height>
+    <height>220</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>342</width>
-    <height>204</height>
+    <height>220</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>342</width>
-    <height>204</height>
+    <height>220</height>
    </size>
   </property>
   <property name="baseSize">
@@ -47,7 +47,7 @@
      <x>0</x>
      <y>10</y>
      <width>341</width>
-     <height>194</height>
+     <height>207</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -99,6 +99,13 @@
        <widget class="QPushButton" name="pushButton_6">
         <property name="text">
          <string>버전확인</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="MonkeyTest">
+        <property name="text">
+         <string>Monkey Test</string>
         </property>
        </widget>
       </item>
