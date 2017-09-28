@@ -6,7 +6,9 @@ class parsing(object):
         self.filepath = ""
 
     @staticmethod
-
+    def exportXML():
+        cmd.call("adb shell uiautomator dump /mnt/sdcard/test.xml", stderr=cmd.STDOUT, shell=True)
+        cmd.call("adb pull /mnt/sdcard/test.xml ./test_me.xml", stderr=cmd.STDOUT, shell=True)
 
     @classmethod
     def parseXML(cls, targetPath):

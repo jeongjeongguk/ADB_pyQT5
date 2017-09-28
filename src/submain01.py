@@ -61,12 +61,17 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
             else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", consts_string.show_flag.foreground.value)
         )
         # lineEdit : self.lineEdit.returnPressed.connect(self.pushButton_9)
+
         # comboBox : self.comboBox.lineEdit().returnPressed.connect()
         # comboBox 에서 엔터입력시 포커스 이동 : self.comboBox.lineEdit().returnPressed.connect(self.pushButton_9.setFocus)
         self.comboBox.lineEdit().returnPressed.connect(
             lambda: self.controlDevice(None, self.comboBox.currentText()) if self.comboBox.currentText() != ""
             else ctypes.windll.user32.MessageBoxW(0, "명령어를 입력해주세요", "명령어없음", consts_string.show_flag.foreground.value)
         ) # 엔터키입력시에도, 버튼을 클릭했을때와 동일한 함수를 연결.
+
+        # self.pushButton_10.clicked.connect(
+        #     lambda : self.alyac_dectect(None)
+        # )
 
 
     def setAPKpath(self):

@@ -4,6 +4,8 @@ import win32com.shell.shell as win32shell
 from xml.dom.minidom import parse
 import win32api
 import consts_string
+from moviepy.editor import *
+
 
 class defaultADB(object) :
     def __init__(self):
@@ -257,14 +259,18 @@ class defaultADB(object) :
 
     @staticmethod
     def exportXML():
+        '''
+        현재화면을 xml파일로 덤프.
+        '''
+        # TODO: ERROR: could not get idle state.
         cmd.call("adb shell uiautomator dump /mnt/sdcard/test.xml", stderr=cmd.STDOUT, shell=True)
         cmd.call("adb pull /mnt/sdcard/test.xml ./test_me.xml", stderr=cmd.STDOUT, shell=True)
 
     @classmethod
     def touchByID(cls, ID):
         cls.exportXML()
-        directory = '%s/' % os.getcwd()
-        dom = parse(directory + ".\\test_me.xml")
+        directory = '%s' % os.getcwd()
+        dom = parse(directory + "\\test_me.xml")
         for node in dom.getElementsByTagName('node'):
             if node.getAttribute('resource-id') == ID:
                 position = node.getAttribute('bounds')
@@ -579,8 +585,16 @@ class defaultADB(object) :
         changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
         os.system("cd %s"%path)
         os.system("ren test.mp4 " + changedName)
+        # os.system("move " + changedName + " " + cls.today)
+        # os.system("start " + cls.today)
+
+        clip = VideoFileClip(changedName)
+        org_size = clip.aspect_ratio
+        tmp_height = 320 * org_size
+        tmp_height = int(tmp_height)
+        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(changedName, tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
         os.system("move " + changedName + " " + cls.today)
-        os.system("start " + cls.today)
+
 
     @classmethod
     def ConnectedDevices(cls):
@@ -708,6 +722,12 @@ class defaultADB(object) :
 
         # return args[0], args[1] # ok.
         # return type(args[0]), type(args[1]) # str
+
+    @classmethod
+    def alyac_dectect(cls):
+        cls.touchByID("text_view_main_scan_button_message")
+
+
 
     @staticmethod
     def show_help_subform01(self):
@@ -849,6 +869,7 @@ if __name__ == "__main__":
     #TODO : 패키지의 activity 호출 스택 확인
     # packageName = "com.estsoft.picnic.test"
     # packageName = "com.estsoft.alsong"
+    # packageName = "com.estsoft.alyac"
     # test.getAPKActivityStack(None,packageName)
 
 
@@ -916,3 +937,6 @@ if __name__ == "__main__":
     # stats.print_stats()
 
     # test.show_file_view(None, "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src")
+
+    # test.exportXML()
+    # test.alyac_dectect()
