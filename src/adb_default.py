@@ -259,18 +259,14 @@ class defaultADB(object) :
 
     @staticmethod
     def exportXML():
-        '''
-        현재화면을 xml파일로 덤프.
-        '''
-        # TODO: ERROR: could not get idle state.
         cmd.call("adb shell uiautomator dump /mnt/sdcard/test.xml", stderr=cmd.STDOUT, shell=True)
         cmd.call("adb pull /mnt/sdcard/test.xml ./test_me.xml", stderr=cmd.STDOUT, shell=True)
 
     @classmethod
     def touchByID(cls, ID):
         cls.exportXML()
-        directory = '%s' % os.getcwd()
-        dom = parse(directory + "\\test_me.xml")
+        directory = '%s/' % os.getcwd()
+        dom = parse(directory + ".\\test_me.xml")
         for node in dom.getElementsByTagName('node'):
             if node.getAttribute('resource-id') == ID:
                 position = node.getAttribute('bounds')
@@ -375,7 +371,7 @@ class defaultADB(object) :
                                   stderr=cmd.STDOUT, shell=True)
         string = string.decode("utf-8")
         # print(string)
-        
+
         # 아래 활성화하면, 다이얼로그로 표시해준다
         from PyQt5 import QtWidgets
         app = QtWidgets.QApplication([])
@@ -555,14 +551,13 @@ class defaultADB(object) :
             # New window cmd : start cmd/k command
 
             win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' +
-                      "adb shell screenrecord --time-limit 1800 --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
+                      "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
             # os.system("start /B start cmd.exe @cmd /k "
             #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
 
             # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + "adb shell rm -r /mnt/sdcard/ScreenCapture")
             # os.system("start /B start powershell.exe @powershell /k "
             #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
-
 
             path = os.getcwd().replace("\\","/").replace("\r","").replace("\n","")
             time.sleep(1)
@@ -585,15 +580,25 @@ class defaultADB(object) :
         changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
         os.system("cd %s"%path)
         os.system("ren test.mp4 " + changedName)
-        # os.system("move " + changedName + " " + cls.today)
-        # os.system("start " + cls.today)
+        os.system("move " + changedName + " " + cls.today)
+        os.system("start " + cls.today)
 
-        clip = VideoFileClip(changedName)
+        movie2gif_confirm = ctypes.windll.user32.MessageBoxW \
+            (0, " 녹화된 영상을 업로드가능한 \n gif파일로 변환하시겠습니까?", " 영상파일변환 확인", 1 | consts_string.show_flag.foreground.value)
+        if movie2gif_confirm == 1:  # 확인 : call mp4_downsize_gif().
+            print("변환시작\n")
+        else :
+            print("변환안함\n")
+
+    @classmethod
+    def mp4_downsize_gif(cls):
+        clip = VideoFileClip('movie_360p.mp4')
         org_size = clip.aspect_ratio
+
         tmp_height = 320 * org_size
         tmp_height = int(tmp_height)
-        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(changedName, tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
-        os.system("move " + changedName + " " + cls.today)
+        # print(tmp_height)
+        os.system("ffmpeg -i movie_360p.mp4 -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
 
 
     @classmethod
@@ -609,6 +614,7 @@ class defaultADB(object) :
         from PyQt5 import QtWidgets
         self.fileDialog = QtWidgets.QFileDialog()
         select = self.fileDialog.getOpenFileUrl(filter='*.apk')
+        # select = self.fileDialog.selectedUrls(filter='*.apk')
         # print(select)
         # (PyQt5.QtCore.QUrl(''), '')
         # (PyQt5.QtCore.QUrl('file:///C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/alsong_1.5.0.0_1cha.apk'), '*.apk')
@@ -618,9 +624,45 @@ class defaultADB(object) :
         else :
             path = str(select[0]).replace("PyQt5.QtCore.QUrl('file:///", "")
             path = path.replace("')", "")
+            # pass
         # self.lineEdit.setText(path)
         # print(path)
+
+        path = self.regular_path(None, path)
+
         return  path
+
+    @staticmethod
+    def regular_path(self, path):
+        import re
+        # pattern_korean = r"^[가-힣]*$"
+        # pattern_network = r"([0-9]{1,3}) \. ([0-9]{1,3}) \. ([0-9]{1,3}) \. ([0-9]{1,3})"
+        # prttern_space =  r"[\s]+"
+        # hangul = re.compile('[^ ㄱ-ㅣ가-힣]+')  # 한글과 띄어쓰기를 제외한 모든 글자
+        hangul = r'[ ㄱ-ㅣ가-힣]+'
+        network = r"([0-9]{1,3}) \. ([0-9]{1,3}) \. ([0-9]{1,3}) \. ([0-9]{1,3})"
+        '''
+        한글 코드 범위
+        ㄱ ~ ㅎ: 0x3131 ~ 0x314e
+        ㅏ ~ ㅣ: 0x314f ~ 0x3163
+        가 ~ 힣: 0xac00 ~ 0xd7a3
+        출처: http://jokergt.tistory.com/52 [Gun's Knowledge Base]
+        '''
+        # s = ' 韓子는 싫고, 한글은 nice하다. English 쵝오 -_-ㅋㅑㅋㅑ ./?! '
+        # result = hangul.findall(s)
+        # print(result)
+        result = re.findall(network, path)
+        if not result == [] :
+            path = "네트워크경로의 파일을 PC로 복사해주세요."
+            return path
+
+        result = re.findall(hangul, path)
+        if not result == [] :
+            path = "한글이나 띄어쓰기가, 경로 및 파일명에 포함됨"
+            return path
+
+        return path
+
 
     @staticmethod
     def list_ins_program(self):
@@ -722,12 +764,6 @@ class defaultADB(object) :
 
         # return args[0], args[1] # ok.
         # return type(args[0]), type(args[1]) # str
-
-    @classmethod
-    def alyac_dectect(cls):
-        cls.touchByID("text_view_main_scan_button_message")
-
-
 
     @staticmethod
     def show_help_subform01(self):
@@ -839,6 +875,7 @@ if __name__ == "__main__":
     # test.show_help_subform01(None)
     # test.list_ins_program(None)
     # test.goDevelopPage(None)
+    # test.regular_path(None,None)
 
 
     # TODO : 프로파일링
@@ -869,7 +906,6 @@ if __name__ == "__main__":
     #TODO : 패키지의 activity 호출 스택 확인
     # packageName = "com.estsoft.picnic.test"
     # packageName = "com.estsoft.alsong"
-    # packageName = "com.estsoft.alyac"
     # test.getAPKActivityStack(None,packageName)
 
 
@@ -937,6 +973,3 @@ if __name__ == "__main__":
     # stats.print_stats()
 
     # test.show_file_view(None, "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src")
-
-    # test.exportXML()
-    # test.alyac_dectect()

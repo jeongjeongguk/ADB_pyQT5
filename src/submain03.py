@@ -28,6 +28,8 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
 
     def connect(self):
         self.treeView.clicked.connect(self.on_treeView_clicked)
+        self.newCapture.clicked.connect(self.call_capture2image)
+        self.link2mspaint.clicked.connect(self.call_mspaint2image)
 
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def on_treeView_clicked(self, index):
@@ -54,6 +56,16 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.scene.addPixmap(pixMap)
         self.graphicsView.fitInView(0,0,w,h,1)
         self.scene.update()
+
+    def call_capture2image(self):
+        self.newCapture.setEnabled(False)
+        self.capture2image()
+        self.newCapture.setEnabled(True)
+
+    def call_mspaint2image(self):
+        filepath = self.lineEdit.text()
+        filepath = filepath.replace("/","\\\\")
+        os.system("mspaint "+filepath)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
