@@ -109,7 +109,8 @@ class defaultADB(object) :
             except:
                 # TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
                 # ?????? 언제 안구해지지? 런쳐액티버티 가렸을때 못찾음 -> 파싱으로 찾기
-                pass
+                # pass
+                return False, "None", "None"
         else:
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
@@ -543,10 +544,15 @@ class defaultADB(object) :
         if float(device_api) < videoEnableOSver :
             ctypes.windll.user32.MessageBoxW(0, "선택된 기기에서는 녹화가 되지 않습니다.", "녹화지원안됨", consts_string.show_flag.foreground.value)
         else:
-            try :
+            try:
                 cmd.check_output("adb shell rm -r /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
+            except:
+                print("폴더없어서 삭제과정진행 안함")
+                pass
+            try :
                 cmd.check_output("adb shell mkdir /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
             except :
+                print("폴더를 생성못함")
                 pass
             # New window cmd : start cmd/k command
 
@@ -572,34 +578,52 @@ class defaultADB(object) :
                 time.sleep(1)
                 cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
                 cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
+
+                cls.check_time()
+                changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
+                os.system("cd %s" % path)
+                os.system("ren test.mp4 " + changedName)
+                os.system("move " + changedName + " " + cls.today)
+                os.system("start " + cls.today)
+
+                movie2gif_confirm = ctypes.windll.user32.MessageBoxW \
+                    (0, " 녹화된 영상을 업로드가능한 \n gif파일로 변환하시겠습니까?", " 영상파일변환 확인",
+                     1 | consts_string.show_flag.foreground.value)
+                if movie2gif_confirm == 1:  # 확인 : call mp4_downsize_gif().
+                    print("변환시작\n")
+                    print(cls.today) # 171012
+                    print(os.getcwd()) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src
+                    org_path = os.getcwd() + "\\{}".format(cls.today)
+                    print(org_path) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171012
+                    print(changedName) # 171012_095106_LG-F700K_7.0_API_24.mp4
+                    cls.mp4_downsize_gif(org_path,changedName)
+                else:
+                    print("변환안함\n")
+
             else : # 취소 : 기기에서 삭제
                 os.system("TASKKILL /F /IM cmd.exe /T")
                 cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
 
-        cls.check_time()
-        changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
-        os.system("cd %s"%path)
-        os.system("ren test.mp4 " + changedName)
-        os.system("move " + changedName + " " + cls.today)
-        os.system("start " + cls.today)
-
-        movie2gif_confirm = ctypes.windll.user32.MessageBoxW \
-            (0, " 녹화된 영상을 업로드가능한 \n gif파일로 변환하시겠습니까?", " 영상파일변환 확인", 1 | consts_string.show_flag.foreground.value)
-        if movie2gif_confirm == 1:  # 확인 : call mp4_downsize_gif().
-            print("변환시작\n")
-        else :
-            print("변환안함\n")
-
     @classmethod
-    def mp4_downsize_gif(cls):
-        clip = VideoFileClip('movie_360p.mp4')
+    def mp4_downsize_gif(cls, org_path, org_filename):
+        print("hello")
+        org_file = org_path + org_filename
+        org_file = org_file.replace("\\","\\\\")
+        print(org_file)
+        clip = VideoFileClip(org_file) # 여기서부터 안됨. 확인필요.
+        print("what?!")
         org_size = clip.aspect_ratio
 
         tmp_height = 320 * org_size
         tmp_height = int(tmp_height)
-        # print(tmp_height)
-        os.system("ffmpeg -i movie_360p.mp4 -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
 
+        new_filename = org_filename.replace("mp4","gif")
+        new_file = org_path + new_filename
+
+        # print(tmp_height)
+        # os.system("ffmpeg -i movie_360p.mp4 -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
+        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x240 {}".format(org_file, tmp_height, new_file))
+        print("변환완료")
 
     @classmethod
     def ConnectedDevices(cls):
