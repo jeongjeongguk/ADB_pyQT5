@@ -570,6 +570,7 @@ class defaultADB(object) :
             RecordCnt = ctypes.windll.user32.MessageBoxW \
                 (0, "영상기록을 시작합니다.\n확인 : 영상기록 PC전송\n취소 : 영상기록삭제", "영상기록중", 1|consts_string.show_flag.foreground.value)
             if RecordCnt == 1: # 확인 : 기기 -> PC 로 영상전송
+                # TODO : 확인이나, 취소 누르기전에 연결끊어졌는지 확인할것 -> 이경우, 강제종료됨.
                 os.system("TASKKILL /F /IM cmd.exe /T")
                 # powershell 기반으로 main.exe가 실행되면 괜찮음?? win7 x86 sp1 ent / win10 x64 ent 에서 g5 7.0으로 확인
                 # os.system("TASKKILL /F /FI "
@@ -583,6 +584,7 @@ class defaultADB(object) :
                 changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
                 os.system("cd %s" % path)
                 os.system("ren test.mp4 " + changedName)
+                # TODO : 넥서스 6P 8.0 에서 changedName 확인할것. test.mp4를 가져오긴 하는데, 이름변경이 안되고 test.mp4로 머물러있음.
                 os.system("move " + changedName + " " + cls.today)
                 os.system("start " + cls.today)
 
@@ -592,11 +594,12 @@ class defaultADB(object) :
                 if movie2gif_confirm == 1:  # 확인 : call mp4_downsize_gif().
                     print("변환시작\n")
                     print(cls.today) # 171012
-                    print(os.getcwd()) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src
-                    org_path = os.getcwd() + "\\{}".format(cls.today)
-                    print(org_path) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171012
+                    os.chdir(cls.today)
+                    # print(os.getcwd()) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src
+                    # org_path = os.getcwd() + "\\{}".format(cls.today)
+                    # print(org_path) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171012
                     print(changedName) # 171012_095106_LG-F700K_7.0_API_24.mp4
-                    cls.mp4_downsize_gif(org_path,changedName)
+                    cls.mp4_downsize_gif(changedName)
                 else:
                     print("변환안함\n")
 
@@ -605,24 +608,29 @@ class defaultADB(object) :
                 cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
 
     @classmethod
-    def mp4_downsize_gif(cls, org_path, org_filename):
+    def mp4_downsize_gif(cls, org_filename):
         print("hello")
-        org_file = org_path + org_filename
-        org_file = org_file.replace("\\","\\\\")
-        print(org_file)
+        org_file = org_filename
+        # org_file = org_file.replace("\\\\","\\")
+        # print(org_file)
+        # clip = VideoFileClip("{!r}".format(org_file)) # 여기서부터 안됨. 확인필요.
         clip = VideoFileClip(org_file) # 여기서부터 안됨. 확인필요.
+        # TODO : Invalid Argument로 처리안됨. Path수정필요.
         print("what?!")
         org_size = clip.aspect_ratio
 
-        tmp_height = 320 * org_size
+        ch_height = 320
+        ch_width = 240
+
+        tmp_height = ch_height * org_size
         tmp_height = int(tmp_height)
 
         new_filename = org_filename.replace("mp4","gif")
-        new_file = org_path + new_filename
+        new_file = new_filename
 
         # print(tmp_height)
         # os.system("ffmpeg -i movie_360p.mp4 -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
-        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x240 {}".format(org_file, tmp_height, new_file))
+        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}".format(org_file, tmp_height, ch_width,new_file))
         print("변환완료")
 
     @classmethod
