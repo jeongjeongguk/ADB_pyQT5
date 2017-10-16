@@ -583,8 +583,13 @@ class defaultADB(object) :
                 cls.check_time()
                 changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
                 os.system("cd %s" % path)
-                os.system("ren test.mp4 " + changedName)
+                print(changedName)
+                try :
+                    os.system("ren test.mp4 " + changedName)
+                except :
+                    os.renames("test.mp4", changedName)
                 # TODO : 넥서스 6P 8.0 에서 changedName 확인할것. test.mp4를 가져오긴 하는데, 이름변경이 안되고 test.mp4로 머물러있음.
+                # 171016_175316_Nexus 6P_8.0.0_API_26.mp4 으로 정상적으로 찍힘.
                 os.system("move " + changedName + " " + cls.today)
                 os.system("start " + cls.today)
 
