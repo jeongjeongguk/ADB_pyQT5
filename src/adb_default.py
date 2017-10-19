@@ -1,3 +1,6 @@
+'''
+ADB를 활용하는 기능들에 대한 함수모음
+'''
 import ctypes, datetime, time, os, sys
 import subprocess as cmd
 import win32com.shell.shell as win32shell
@@ -5,7 +8,20 @@ from xml.dom.minidom import parse
 import win32api
 import consts_string
 from moviepy.editor import *
+import logging
+import logging.handlers
+from PIL import Image
+import re
 
+logger = logging.getLogger('mylogger') # 로거 인스턴스를 만든다
+fomatter = logging.Formatter('[%(levelname)s|%(filename)s:%(lineno)s] %(asctime)s > %(message)s') # 포매터를 만든다
+fileHandler = logging.FileHandler('./runtime_ADBGUI.log')# 스트림과 파일로 로그를 출력하는 핸들러를 각각 만든다.
+streamHandler = logging.StreamHandler()
+fileHandler.setFormatter(fomatter) # 각 핸들러에 포매터를 지정한다.
+streamHandler.setFormatter(fomatter)
+logger.addHandler(fileHandler) # 로거 인스턴스에 스트림 핸들러와 파일핸들러를 붙인다.
+logger.addHandler(streamHandler)
+logger.setLevel(logging.DEBUG)
 
 class defaultADB(object) :
     def __init__(self):
@@ -21,6 +37,12 @@ class defaultADB(object) :
 
     @classmethod
     def check_connect(cls):
+        '''
+        check & return number of connected android devices.
+        If any devices don't connected, '-1' is returned.
+        using_place: capture2image, capture2video, install_apk, run_info, update
+        :return: len(cls.ConnectDevices)
+        '''
         try:
             # \r\n 제거는 윈도우10 x64 Enterprise 1607 기준
             List_misi = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True) \
@@ -37,50 +59,53 @@ class defaultADB(object) :
     @classmethod
     def install_apk(cls, filepath, option): # def install_apk(self, filepath, option): # option : r, b, ...
         '''
-        :param filepath:
+        :param filepath: to install file(.apk)'s path. Must use in English&Number. (because adb doesn't use another language)
+        :param option: "" or something
         :return:
         '''
         fileCheck = cls.run_info(filepath)
-        if  fileCheck[0]:
-            if option == "" :
-                title = "설치 시작확인"
-                version = cls.getVersion(filepath, "")
-                message = "버전 : {}\n".format(version)
+        try :
+            if  fileCheck[0]:
+                if option == "" :
+                    title = "설치 시작확인"
+                    version = cls.getVersion(filepath, "")
+                    message = "버전 : {}\n".format(version)
+                else :
+                    ConnectedDevicesCnt = cls.check_connect()
+                    if ConnectedDevicesCnt != 0:
+                        title = "덮어쓰기설치 시작확인"
+                        OldVersion, NewVersion = cls.getVersion(cls.packageName, filepath)
+                        message = "설치된 버전 : {}\n설치할 버전 : {}\n" \
+                                  "\n[주의]\n" \
+                                  "같거나 높은 버전으로만 덮어쓰기 설치가 가능합니다.\n"\
+                                    .format(OldVersion, NewVersion)
+                    else:
+                        ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
+                        return None
+
+                userChoice = ctypes.windll.user32.MessageBoxW \
+                            (
+                                0,  "패키지명 : {} \n"
+                                    "{}"
+                                    "\n'확인'을 클릭하시면, 설치를 시작합니다."
+                                    "\n기기에따라 최대 20초가량 소요됩니다.".format(cls.packageName, message), title, 1 | consts_string.show_flag.foreground.value
+                            )
+                # https://msdn.microsoft.com/en-us/library/ms645505(VS.85).aspx
+
+                if userChoice == 1:
+                    ConnectedDevicesCnt = cls.check_connect()
+                    if ConnectedDevicesCnt != 0:
+                        if option == "": cls.uninstall_apk("path", filepath)
+                        os.system("adb install " + option + filepath)
+                        ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
+                    else:
+                        ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
+                else :
+                    ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", consts_string.show_flag.foreground.value)
             else :
-                ConnectedDevicesCnt = cls.check_connect()
-                if ConnectedDevicesCnt != 0:
-                    title = "덮어쓰기설치 시작확인"
-                    OldVersion, NewVersion = cls.getVersion(cls.packageName, filepath)
-                    message = "설치된 버전 : {}\n설치할 버전 : {}\n" \
-                              "\n[주의]\n" \
-                              "같거나 높은 버전으로만 덮어쓰기 설치가 가능합니다.\n"\
-                                .format(OldVersion, NewVersion)
-                else:
-                    ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
-                    return None
-
-            userChoice = ctypes.windll.user32.MessageBoxW \
-                        (
-                            0,  "패키지명 : {} \n"
-                                "{}"
-                                "\n'확인'을 클릭하시면, 설치를 시작합니다."
-                                "\n기기에따라 최대 20초가량 소요됩니다.".format(cls.packageName, message), title, 1 | consts_string.show_flag.foreground.value
-                        )
-            # https://msdn.microsoft.com/en-us/library/ms645505(VS.85).aspx
-
-            if userChoice == 1:
-                ConnectedDevicesCnt = cls.check_connect()
-                if ConnectedDevicesCnt != 0:
-                    if option == "": cls.uninstall_apk("path", filepath)
-                    os.system("adb install " + option + filepath)
-                    ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
-                else:
-                    ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
-            else :
-                ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", consts_string.show_flag.foreground.value)
-        else :
-            ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", consts_string.show_flag.foreground.value)
-
+                ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", consts_string.show_flag.foreground.value)
+        except:
+            logger.error("{} : Failed to install".format(cls.install_apk.__name__))
         #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
         #TODO : 위 내용관련한 처리필요
 
@@ -452,14 +477,14 @@ class defaultADB(object) :
         '''
         select_device = ""  # TODO : delete this line
         os_ver = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.release",
-                                  stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
+                                  stderr=cmd.STDOUT, shell=True).decode("utf-8")
         api_level = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.sdk",
-                                     stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
+                                     stderr=cmd.STDOUT, shell=True).decode("utf-8")
         model = cmd.check_output("adb shell " + select_device + "getprop ro.product.model",
-                                 stderr=cmd.STDOUT, shell=True).decode("utf-8").replace("\r\n", "")
-        cls.deviceData = model + "_" + os_ver + "_API_" + api_level
+                                 stderr=cmd.STDOUT, shell=True).decode("utf-8")
 
-        # print(cls.deviceData)
+        cls.deviceData = r"{}_{}_API_{}".format(model, os_ver, api_level)
+        cls.deviceData = re.sub('\s','',cls.deviceData) #white space 제거
 
     @classmethod
     def open_capture_folder(cls):
@@ -499,14 +524,11 @@ class defaultADB(object) :
             time.sleep(1)
             cls.device_info(None)
             changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
-            # os.system("ren test.png "+ changedName)
-            #resize
             org_image = os.getcwd() + "\\test.png"
             new_image = os.getcwd() + "\\"+ changedName
             cls.capture_down_size(org_image, new_image, 30, 85)
-
             time.sleep(1)
-            os.system("move " + changedName + " " +cls.today) # 이거 안됨????
+            os.system("move " + changedName + " " +cls.today)
             os.system("start " + cls.today)
         else :
             ctypes.windll.user32.MessageBoxW \
@@ -515,7 +537,6 @@ class defaultADB(object) :
 
     @classmethod
     def capture_down_size(cls, orgfile, newfile, size_per, jpeg_quaility_per):
-        from PIL import Image
         img = Image.open(orgfile)
         downPer = size_per / 100
         resize = (int(img.width * downPer), int(img.height * downPer))
@@ -546,18 +567,19 @@ class defaultADB(object) :
         else:
             try:
                 cmd.check_output("adb shell rm -r /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
+                logger.info("Delete Existing Folder : /mnt/sdcard/ADB_record")
             except:
-                print("폴더없어서 삭제과정진행 안함")
-                pass
+                logger.info("No folder to delete")
             try :
                 cmd.check_output("adb shell mkdir /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
+                logger.info("Complete Making Folder : /mnt/sdcard/ADB_record")
             except :
-                print("폴더를 생성못함")
-                pass
+                logger.warning("Failed make folder") #TODO : 여기로 들어오면, 녹화가 안되느것.
             # New window cmd : start cmd/k command
 
             win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' +
                       "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
+            logger.info("Record Start")
             # os.system("start /B start cmd.exe @cmd /k "
             #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
 
@@ -583,7 +605,7 @@ class defaultADB(object) :
                 cls.check_time()
                 changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
                 os.system("cd %s" % path)
-                print(changedName)
+                # print(changedName)
                 try :
                     os.system("ren test.mp4 " + changedName)
                 except :
@@ -616,14 +638,10 @@ class defaultADB(object) :
     def mp4_downsize_gif(cls, org_filename):
         print("hello")
         org_file = org_filename
-        # org_file = org_file.replace("\\\\","\\")
-        # print(org_file)
-        # clip = VideoFileClip("{!r}".format(org_file)) # 여기서부터 안됨. 확인필요.
-        clip = VideoFileClip(org_file) # 여기서부터 안됨. 확인필요.
-        # TODO : Invalid Argument로 처리안됨. Path수정필요.
-        print("what?!")
+        clip = VideoFileClip(org_file) 
         org_size = clip.aspect_ratio
 
+        #TODO: 연결기기의 해상도정보가져와서, 그 비율대로 절반크기로 줄이기 
         ch_height = 320
         ch_width = 240
 
@@ -671,7 +689,6 @@ class defaultADB(object) :
 
     @staticmethod
     def regular_path(self, path):
-        import re
         # pattern_korean = r"^[가-힣]*$"
         # pattern_network = r"([0-9]{1,3}) \. ([0-9]{1,3}) \. ([0-9]{1,3}) \. ([0-9]{1,3})"
         # prttern_space =  r"[\s]+"
@@ -995,11 +1012,11 @@ if __name__ == "__main__":
     # filepath = "alsong_4.0.7.3.apk"
     # test.run_info(filepath)
     # test.install_apk(filepath)
-    # test.capture2image()
-    try :
-        test.capture2viedo()
-    except :
-        pass
+    test.capture2image()
+    # try :
+    #     test.capture2viedo()
+    # except :
+    #     pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
