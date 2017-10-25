@@ -906,7 +906,7 @@ if __name__ == "__main__":
     # filepath = "picnic-0.0.0.0-release.apk"
     # filepath = "picnic-0.0.0.1-release.apk"
     # filepath = "app-debug.apk"
-    filepath = ""
+    # filepath = ""
     # filepath2 = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\\" + "Picnic-test-release-v0.0.0.5-1.apk"
     # print(os.path.isfile(filepath))
     test = defaultADB()
@@ -964,9 +964,9 @@ if __name__ == "__main__":
 
 
     #TODO : 메모리상태 확인packageName
-    # packageName = "com.estsoft.alsong"
+    packageName = "com.estsoft.alsong"
     # packageName = 4
-    # test.getAPKUsingMemmory(packageName)
+    test.getAPKUsingMemmory(None,packageName)
 
     #TODO : 타켓/최소 sdk버전 확인
     '''
@@ -1012,7 +1012,7 @@ if __name__ == "__main__":
     # filepath = "alsong_4.0.7.3.apk"
     # test.run_info(filepath)
     # test.install_apk(filepath)
-    test.capture2image()
+    # test.capture2image()
     # try :
     #     test.capture2viedo()
     # except :
