@@ -52,6 +52,14 @@ class defaultADB(object) :
                 .replace("device", "")
             cls.ConnectDevices = List_misi.split("	")
             cls.ConnectDevices.remove("")
+            # print(cls.ConnectDevices) # 여기에, 연결된 기기들 접근 serial이 다 모임
+
+            # TODO: device 제거하지말고, 해당 기기와 같이 묶어서 튜플로 가기, 공백문자는 정규식으로 구분.
+            # List_misi = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True) \
+            #     .decode("utf-8") \
+            #     .replace("List of devices attached", "")
+            # List_misi = re.sub('\s', '', List_misi)  # white space 제거
+
             return len(cls.ConnectDevices)
         except:
             return -1
@@ -112,7 +120,9 @@ class defaultADB(object) :
         #TODO : Failed to install C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/4.0.16.1.apk: Failure [INSTALL_PARSE_FAILED_NO_CERTIFICATES: Failed to collect certificates from /data/app/vmdl490955904.tmp/base.apk using APK Signature Scheme v2: SHA-256 digest of contents did not verify]
         #-----> 최신버전 설치후에 이전버전 덮어쓰기 설치시도해서 설치실패후, 최신버전 재설치할려다가 발생된 메시지 : TODO : 처리필요
 
-
+        #TODO : Failure [INSTALL_FAILED_UID_CHANGED] ??? 삭제후 설치과정에서, 계속뜸.. 원인확인필요 Gpro 4.4.2 alsong 4.1.1.3 에서 4.1.1.4 갈때 발생.
+        # https://byunsooblog.wordpress.com/2013/12/07/install_failed_uid_changed-%EC%97%90%EB%9F%AC/
+        # DB삭제가 완전히 안된거. 제대로 삭제가 필요하다.
     @classmethod
     def run_info(cls, filepath):
         ConnectedDevicesCnt = cls.check_connect()
@@ -389,38 +399,39 @@ class defaultADB(object) :
 
         # '''http://mydevromance.tistory.com/16" 참조'''
         # "adb shell dumpsys activity com.estsoft.alsong"
-        # os.system("start /B start cmd.exe @cmd /k "
-        # "adb shell \"dumpsys activity {}\"".format(pakage_name))
+
+        os.system("start /B start cmd.exe @cmd /k "
+                  "adb shell \"dumpsys activity {}\"".format(pakage_name))
 
         # adb shell dumpsys activity com.estsoft.alsong > ./Desktop/alsong_activity_data.txt
-        string = cmd.check_output("adb shell \"dumpsys activity {}\"".format(pakage_name),
-                                  stderr=cmd.STDOUT, shell=True)
-        string = string.decode("utf-8")
-        # print(string)
 
         # 아래 활성화하면, 다이얼로그로 표시해준다
-        from PyQt5 import QtWidgets
-        app = QtWidgets.QApplication([])
-
-        notifyDialog = QtWidgets.QDialog()
-        notifyDialog.resize(1000, 300)
-        layout = QtWidgets.QVBoxLayout(notifyDialog)
-        scroll = QtWidgets.QScrollArea()
-        scroll.setWidgetResizable(True)
-        layout.addWidget(scroll)
-
-        scrollContents = QtWidgets.QWidget()
-        layout = QtWidgets.QVBoxLayout(scrollContents)
-        scroll.setWidget(scrollContents)
-
-        label = QtWidgets.QLabel()
-        label.setText(string)
-
-        layout.addWidget(label)
-
-        notifyDialog.show()
-        notifyDialog.raise_()
-        app.exec_()
+        # string = cmd.check_output("adb shell \"dumpsys activity {}\"".format(pakage_name),
+        #                           stderr=cmd.STDOUT, shell=True)
+        # string = string.decode("utf-8")
+        # # print(string)
+        # from PyQt5 import QtWidgets
+        # app = QtWidgets.QApplication([])
+        #
+        # notifyDialog = QtWidgets.QDialog()
+        # notifyDialog.resize(1000, 300)
+        # layout = QtWidgets.QVBoxLayout(notifyDialog)
+        # scroll = QtWidgets.QScrollArea()
+        # scroll.setWidgetResizable(True)
+        # layout.addWidget(scroll)
+        #
+        # scrollContents = QtWidgets.QWidget()
+        # layout = QtWidgets.QVBoxLayout(scrollContents)
+        # scroll.setWidget(scrollContents)
+        #
+        # label = QtWidgets.QLabel()
+        # label.setText(string)
+        #
+        # layout.addWidget(label)
+        #
+        # notifyDialog.show()
+        # notifyDialog.raise_()
+        # app.exec_()
 
 
     @staticmethod
@@ -921,7 +932,8 @@ if __name__ == "__main__":
     # test.reinstall_apk(filepath)
     # test.check_install()
     # test.uninstall_apk(filepath)
-    # test.check_connect()
+    test.check_connect()
+    print(test.check_connect())
     # test.update(None,None)
     # filepath_new = "teamUP-teamup_store-release.apk"
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
@@ -939,34 +951,34 @@ if __name__ == "__main__":
     # doctest.testmod()
 
 
-    # TODO : 데이터 삭제
+    # 데이터 삭제
     # test.deleteData(None, "com.estsoft.alzip")
     # test.deleteData(None, "com.estsoft.picnic")
 
-    # TODO : 언어 변경 화면으로 이동
+    # 언어 변경 화면으로 이동
     # test.controlDevice(None, "adb shell am start -n com.android.settings/.LanguageSettings")
     # test.goSetLanguagePage(None)
 
-    # TODO : 재부팅
+    # 재부팅
     # os.system("adb reboot")
 
-    #TODO : 현재화면 구하기
+    # 현재화면 구하기
     # test.getCurrentActivity(None)
 
-    #TODO : 패키지 버전 확인
+    # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
     # test.getAPKVersion(None,packageName) #TODO : 처음연결시에, 반환되는 문자열이 연결정보임. 이거 필터링필요.
 
-    #TODO : 패키지의 activity 호출 스택 확인
+    # TODO : 패키지의 activity 호출 스택 확인
     # packageName = "com.estsoft.picnic.test"
     # packageName = "com.estsoft.alsong"
     # test.getAPKActivityStack(None,packageName)
 
 
-    #TODO : 메모리상태 확인packageName
-    packageName = "com.estsoft.alsong"
-    # packageName = 4
-    test.getAPKUsingMemmory(None,packageName)
+    # TODO : 메모리상태 확인packageName
+    # packageName = "com.estsoft.alsong"
+    # # packageName = 4
+    # test.getAPKUsingMemmory(None,packageName)
 
     #TODO : 타켓/최소 sdk버전 확인
     '''
