@@ -7,7 +7,7 @@ import win32com.shell.shell as win32shell
 from xml.dom.minidom import parse
 import win32api
 import consts_string
-from moviepy.editor import *
+from moviepy.video.io.VideoFileClip import VideoFileClip
 import logging
 import logging.handlers
 from PIL import Image
@@ -987,7 +987,7 @@ if __name__ == "__main__":
     # os.system("adb shell getprop ro.build.version.sdk")
     # api_level = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.sdk",
     #                              stderr=cmd.STDOUT, shell=True).decode("utf-8")\
-    apkFileName = "C:\\Users\Jeongkuk\Desktop\Plain-test-release-v1.0.0.1-1.apk"
+    apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("alsong_4.0.0.1_2cha.apk")
     ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
     DeviceAPI = cmd.check_output("adb shell getprop ro.build.version.sdk", stderr=cmd.STDOUT, shell=True).decode("utf-8")
     ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
