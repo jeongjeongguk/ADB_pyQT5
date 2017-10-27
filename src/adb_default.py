@@ -932,8 +932,8 @@ if __name__ == "__main__":
     # test.reinstall_apk(filepath)
     # test.check_install()
     # test.uninstall_apk(filepath)
-    test.check_connect()
-    print(test.check_connect())
+    # test.check_connect()
+    # print(test.check_connect())
     # test.update(None,None)
     # filepath_new = "teamUP-teamup_store-release.apk"
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
@@ -981,6 +981,22 @@ if __name__ == "__main__":
     # test.getAPKUsingMemmory(None,packageName)
 
     #TODO : 타켓/최소 sdk버전 확인
+    # apkFileName = "C:\\Users\Jeongkuk\Desktop\Plain-test-release-v1.0.0.1-1.apk"
+    # # os.system("aapt list -a {} | findstr \"SdkVersion\"".format(apkFileName)) #minSdkVersion, targetSdkVersion
+    # os.system("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName))
+    # os.system("adb shell getprop ro.build.version.sdk")
+    # api_level = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.sdk",
+    #                              stderr=cmd.STDOUT, shell=True).decode("utf-8")\
+    apkFileName = "C:\\Users\Jeongkuk\Desktop\Plain-test-release-v1.0.0.1-1.apk"
+    ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
+    DeviceAPI = cmd.check_output("adb shell getprop ro.build.version.sdk", stderr=cmd.STDOUT, shell=True).decode("utf-8")
+    ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
+    DeviceAPI = re.sub('\s', '', DeviceAPI)
+
+    print("[APK] : {}".format(ApkAPI))
+    print("[Devices] : {}".format(DeviceAPI))
+
+
     '''
     aapt list -a .\4.0.16.1.apk | findstr "SdkVersion"
     A: android:minSdkVersion(0x0101020c)=(type 0x10)0xe
