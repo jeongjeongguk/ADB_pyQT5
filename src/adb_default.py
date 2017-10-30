@@ -959,11 +959,20 @@ if __name__ == "__main__":
     # test.controlDevice(None, "adb shell am start -n com.android.settings/.LanguageSettings")
     # test.goSetLanguagePage(None)
 
+    # TODO : 앱권한 페이지 이동. (바로 이동안되고, 해당 앱으로 이동하고서 이동해야될듯함)
+    # test.controlDevice(None, "adb shell am start -n com.android.settings/com.android.settings.applications.InstalledAppDetails")
+    # test.controlDevice(None, "adb shell am start -n com.google.android.packageinstaller/com.android.packageinstaller.permission.ui.ManagePermissionsActivity")
+
+    # 개발자옵션 페이지이동
+    # test.goDevelopPage(None)
+
+    # test.controlDevice(None, "adb shell am start -n com.google.settings/.")
+
     # 재부팅
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    # test.getCurrentActivity(None)
+    test.getCurrentActivity(None)
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
@@ -987,14 +996,16 @@ if __name__ == "__main__":
     # os.system("adb shell getprop ro.build.version.sdk")
     # api_level = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.sdk",
     #                              stderr=cmd.STDOUT, shell=True).decode("utf-8")\
-    apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("alsong_4.0.0.1_2cha.apk")
-    ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
-    DeviceAPI = cmd.check_output("adb shell getprop ro.build.version.sdk", stderr=cmd.STDOUT, shell=True).decode("utf-8")
-    ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
-    DeviceAPI = re.sub('\s', '', DeviceAPI)
 
-    print("[APK] : {}".format(ApkAPI))
-    print("[Devices] : {}".format(DeviceAPI))
+    # 이 아래부분을 함수화할것. 실행확인함.
+    # apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("alsong_4.0.0.1_2cha.apk")
+    # ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
+    # DeviceAPI = cmd.check_output("adb shell getprop ro.build.version.sdk", stderr=cmd.STDOUT, shell=True).decode("utf-8")
+    # ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
+    # DeviceAPI = re.sub('\s', '', DeviceAPI)
+    #
+    # print("[APK] : {}".format(ApkAPI))
+    # print("[Devices] : {}".format(DeviceAPI))
 
 
     '''
