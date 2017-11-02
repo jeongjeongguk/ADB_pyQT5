@@ -21,6 +21,7 @@ from moviepy.editor import *
 # clip = VideoFileClip('movie_360p.mp4')
 imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\screenshot\1012_1450_08_Nexus6P_8.0.0_API26.mp4'
 imsi = r'C:\Users\Jeongkuk\Documents\AireCam\1012_1450_08_Nexus6P_8.0.0_API26.mp4'
+imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone5s_10.2.1.mov'
 clip = VideoFileClip(imsi)
 org_size = clip.aspect_ratio
 # # print(clip.reader.size)  # 영상사이즈 줄일때도, 기존의 영상 사이즈를 가지고 온다음에, 그 비율에 맞춰서 조율하는게 나을지 확인필요.
@@ -40,7 +41,7 @@ tmp_height = 320 * org_size
 tmp_height = int(tmp_height)
 # print(tmp_height)
 # os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x240 1012_1450_08_Nexus6P_8.0.0_API26.gif".format(imsi, tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
-os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 1012_1450_08_Nexus6P_8.0.0_API26.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
+os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 iphone5s_10.2.1.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
 # File 'movie_360p_320_tmp.gif' already exists. Overwrite ? [y/N]
 #
 # # import moviepy.editor as mp

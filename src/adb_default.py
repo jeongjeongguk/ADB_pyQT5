@@ -972,7 +972,7 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    test.getCurrentActivity(None)
+    # test.getCurrentActivity(None)
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
@@ -998,14 +998,14 @@ if __name__ == "__main__":
     #                              stderr=cmd.STDOUT, shell=True).decode("utf-8")\
 
     # 이 아래부분을 함수화할것. 실행확인함.
-    # apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("alsong_4.0.0.1_2cha.apk")
-    # ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
+    apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("teamUP-teamup_store-release.apk")
+    ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
+    ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
+    print("[APK] : {}".format(ApkAPI))
     # DeviceAPI = cmd.check_output("adb shell getprop ro.build.version.sdk", stderr=cmd.STDOUT, shell=True).decode("utf-8")
-    # ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
     # DeviceAPI = re.sub('\s', '', DeviceAPI)
-    #
-    # print("[APK] : {}".format(ApkAPI))
     # print("[Devices] : {}".format(DeviceAPI))
+
 
 
     '''
