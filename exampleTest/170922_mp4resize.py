@@ -36,12 +36,27 @@ org_size = clip.aspect_ratio
 
 
 
-
-tmp_height = 320 * org_size
-tmp_height = int(tmp_height)
+# 영상크기축소하여, gif 변환
+# tmp_height = 320 * org_size
+# tmp_height = int(tmp_height)
 # print(tmp_height)
-# os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x240 1012_1450_08_Nexus6P_8.0.0_API26.gif".format(imsi, tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
-os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 iphone5s_10.2.1.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
+imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone7_11.0.mp4'
+tmp_height = "375"
+tmp_width = "667"
+os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} iphone7_11.0_down.gif".format(imsi, tmp_height, tmp_width)) #OK> ffmpeg 폴더를 path에 추가.
+
+# 영상크기축소없이, gif 변환
+# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone7_11.0.mp4'
+# os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 iphone7_11.0.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
+
+# 영상 자르기
+# ffmpeg   -i   동영상.avi -ss  600  -t  120  -vcodec copy -acodec copy  clip.avi
+# 출처: http://crynut84.tistory.com/6 [Life is Dynamic]
+# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone7_11.0.mov'
+# startTime = "80" #second. cutting start time.
+# ToCutTime = "20" #second. cutting during time from start time.
+# os.system("ffmpeg -i {} -ss {} -t {} -vcodec copy -acodec copy clip.mp4".format(imsi, startTime, ToCutTime))
+
 # File 'movie_360p_320_tmp.gif' already exists. Overwrite ? [y/N]
 #
 # # import moviepy.editor as mp
