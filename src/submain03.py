@@ -26,6 +26,11 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         # self.model.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot | QDir.AllEntries ) # Display ALL.
         filter_jpg = (None, "*.jpg")
         self.model.setNameFilters(filter_jpg)
+        self.model.setNameFilterDisables(False)
+        # This property holds whether files that don't pass the name filter are hidden or disabled
+        # This property is true by default : http://doc.qt.io/qt-5/qfilesystemmodel.html
+        # 위에서, 디폴트값이 True인거 확인후, PYQT 전체소스에서, setNameFilterDisables 함수확인하고, 매개변수값확인하고서 False로 수정.
+        # True : 음영처리되서 보임 / False : 아예 리스트에서 빠짐
         self.indexRoot = self.model.index(self.model.rootPath())
         self.treeView.setModel(self.model)
         self.treeView.setRootIndex(self.indexRoot)
@@ -38,6 +43,7 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.model2.setFilter(QDir.Files)
         filter_mp4 = (None, "*.mp4")
         self.model2.setNameFilters(filter_mp4)
+        self.model2.setNameFilterDisables(False)
         self.indexRoot = self.model2.index(self.model2.rootPath())
         self.treeView_2.setModel(self.model2)
         self.treeView_2.setRootIndex(self.indexRoot)
@@ -50,6 +56,7 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         self.model3.setFilter(QDir.Files)
         filter_gif = (None, "*.gif")
         self.model3.setNameFilters(filter_gif)
+        self.model3.setNameFilterDisables(False)
         self.indexRoot = self.model3.index(self.model3.rootPath())
         self.treeView_3.setModel(self.model3)
         self.treeView_3.setRootIndex(self.indexRoot)
