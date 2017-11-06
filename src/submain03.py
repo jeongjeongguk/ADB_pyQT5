@@ -8,6 +8,7 @@ import adb_default
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QWidget, QFileSystemModel, QTreeView, QVBoxLayout, QApplication, QLabel, QLineEdit, QGridLayout, QGraphicsScene
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import QDir, Qt
 from PIL import Image, ImageQt
 import win32com.shell.shell as win32shell
 import consts_string
@@ -17,11 +18,54 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         QtWidgets.QWidget.__init__(self, parent)
         self.pathRoot = path
         self.setupUi(self)
+        paths = self.pathRoot
+        # Tab : [image]
         self.model = QFileSystemModel(self)
         self.model.setRootPath(self.pathRoot)
+        self.model.setFilter(QDir.Files) # Display only files
+        # self.model.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot | QDir.AllEntries ) # Display ALL.
+        filter_jpg = (None, "*.jpg")
+        self.model.setNameFilters(filter_jpg)
         self.indexRoot = self.model.index(self.model.rootPath())
         self.treeView.setModel(self.model)
         self.treeView.setRootIndex(self.indexRoot)
+        self.treeView.setSortingEnabled(True)
+        self.treeView.sortByColumn(1, Qt.AscendingOrder)
+
+        # Tab : [mp4]
+        self.model2 = QFileSystemModel(self)
+        self.model2.setRootPath(self.pathRoot)
+        self.model2.setFilter(QDir.Files)
+        filter_mp4 = (None, "*.mp4")
+        self.model2.setNameFilters(filter_mp4)
+        self.indexRoot = self.model2.index(self.model2.rootPath())
+        self.treeView_2.setModel(self.model2)
+        self.treeView_2.setRootIndex(self.indexRoot)
+        self.treeView_2.setSortingEnabled(True)
+        self.treeView_2.sortByColumn(1, Qt.AscendingOrder)
+
+        # Tab : [gif]
+        self.model3 = QFileSystemModel(self)
+        self.model3.setRootPath(self.pathRoot)
+        self.model3.setFilter(QDir.Files)
+        filter_gif = (None, "*.gif")
+        self.model3.setNameFilters(filter_gif)
+        self.indexRoot = self.model3.index(self.model3.rootPath())
+        self.treeView_3.setModel(self.model3)
+        self.treeView_3.setRootIndex(self.indexRoot)
+        self.treeView_3.setSortingEnabled(True)
+        self.treeView_3.sortByColumn(1, Qt.AscendingOrder)
+
+        # Tab : [etc]
+        self.model4 = QFileSystemModel(self)
+        self.model4.setRootPath(self.pathRoot)
+        self.model4.setFilter(QDir.AllDirs | QDir.NoDotAndDotDot | QDir.AllEntries ) # Display ALL.
+        self.indexRoot = self.model4.index(self.model4.rootPath())
+        self.treeView_4.setModel(self.model4)
+        self.treeView_4.setRootIndex(self.indexRoot)
+        self.treeView_4.setSortingEnabled(True)
+        self.treeView_4.sortByColumn(1, Qt.AscendingOrder)
+
         self.scene = QtWidgets.QGraphicsScene()
         self.graphicsView.setScene(self.scene)
         self.connect()
@@ -39,9 +83,9 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
 
         self.lineEdit_2.setText(fileName)
         self.lineEdit.setText(filePath)
-
-        # TODO: 실행하는거 말고, graphicView에 그리는걸로 변경필요
+        # file 실행시, 아래 커맨드 사용
         # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
+        #
         try :
             img = Image.open(filePath)
             self.display_image(img)
