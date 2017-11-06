@@ -27,6 +27,8 @@ if (extension == 'jpg') | (extension == 'JPG') | (extension == 'jpeg') | (extens
             print("- Cameara Software : " + Camera_Software + "\n")  # Camera Software 을 출력
             print("- Taking Photo Time : " + Camera_Date + "\n")  # Camear_Date 를 출력
         except:
+            # logging.exception("message")
+            print("- No Cammera's information. ")
             pass
 
         exifGPS = exif['GPSInfo']  # GPS 좌표값을 exifGPS에 저장
@@ -48,9 +50,9 @@ if (extension == 'jpg') | (extension == 'JPG') | (extension == 'jpeg') | (extens
         Y = Lon  # 위도를 Y에 저장
         map_osm = folium.Map(location=[X, Y], zoom_start=15)  # folium 모듈을 사용하여 좌표값을 지도에 찍음, zoom_start는 지도의 확대범위를 나타냄
         folium.Marker([X, Y], popup=filename).add_to(map_osm)  # 좌표에 마커를 찍음
-        map_osm.save('Map.html')  # 지도를 Map.html에 저장
+        map_osm.save('Map_{}.html'.format(filename))  # 지도를 Map.html에 저장
         print("- Located GPS  " + str(Lat) + "," + str(Lon) + "\n")  # 좌표 출력
-        print("- Check your dictectory Map.html!!!")
+        print("- Check your dictectory Map_{}.html!!!")
 
     except:
         logging.exception("message")

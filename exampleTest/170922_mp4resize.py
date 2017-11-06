@@ -2,6 +2,7 @@ import os
 import moviepy
 import subprocess as cmd
 import win32com.shell.shell as win32shell
+import re
 
 # os.system("ffmpeg -i resize.mp4") #OK> ffmpeg 폴더를 path에 추가.
 # # Stream #0:0(eng): Video: h264 (Baseline) (avc1 / 0x31637661), yuv420p, 1080x1920, 9910 kb/s, 33.12 fps, 90k tbr, 90k tbn, 180k tbc (default)
@@ -19,11 +20,13 @@ import win32com.shell.shell as win32shell
 
 from moviepy.editor import *
 # clip = VideoFileClip('movie_360p.mp4')
-imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\screenshot\1012_1450_08_Nexus6P_8.0.0_API26.mp4'
-imsi = r'C:\Users\Jeongkuk\Documents\AireCam\1012_1450_08_Nexus6P_8.0.0_API26.mp4'
-imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone5s_10.2.1.mov'
-clip = VideoFileClip(imsi)
-org_size = clip.aspect_ratio
+# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\screenshot\1012_1450_08_Nexus6P_8.0.0_API26.mp4'
+# imsi = r'C:\Users\Jeongkuk\Documents\AireCam\1012_1450_08_Nexus6P_8.0.0_API26.mp4'
+# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone5s_10.2.1.mov'
+# clip = VideoFileClip(imsi)
+# org_size = clip.aspect_ratio
+# print(org_size)
+# print(clip.size)
 # # print(clip.reader.size)  # 영상사이즈 줄일때도, 기존의 영상 사이즈를 가지고 온다음에, 그 비율에 맞춰서 조율하는게 나을지 확인필요.
 # # print(org_size)
 # #
@@ -34,16 +37,23 @@ org_size = clip.aspect_ratio
 # # width = vid.get(cv2.CAP_PROP_FRAME_WIDTH)
 #
 
+# lib써서(VideoFileClip) 프레임 사이즈 정보확인
+# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone5s_10.2.1.mov'
+# clip = VideoFileClip(imsi)
+# org_width, org_height = clip.size[0], clip.size[1]
+# print(org_width); print(org_height)
 
-
-# 영상크기축소하여, gif 변환
-# tmp_height = 320 * org_size
-# tmp_height = int(tmp_height)
-# print(tmp_height)
-imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone7_11.0.mp4'
-tmp_height = "375"
-tmp_width = "667"
-os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} iphone7_11.0_down.gif".format(imsi, tmp_height, tmp_width)) #OK> ffmpeg 폴더를 path에 추가.
+# 영상 프레임크기축소하여, gif 변환
+imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone5s_10.2.1.mov'
+org_width = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width {}".format(imsi)).decode("utf-8")
+org_width = re.sub('\s', '', org_width)
+org_width = int(org_width.split("=")[1])
+org_height = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height {}".format(imsi)).decode("utf-8")
+org_height = re.sub('\s', '', org_height)
+org_height = int(org_height.split("=")[1])
+downPercent = 0.5
+tmp_width, tmp_height = int(org_width * downPercent), int(org_height * downPercent)
+os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} downSize_3.gif".format(imsi, tmp_width, tmp_height)) #Invalid frame size:
 
 # 영상크기축소없이, gif 변환
 # imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone7_11.0.mp4'
