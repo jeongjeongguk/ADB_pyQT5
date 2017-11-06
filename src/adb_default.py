@@ -123,6 +123,9 @@ class defaultADB(object) :
         #TODO : Failure [INSTALL_FAILED_UID_CHANGED] ??? 삭제후 설치과정에서, 계속뜸.. 원인확인필요 Gpro 4.4.2 alsong 4.1.1.3 에서 4.1.1.4 갈때 발생.
         # https://byunsooblog.wordpress.com/2013/12/07/install_failed_uid_changed-%EC%97%90%EB%9F%AC/
         # DB삭제가 완전히 안된거. 제대로 삭제가 필요하다.
+
+        # TODO : 출처알수없는 앱 허용안했을때 나오는 메시지. 처리필요함 / or APK 깨진경우 발생됨( 동일이름으로 복붙해서 이동했을 경우)
+        # Failed to install C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/Cheek-test-release-v1.0.0.1-1.apk: Failure [INSTALL_PARSE_FAILED_NO_CERTIFICATES: Failed to collect certificates from /data/app/vmdl213753190.tmp/base.apk using APK Signature Scheme v2: SHA-256 digest of contents did not verify]
     @classmethod
     def run_info(cls, filepath):
         ConnectedDevicesCnt = cls.check_connect()
