@@ -465,14 +465,20 @@ class defaultADB(object) :
     def makedir(cls):
         cls.today = datetime.datetime.now().strftime("%y%m%d")
         check_folder = os.path.exists(cls.today)
+        # print(os.getcwd().split("\\")[-1])
         if check_folder == False:
-            try :
-                cmd.call("mkdir " + cls.today, stderr=None, shell=True)
-                # cmd.call("mkdir " + cls.today, stderr=None, shell=False) # except Test
-                ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", consts_string.show_flag.foreground.value)
-            except :
-                ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치에서 프로그램이 실행되었습니다.", "실행파일 경로확인요청", consts_string.show_flag.foreground.value)
-                return -1
+            if os.getcwd().split("\\")[-1] != cls.today :
+                try :
+                    cmd.call("mkdir " + cls.today, stderr=None, shell=True)
+                    # cmd.call("mkdir " + cls.today, stderr=None, shell=False) # except Test
+                    ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", consts_string.show_flag.foreground.value)
+                except :
+                    logger.exception("message")
+                    ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치에서 프로그램이 실행되었습니다.", "실행파일 경로확인요청", consts_string.show_flag.foreground.value)
+                    return -1
+            else :
+                ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : " + cls.today, "스크린샷 저장경로안내",
+                                                 consts_string.show_flag.foreground.value)
         else:
             ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : "+ cls.today, "스크린샷 저장경로안내", consts_string.show_flag.foreground.value)
 
@@ -518,6 +524,11 @@ class defaultADB(object) :
         ConnectedDevicesCnt = cls.check_connect()
         if ConnectedDevicesCnt > 0 :
             cls.makedir()
+            if os.getcwd().split("\\")[-1] != cls.today:
+                os.chdir(cls.today)
+            else :
+                pass
+            # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
             os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
             os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
             os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
@@ -529,10 +540,10 @@ class defaultADB(object) :
             changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
             org_image = os.getcwd() + "\\test.png"
             new_image = os.getcwd() + "\\"+ changedName
-            cls.capture_down_size(org_image, new_image, size_per = 30, jpeg_quaility_per = 85)
-            time.sleep(1)
-            os.system("move " + changedName + " " +cls.today)
-            os.system("start " + cls.today)
+            cls.capture_down_size(org_image, new_image, 30, 85)
+            # time.sleep(1)
+            # os.system("move " + changedName + " " +cls.today)
+            # os.system("start " + cls.today)
         else :
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
@@ -551,6 +562,10 @@ class defaultADB(object) :
         ConnectedDevicesCnt = cls.check_connect()
         if ConnectedDevicesCnt > 0 :
             cls.makedir()
+            if os.getcwd().split("\\")[-1] != cls.today:
+                os.chdir(cls.today)
+            else :
+                pass
             cls.device_info(None)
             # print(ConnectedDevicesCnt)
             # print(cls.deviceData)
@@ -575,12 +590,13 @@ class defaultADB(object) :
                 cmd.check_output("adb shell mkdir /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
                 logger.info("Complete Making Folder : /mnt/sdcard/ADB_record")
             except :
-                logger.warning("Failed make folder. & Failed record screen." )
+                logger.warning("Failed make folder. ") #TODO : 여기로 들어오면, 녹화가 안되느것.
+                logger.exception("message")
             # New window cmd : start cmd/k command
 
             win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' +
                       "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
-            logger.info("Record Start")
+            logger.info("Record Start>>>>>")
             # os.system("start /B start cmd.exe @cmd /k "
             #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4")
 
@@ -595,35 +611,48 @@ class defaultADB(object) :
             if RecordCnt == 1: # 확인 : 기기 -> PC 로 영상전송
                 # TODO : 확인이나, 취소 누르기전에 연결끊어졌는지 확인할것 -> 이경우, 강제종료됨.
                 os.system("TASKKILL /F /IM cmd.exe /T")
+                logger.info("Record End======")
                 # powershell 기반으로 main.exe가 실행되면 괜찮음?? win7 x86 sp1 ent / win10 x64 ent 에서 g5 7.0으로 확인
                 # os.system("TASKKILL /F /FI "
                 #           "\"WINDOWTITLE eq C:\WINDOWS\system32\cmd.exe - "
                 #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4\" /T")
                 time.sleep(1)
-                cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
-                cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
+                logger.info("Recording File Move Start >>>>>")
+                logger.info(
+                cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True))
+                logger.info(
+                cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True))
 
                 cls.check_time()
                 changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
                 os.system("cd %s" % path)
-                # print(changedName)
                 try :
                     os.system("ren test.mp4 " + changedName)
                 except :
-                    os.renames("test.mp4", changedName)
+                    try:
+                        os.renames("test.mp4", changedName)
+                    except:
+                        logger.exception("message")
                 # TODO : 넥서스 6P 8.0 에서 changedName 확인할것. test.mp4를 가져오긴 하는데, 이름변경이 안되고 test.mp4로 머물러있음.
                 # TODO : 폴더생성관련 문제로 인해 발생되는것. 폴더관리쪽을 확인해야함.
                 # 171016_175316_Nexus 6P_8.0.0_API_26.mp4 으로 정상적으로 찍힘.
                 os.system("move " + changedName + " " + cls.today)
-                os.system("start " + cls.today)
                 logger.info("Recording File Move End =======")
+                # os.system("start " + cls.today) #저장한 폴더 열어주는거.
+
                 movie2gif_confirm = ctypes.windll.user32.MessageBoxW \
                     (0, " 녹화된 영상을 업로드가능한 \n gif파일로 변환하시겠습니까?", " 영상파일변환 확인",
                      1 | consts_string.show_flag.foreground.value)
-                if movie2gif_confirm == 1:  # 확인 : call mp4_downsize_gif().
-                    logger.info("MP4 to GIF start >>>>>")
+                if movie2gif_confirm == 1:
+                    logger.info("Today : {}".format(cls.today))
+                    # if os.getcwd().split("\\")[-1] != cls.today:
+                    #     os.chdir(cls.today)
+                    # else:
+                    #     pass
                     os.chdir(cls.today)
-                    cls.mp4_downsize_gif(changedName, downPercent=0.5)
+                    logger.info("MP4 to GIF start >>>>>")
+                    print(changedName)
+                    cls.mp4_downsize_gif(changedName, downPercent=0.5) #todo: 171107_172047_LG-F700K_7.0_API_24.mp4: No such file or directory
                     logger.info("MP4 to GIF End ======")
                 else:
                     logger.info("Not work MP4 to GIF ======")
@@ -636,7 +665,6 @@ class defaultADB(object) :
     def mp4_downsize_gif(cls, org_filename, downPercent):
         # print("hello")
         # OK> ffmpeg 폴더를 path에 추가.
-
         org_width = cmd.check_output(
             "ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width {}".format(org_filename)).decode("utf-8")
         org_width = re.sub('\s', '', org_width)
@@ -650,7 +678,6 @@ class defaultADB(object) :
         new_filename = org_filename.replace("mp4","gif")
         new_file = new_filename
         os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}".format(org_filename, tmp_width, tmp_height, new_file))  # Invalid frame size:
-
 
     @classmethod
     def ConnectedDevices(cls):
@@ -983,10 +1010,11 @@ if __name__ == "__main__":
     #                              stderr=cmd.STDOUT, shell=True).decode("utf-8")\
 
     # 이 아래부분을 함수화할것. 실행확인함.
-    # apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("Cheek-test-release-v1.0.0.1-1.apk")
+    # apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("teamUP-teamup_store-release.apk")
     # ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
     # ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
     # print("[APK] : {}".format(ApkAPI))
+
     # DeviceAPI = cmd.check_output("adb shell getprop ro.build.version.sdk", stderr=cmd.STDOUT, shell=True).decode("utf-8")
     # DeviceAPI = re.sub('\s', '', DeviceAPI)
     # print("[Devices] : {}".format(DeviceAPI))

@@ -99,6 +99,24 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         except:
             ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", consts_string.show_flag.foreground.value)
 
+    @QtCore.pyqtSlot(QtCore.QModelIndex)
+    def on_treeView_4_clicked(self, index):
+        indexItem = self.model4.index(index.row(), 0, index.parent())
+        fileName = self.model4.fileName(indexItem)
+        filePath = self.model4.filePath(indexItem)
+
+        self.lineEdit_2.setText(fileName)
+        self.lineEdit.setText(filePath)
+        # file 실행시, 아래 커맨드 사용
+        # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
+        #
+        try :
+            img = Image.open(filePath)
+            self.display_image(img)
+        except:
+            ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", consts_string.show_flag.foreground.value)
+
+
     def display_image(self, img):
         self.scene.clear()
         w, h = img.size
