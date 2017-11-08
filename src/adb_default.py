@@ -472,6 +472,8 @@ class defaultADB(object) :
                     cmd.call("mkdir " + cls.today, stderr=None, shell=True)
                     # cmd.call("mkdir " + cls.today, stderr=None, shell=False) # except Test
                     ctypes.windll.user32.MessageBoxW(0, "[폴더생성 완료]\n폴더명 : " + cls.today, "스크린샷 저장폴더생성", consts_string.show_flag.foreground.value)
+                    os.chdir(cls.today)
+                    print("[Here 1]  "+os.getcwd())
                 except :
                     logger.exception("message")
                     ctypes.windll.user32.MessageBoxW(0, "폴더생성 불가한 위치에서 프로그램이 실행되었습니다.", "실행파일 경로확인요청", consts_string.show_flag.foreground.value)
@@ -479,8 +481,12 @@ class defaultADB(object) :
             else :
                 ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : " + cls.today, "스크린샷 저장경로안내",
                                                  consts_string.show_flag.foreground.value)
+                os.chdir(cls.today)
+                print("[Here 2]  "+os.getcwd())
         else:
             ctypes.windll.user32.MessageBoxW(0, "[스크린샷 저장경로]\n폴더명 : "+ cls.today, "스크린샷 저장경로안내", consts_string.show_flag.foreground.value)
+            os.chdir(cls.today)
+            print("[Here 3]  "+os.getcwd())
 
     @classmethod
     def check_time(cls):
@@ -562,9 +568,14 @@ class defaultADB(object) :
         ConnectedDevicesCnt = cls.check_connect()
         if ConnectedDevicesCnt > 0 :
             cls.makedir()
+            print("okay")
             if os.getcwd().split("\\")[-1] != cls.today:
+                print("=============================================================== halo")
                 os.chdir(cls.today)
+                print(os.getcwd())
             else :
+                print("=============================================================== hey")
+
                 pass
             cls.device_info(None)
             # print(ConnectedDevicesCnt)
@@ -618,19 +629,19 @@ class defaultADB(object) :
                 #           "adb shell screenrecord --bit-rate 10000000 /mnt/sdcard/ADB_record/test.mp4\" /T")
                 time.sleep(1)
                 logger.info("Recording File Move Start >>>>>")
-                logger.info(
-                cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True))
-                logger.info(
-                cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True))
+                cmd.check_output("adb pull /mnt/sdcard/ADB_record/test.mp4 %s/test.mp4" % path, stderr=cmd.STDOUT, shell=True)
+                # cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
 
                 cls.check_time()
-                changedName = cls.currentTime + "_" + cls.deviceData + ".mp4"
-                os.system("cd %s" % path)
+                import copy
+                changedName = copy.deepcopy(cls.currentTime + "_" + cls.deviceData + ".mp4")
+                print("============================================================== {}".format(changedName))
                 try :
-                    os.system("ren test.mp4 " + changedName)
+                    os.renames("test.mp4", changedName)
+                    print(os.getcwd())
                 except :
                     try:
-                        os.renames("test.mp4", changedName)
+                        os.system("ren test.mp4 " + changedName)
                     except:
                         logger.exception("message")
                 # TODO : 넥서스 6P 8.0 에서 changedName 확인할것. test.mp4를 가져오긴 하는데, 이름변경이 안되고 test.mp4로 머물러있음.
@@ -638,7 +649,7 @@ class defaultADB(object) :
                 # 171016_175316_Nexus 6P_8.0.0_API_26.mp4 으로 정상적으로 찍힘.
                 os.system("move " + changedName + " " + cls.today)
                 logger.info("Recording File Move End =======")
-                # os.system("start " + cls.today) #저장한 폴더 열어주는거.
+                os.system("start " + os.getcwd()) #저장한 폴더 열어주는거.
 
                 movie2gif_confirm = ctypes.windll.user32.MessageBoxW \
                     (0, " 녹화된 영상을 업로드가능한 \n gif파일로 변환하시겠습니까?", " 영상파일변환 확인",
@@ -649,10 +660,10 @@ class defaultADB(object) :
                     #     os.chdir(cls.today)
                     # else:
                     #     pass
-                    os.chdir(cls.today)
+                    # os.chdir(cls.today)
                     logger.info("MP4 to GIF start >>>>>")
                     print(changedName)
-                    cls.mp4_downsize_gif(changedName, downPercent=0.5) #todo: 171107_172047_LG-F700K_7.0_API_24.mp4: No such file or directory
+                    cls.mp4_downsize_gif(org_filename=changedName, downPercent=0.5) #todo: 171107_172047_LG-F700K_7.0_API_24.mp4: No such file or directory
                     logger.info("MP4 to GIF End ======")
                 else:
                     logger.info("Not work MP4 to GIF ======")
@@ -665,6 +676,7 @@ class defaultADB(object) :
     def mp4_downsize_gif(cls, org_filename, downPercent):
         # print("hello")
         # OK> ffmpeg 폴더를 path에 추가.
+
         org_width = cmd.check_output(
             "ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width {}".format(org_filename)).decode("utf-8")
         org_width = re.sub('\s', '', org_width)
@@ -678,6 +690,7 @@ class defaultADB(object) :
         new_filename = org_filename.replace("mp4","gif")
         new_file = new_filename
         os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}".format(org_filename, tmp_width, tmp_height, new_file))  # Invalid frame size:
+
 
     @classmethod
     def ConnectedDevices(cls):

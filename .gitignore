@@ -39,3 +39,5 @@ src/dist/
 src/test.png
 test170707.txt
 ui_py/capture_ui_old.py
+/adb/
+/sdk_info/

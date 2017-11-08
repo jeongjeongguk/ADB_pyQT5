@@ -44,20 +44,20 @@ from moviepy.editor import *
 # print(org_width); print(org_height)
 
 # 영상 프레임크기축소하여, gif 변환
-imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone5s_10.2.1.mov'
-org_width = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width {}".format(imsi)).decode("utf-8")
-org_width = re.sub('\s', '', org_width)
-org_width = int(org_width.split("=")[1])
-org_height = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height {}".format(imsi)).decode("utf-8")
-org_height = re.sub('\s', '', org_height)
-org_height = int(org_height.split("=")[1])
-downPercent = 0.5
-tmp_width, tmp_height = int(org_width * downPercent), int(org_height * downPercent)
-os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} downSize_3.gif".format(imsi, tmp_width, tmp_height)) #Invalid frame size:
+# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone5s_10.2.1.mov'
+# org_width = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width {}".format(imsi)).decode("utf-8")
+# org_width = re.sub('\s', '', org_width)
+# org_width = int(org_width.split("=")[1])
+# org_height = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height {}".format(imsi)).decode("utf-8")
+# org_height = re.sub('\s', '', org_height)
+# org_height = int(org_height.split("=")[1])
+# downPercent = 0.5
+# tmp_width, tmp_height = int(org_width * downPercent), int(org_height * downPercent)
+# os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} downSize_3.gif".format(imsi, tmp_width, tmp_height)) #Invalid frame size:
 
 # 영상크기축소없이, gif 변환
-# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone7_11.0.mp4'
-# os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 iphone7_11.0.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
+imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\src\dist\171108\171108\171108_140525_SM-G930K_7.0_API_24.mp4'
+os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 171108_140525_SM-G930K_7.0_API_24.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
 
 # 영상 자르기
 # ffmpeg   -i   동영상.avi -ss  600  -t  120  -vcodec copy -acodec copy  clip.avi
