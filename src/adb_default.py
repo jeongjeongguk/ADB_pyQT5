@@ -641,6 +641,7 @@ class defaultADB(object) :
         clip = VideoFileClip(org_file) 
         org_size = clip.aspect_ratio
 
+
         #TODO: 연결기기의 해상도정보가져와서, 그 비율대로 절반크기로 줄이기 
         ch_height = 320
         ch_width = 240
