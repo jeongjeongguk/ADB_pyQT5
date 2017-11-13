@@ -456,6 +456,7 @@ class defaultADB(object) :
     @staticmethod
     def goDevelopPage(self):
         os.system("adb shell am start -S com.android.settings/.Settings\$DevelopmentSettingsActivity")
+        # TODO: 제발 이것도 UI에 추가해놓자. 맨날 추가안해서 형이 힘들다.
 
     @classmethod
     def makedir(cls):
@@ -510,26 +511,14 @@ class defaultADB(object) :
         cls.show_file_view(None, paths)
 
     @classmethod
-    def capture2image(cls):#TODO : 기기 잠금화면 상태유무 확인후, 잠금해제 메소드 추가 필요
+    def capture2image(cls):# TODO : 기기 잠금화면 상태유무 확인후, 잠금화면을 찍을지 or 잠금해제 메소드 추가 필요
         ConnectedDevicesCnt = cls.check_connect()
         if ConnectedDevicesCnt > 0 :
             cls.makedir()
-            # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
             os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
-            # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + "adb shell rm -r /mnt/sdcard/ScreenCapture")
             os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
-
             os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
-
             os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
-
-            #TODO : textMovingRatio 를 구분해서, 이를 window에 출력하기. -> 중간에 UI그리는 함수로 점프.??
-            # movePNG = cmd.Popen("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png",
-            #                  stdout=cmd.PIPE, stderr=cmd.STDOUT)
-            # textMovingRatio = movePNG.stdout.read().decode("utf-8").split("\r\n")
-            # for Cnt in range(len(textMovingRatio)):
-            #     print(textMovingRatio[Cnt])
-
             os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
             cls.check_time()
             time.sleep(1)
@@ -537,7 +526,7 @@ class defaultADB(object) :
             changedName = cls.currentTime + "_" + cls.deviceData+".jpg"
             org_image = os.getcwd() + "\\test.png"
             new_image = os.getcwd() + "\\"+ changedName
-            cls.capture_down_size(org_image, new_image, 30, 85)
+            cls.capture_down_size(org_image, new_image, size_per = 30, jpeg_quaility_per = 85)
             time.sleep(1)
             os.system("move " + changedName + " " +cls.today)
             os.system("start " + cls.today)
@@ -568,11 +557,9 @@ class defaultADB(object) :
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
             return -1
-        # TODO : API 19 이상일때에만 영상녹화하고, 메시지다이얼로그의 '녹화끝','취소'리턴받으면 녹화중지시키고 영상뺴오기
         device_api = cls.deviceData.split("_")[3]
         device_api = device_api.split("I")[0].replace("\r","")
-        videoEnableOSver = 19
-        # print("연결된 기기의 OS API은 " + device_api)
+        videoEnableOSver = 19 # 19 이상만 녹화가능. adb 이용 녹화 최대 가능시간은 3분. 그 이상은 클라이언트 앱추가필요.
         if float(device_api) < videoEnableOSver :
             ctypes.windll.user32.MessageBoxW(0, "선택된 기기에서는 녹화가 되지 않습니다.", "녹화지원안됨", consts_string.show_flag.foreground.value)
         else:
@@ -585,7 +572,7 @@ class defaultADB(object) :
                 cmd.check_output("adb shell mkdir /mnt/sdcard/ADB_record", stderr=cmd.STDOUT, shell=True)
                 logger.info("Complete Making Folder : /mnt/sdcard/ADB_record")
             except :
-                logger.warning("Failed make folder") #TODO : 여기로 들어오면, 녹화가 안되느것.
+                logger.warning("Failed make folder. & Failed record screen." )
             # New window cmd : start cmd/k command
 
             win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' +
@@ -622,50 +609,45 @@ class defaultADB(object) :
                 except :
                     os.renames("test.mp4", changedName)
                 # TODO : 넥서스 6P 8.0 에서 changedName 확인할것. test.mp4를 가져오긴 하는데, 이름변경이 안되고 test.mp4로 머물러있음.
+                # TODO : 폴더생성관련 문제로 인해 발생되는것. 폴더관리쪽을 확인해야함.
                 # 171016_175316_Nexus 6P_8.0.0_API_26.mp4 으로 정상적으로 찍힘.
                 os.system("move " + changedName + " " + cls.today)
                 os.system("start " + cls.today)
-
+                logger.info("Recording File Move End =======")
                 movie2gif_confirm = ctypes.windll.user32.MessageBoxW \
                     (0, " 녹화된 영상을 업로드가능한 \n gif파일로 변환하시겠습니까?", " 영상파일변환 확인",
                      1 | consts_string.show_flag.foreground.value)
                 if movie2gif_confirm == 1:  # 확인 : call mp4_downsize_gif().
-                    print("변환시작\n")
-                    print(cls.today) # 171012
+                    logger.info("MP4 to GIF start >>>>>")
                     os.chdir(cls.today)
-                    # print(os.getcwd()) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src
-                    # org_path = os.getcwd() + "\\{}".format(cls.today)
-                    # print(org_path) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171012
-                    print(changedName) # 171012_095106_LG-F700K_7.0_API_24.mp4
-                    cls.mp4_downsize_gif(changedName)
+                    cls.mp4_downsize_gif(changedName, downPercent=0.5)
+                    logger.info("MP4 to GIF End ======")
                 else:
-                    print("변환안함\n")
+                    logger.info("Not work MP4 to GIF ======")
 
             else : # 취소 : 기기에서 삭제
                 os.system("TASKKILL /F /IM cmd.exe /T")
                 cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
 
     @classmethod
-    def mp4_downsize_gif(cls, org_filename):
-        print("hello")
-        org_file = org_filename
-        clip = VideoFileClip(org_file) 
-        org_size = clip.aspect_ratio
+    def mp4_downsize_gif(cls, org_filename, downPercent):
+        # print("hello")
+        # OK> ffmpeg 폴더를 path에 추가.
 
-        #TODO: 연결기기의 해상도정보가져와서, 그 비율대로 절반크기로 줄이기 
-        ch_height = 320
-        ch_width = 240
+        org_width = cmd.check_output(
+            "ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width {}".format(org_filename)).decode("utf-8")
+        org_width = re.sub('\s', '', org_width)
+        org_width = int(org_width.split("=")[1])
+        org_height = cmd.check_output(
+            "ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height {}".format(org_filename)).decode("utf-8")
+        org_height = re.sub('\s', '', org_height)
+        org_height = int(org_height.split("=")[1])
 
-        tmp_height = ch_height * org_size
-        tmp_height = int(tmp_height)
-
+        tmp_width, tmp_height = int(org_width * downPercent), int(org_height * downPercent)
         new_filename = org_filename.replace("mp4","gif")
         new_file = new_filename
+        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}".format(org_filename, tmp_width, tmp_height, new_file))  # Invalid frame size:
 
-        # print(tmp_height)
-        # os.system("ffmpeg -i movie_360p.mp4 -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
-        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}".format(org_file, tmp_height, ch_width,new_file))
-        print("변환완료")
 
     @classmethod
     def ConnectedDevices(cls):
@@ -998,10 +980,10 @@ if __name__ == "__main__":
     #                              stderr=cmd.STDOUT, shell=True).decode("utf-8")\
 
     # 이 아래부분을 함수화할것. 실행확인함.
-    apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("teamUP-teamup_store-release.apk")
-    ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
-    ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
-    print("[APK] : {}".format(ApkAPI))
+    # apkFileName = "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\\apks\{}".format("Cheek-test-release-v1.0.0.1-1.apk")
+    # ApkAPI = cmd.check_output("aapt list -a {} | findstr \"minSdkVersion\"".format(apkFileName), stderr=cmd.STDOUT, shell=True).decode("utf-8")
+    # ApkAPI = re.sub('\s', '', ApkAPI)[-4:]
+    # print("[APK] : {}".format(ApkAPI))
     # DeviceAPI = cmd.check_output("adb shell getprop ro.build.version.sdk", stderr=cmd.STDOUT, shell=True).decode("utf-8")
     # DeviceAPI = re.sub('\s', '', DeviceAPI)
     # print("[Devices] : {}".format(DeviceAPI))
@@ -1052,10 +1034,10 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
-    # try :
-    #     test.capture2viedo()
-    # except :
-    #     pass
+    try :
+        test.capture2viedo()
+    except :
+        pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
