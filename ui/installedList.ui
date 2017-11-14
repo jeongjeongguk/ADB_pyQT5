@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>342</width>
-    <height>220</height>
+    <height>280</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>342</width>
-    <height>220</height>
+    <height>280</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>342</width>
-    <height>220</height>
+    <height>280</height>
    </size>
   </property>
   <property name="baseSize">
@@ -47,7 +47,7 @@
      <x>0</x>
      <y>10</y>
      <width>341</width>
-     <height>207</height>
+     <height>265</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -82,16 +82,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="MonkeyTest_2">
         <property name="text">
-         <string>리스트갱신</string>
+         <string>앱 시작</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_5">
+       <widget class="QPushButton" name="pushButton_4">
         <property name="text">
-         <string>도움말</string>
+         <string>리스트갱신</string>
         </property>
        </widget>
       </item>
@@ -106,6 +106,20 @@
        <widget class="QPushButton" name="MonkeyTest">
         <property name="text">
          <string>Monkey Test</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="MonkeyTest_3">
+        <property name="text">
+         <string>개발자페이지</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_5">
+        <property name="text">
+         <string>도움말</string>
         </property>
        </widget>
       </item>

@@ -16,9 +16,10 @@ class Ui_Form(object):
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
-        # TODO : 추가한것
-        Form.setWindowFlags(
-            QtCore.Qt.Window | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.CustomizeWindowHint)
+        # 제목표시줄의 최소화버튼제거방법 -> 일단 나는 메인창에서 버튼클릭시 서브창 재호출 안되고 있어서, 이 기능은 주석처리.
+        # Form.setWindowFlags(
+        #     QtCore.Qt.Window | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.CustomizeWindowHint
+        # )
         # ---------
         Form.setSizePolicy(sizePolicy)
         Form.setMinimumSize(QtCore.QSize(342, 182))
