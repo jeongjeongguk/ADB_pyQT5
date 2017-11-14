@@ -626,7 +626,7 @@ class defaultADB(object) :
                     # org_path = os.getcwd() + "\\{}".format(cls.today)
                     # print(org_path) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171012
                     print(changedName) # 171012_095106_LG-F700K_7.0_API_24.mp4
-                    cls.mp4_downsize_gif(changedName)
+                    cls.mp4_downsize_gif(changedName, downPercent=100)
                 else:
                     print("변환안함\n")
 
@@ -635,27 +635,16 @@ class defaultADB(object) :
                 cmd.check_output("adb shell rm /mnt/sdcard/ADB_record/test.mp4", stderr=cmd.STDOUT, shell=True)
 
     @classmethod
-    def mp4_downsize_gif(cls, org_filename):
-        print("hello")
-        org_file = org_filename
-        clip = VideoFileClip(org_file) 
-        org_size = clip.aspect_ratio
-
-
-        #TODO: 연결기기의 해상도정보가져와서, 그 비율대로 절반크기로 줄이기 
-        ch_height = 320
-        ch_width = 240
-
-        tmp_height = ch_height * org_size
-        tmp_height = int(tmp_height)
-
-        new_filename = org_filename.replace("mp4","gif")
-        new_file = new_filename
-
-        # print(tmp_height)
-        # os.system("ffmpeg -i movie_360p.mp4 -pix_fmt rgb24 -r 10 -s {}x240 movie_360p_320_tmp.gif".format(tmp_height)) #OK> ffmpeg 폴더를 path에 추가.
-        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}".format(org_file, tmp_height, ch_width,new_file))
-        print("변환완료")
+    def mp4_downsize_gif(cls, org_filename, downPercent):
+        org_width = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=width {}".format(org_filename)).decode("utf-8")
+        org_width = re.sub('\s', '', org_width)
+        org_width = int(org_width.split("=")[1])
+        org_height = cmd.check_output("ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height {}".format(org_filename)).decode("utf-8")
+        org_height = re.sub('\s', '', org_height)
+        org_height = int(org_height.split("=")[1])
+        downPercent = downPercent / 100
+        tmp_width, tmp_height = int(org_width * downPercent), int(org_height * downPercent)
+        os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}.gif".format(org_filename, tmp_width, tmp_height, org_filename))
 
     @classmethod
     def ConnectedDevices(cls):
