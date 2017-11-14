@@ -455,8 +455,11 @@ class defaultADB(object) :
 
     @staticmethod
     def goDevelopPage(self):
-        os.system("adb shell am start -S com.android.settings/.Settings\$DevelopmentSettingsActivity")
-        # TODO: 제발 이것도 UI에 추가해놓자. 맨날 추가안해서 형이 힘들다.
+        try :
+            os.system("adb shell am start -S com.android.settings/.Settings\$DevelopmentSettingsActivity")
+        except :
+            ctypes.windll.user32.MessageBoxW(0, "개발자모드활성화 되지 않았습니다.", "모드 활성화요청",
+                                             consts_string.show_flag.foreground.value)
 
     @classmethod
     def makedir(cls):

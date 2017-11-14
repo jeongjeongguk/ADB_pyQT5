@@ -77,6 +77,11 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
             else self.exceptionMessage()
         )
 
+        # DeveloperPage
+        self.DeveloperPage.clicked.connect(
+            lambda:
+            self.goDevelopPage(None)
+        )
     def listup(self):
         self.listWidget.clear() # clear list
         InstProgramInfo = self.list_ins_program(None)
