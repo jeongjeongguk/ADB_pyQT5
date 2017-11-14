@@ -82,7 +82,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="MonkeyTest_2">
+       <widget class="QPushButton" name="StartApp">
         <property name="text">
          <string>앱 시작</string>
         </property>
@@ -110,7 +110,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="MonkeyTest_3">
+       <widget class="QPushButton" name="DeveloperPage">
         <property name="text">
          <string>개발자페이지</string>
         </property>
