@@ -461,6 +461,11 @@ class defaultADB(object) :
             ctypes.windll.user32.MessageBoxW(0, "개발자모드활성화 되지 않았습니다.", "모드 활성화요청",
                                              consts_string.show_flag.foreground.value)
 
+    @staticmethod
+    def goPrevilegePage(self, packageName):
+        # TODO : 앱 패키지명 받아와서, 해당앱의 권한페이지 이동함수 필요
+        pass
+
     @classmethod
     def makedir(cls):
         cls.today = datetime.datetime.now().strftime("%y%m%d")
