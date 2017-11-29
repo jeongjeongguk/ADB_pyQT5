@@ -888,16 +888,21 @@ class defaultADB(object) :
         try:
             packageName = agrs[0]
             # cmd.check_output("adb shell pm list packages -f | findstr " + packageName , stderr=cmd.STDOUT, shell=True)
-            # print("OK")
             print(packageName)
-            test = cmd.check_output("adb shell pm list packages -f | findstr " + packageName, stderr=cmd.STDOUT, shell=True)
+            test = cmd.check_output("adb shell pm list packages -f | findstr " + packageName, stderr=cmd.STDOUT, shell=True).decode("utf-8")
+            test = re.sub('\s', '', test) # white space 제거
+            print(test)
+            print("OK")
             # print(test.decode("utf-8").split("=")[0].split(":")[1]) # /data/app/com.estsoft.alsong-1/base.apk
-            install_path = test.decode("utf-8").split("=")[0].split(":")[1] # /data/app/com.estsoft.alsong-1/base.apk
+            install_path = test.split("=")[0].split(":")[1] # /data/app/com.estsoft.alsong-1/base.apk
             download_path = os.getcwd() + "\\" + packageName + ".apk"
-            # print(download_path)
+            print("인스톨경로 : " + install_path)
+            print("PC경로 : " + download_path)
+            time.sleep(2)
             os.system("adb pull {} {}".format(install_path, download_path))
             return download_path
         except:
+            print("oops")
             return False
 
 
@@ -980,7 +985,7 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    # test.getCurrentActivity(None)
+    test.getCurrentActivity(None)
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
@@ -1074,5 +1079,6 @@ if __name__ == "__main__":
     # stats.print_stats()
 
     # test.show_file_view(None, "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src")
-    test.getAPK("com.estsoft.alsong")
+    # test.getAPK("com.estsoft.alsong")
+    # test.getAPK("com.zum.android.swing") #스윙만 죽음
 

@@ -94,7 +94,7 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
 
     def getappinfo(self, *args):
         getAPP = self.getAPK(args[1])
-        # print(getAPP)
+        print(getAPP)
         if getAPP :
             self.run_apk(getAPP)
             os.remove(getAPP)
