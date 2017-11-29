@@ -728,6 +728,8 @@ class defaultADB(object) :
             for Cnt in range(len(Installed_app_List)):
                 if "estsoft" in Installed_app_List[Cnt]:
                     test_list.append(Installed_app_List[Cnt])
+                elif "zum" in Installed_app_List[Cnt]:
+                    test_list.append(Installed_app_List[Cnt])
                 else:
                     pass
             # 설치된 패키지들 바로 확인하고 싶을때에만 사용
@@ -880,6 +882,22 @@ class defaultADB(object) :
         main.move(app.desktop().screen().rect().center() - main.rect().center())
         main.show()
         app.exec_()
+
+    @classmethod
+    def getAPK(cls, *agrs):
+        try:
+            packageName = agrs[0]
+            # cmd.check_output("adb shell pm list packages -f | findstr " + packageName , stderr=cmd.STDOUT, shell=True)
+            test = cmd.check_output("adb shell pm list packages -f | findstr " + packageName, stderr=cmd.STDOUT, shell=True)
+            # print(test.decode("utf-8").split("=")[0].split(":")[1]) # /data/app/com.estsoft.alsong-1/base.apk
+            install_path = test.decode("utf-8").split("=")[0].split(":")[1] # /data/app/com.estsoft.alsong-1/base.apk
+            download_path = os.getcwd() + "\\" + packageName + ".apk"
+            # print(download_path)
+            cmd.check_output("adb pull {} {}".format(install_path, download_path), stderr=cmd.STDOUT, shell=True)
+        except:
+            return -1
+
+
 
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
@@ -1039,10 +1057,10 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
-    try :
-        test.capture2viedo()
-    except :
-        pass
+    # try :
+    #     test.capture2viedo()
+    # except :
+    #     pass
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
@@ -1053,3 +1071,5 @@ if __name__ == "__main__":
     # stats.print_stats()
 
     # test.show_file_view(None, "C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src")
+    test.getAPK("com.estsoft.alsong")
+

@@ -72,6 +72,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Application"))
+        self.listWidget.setSortingEnabled(True)
         self.pushButton.setText(_translate("Form", "앱 삭제"))
         self.pushButton_2.setText(_translate("Form", "데이터삭제"))
         self.pushButton_3.setText(_translate("Form", "출시버전"))
