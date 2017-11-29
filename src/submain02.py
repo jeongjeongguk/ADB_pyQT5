@@ -83,6 +83,26 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
             lambda:
             self.goDevelopPage(None)
         )
+
+        # StartApp
+        self.StartApp.clicked.connect(
+            lambda:
+                self.getappinfo(None, self.listWidget.selectedItems()[0].text())
+            if self.listWidget.selectedItems() != []
+            else self.exceptionMessage()
+        )
+
+    def getappinfo(self, *args):
+        getAPP = self.getAPK(args[1])
+        # print(getAPP)
+        if getAPP :
+            self.run_apk(getAPP)
+            os.remove(getAPP)
+        else:
+            ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 설치되지 않았습니다.\n리스트갱신합니다.", "리스트확인요청",
+                                             consts_string.show_flag.foreground.value)
+            self.listup()
+
     def listup(self):
         self.listWidget.clear() # clear list
         InstProgramInfo = self.list_ins_program(None)

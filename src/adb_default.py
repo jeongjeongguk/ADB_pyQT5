@@ -888,14 +888,17 @@ class defaultADB(object) :
         try:
             packageName = agrs[0]
             # cmd.check_output("adb shell pm list packages -f | findstr " + packageName , stderr=cmd.STDOUT, shell=True)
+            # print("OK")
+            print(packageName)
             test = cmd.check_output("adb shell pm list packages -f | findstr " + packageName, stderr=cmd.STDOUT, shell=True)
             # print(test.decode("utf-8").split("=")[0].split(":")[1]) # /data/app/com.estsoft.alsong-1/base.apk
             install_path = test.decode("utf-8").split("=")[0].split(":")[1] # /data/app/com.estsoft.alsong-1/base.apk
             download_path = os.getcwd() + "\\" + packageName + ".apk"
             # print(download_path)
-            cmd.check_output("adb pull {} {}".format(install_path, download_path), stderr=cmd.STDOUT, shell=True)
+            os.system("adb pull {} {}".format(install_path, download_path))
+            return download_path
         except:
-            return -1
+            return False
 
 
 
