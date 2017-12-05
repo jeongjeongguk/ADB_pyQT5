@@ -1,7 +1,14 @@
 from enum import Enum
 class show_flag(Enum):
     foreground= 0x00001000
-    test = "test123"
+    MB_OK = 0x0
+    MB_OKCXL = 0x01
+    MB_YESNOCXL = 0x03
+    MB_YESNO = 0x04
+    MB_HELP = 0x4000
+    ICON_EXLAIM = 0x30
+    ICON_INFO = 0x40
+    ICON_STOP = 0x10
     # https://msdn.microsoft.com/en-us/library/ms645505(VS.85).aspx
     # MB_SETFOREGROUND 0x00010000L
     # The message box becomes the foreground window. Internally, the system calls the SetForegroundWindow function for the message box.
