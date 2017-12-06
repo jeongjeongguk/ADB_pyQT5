@@ -44,10 +44,10 @@
   <widget class="QComboBox" name="comboBox">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>10</y>
-     <width>61</width>
-     <height>41</height>
+     <x>120</x>
+     <y>20</y>
+     <width>72</width>
+     <height>52</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -58,22 +58,15 @@
 QComboBox::drop-down {
 	background-color: transparent;
 }
-QComboBox::down-arrow:on { /* shift the arrow when popup is open */
-    top: 1px;
-    left: 1px;
-}
 QComboBox QAbstractItemView {
     border: 2px solid darkgray;
     selection-background-color: lightblue;
-}
-QComboBox::down-arrow {
-    image: url(C:\Users\Jeongkuk\PycharmProjects\androidADB\ui\icons/arrow.png);
 }</string>
    </property>
    <property name="iconSize">
     <size>
-     <width>40</width>
-     <height>40</height>
+     <width>50</width>
+     <height>50</height>
     </size>
    </property>
    <property name="frame">
@@ -85,7 +78,7 @@ QComboBox::down-arrow {
     </property>
     <property name="icon">
      <iconset resource="icon.qrc">
-      <normaloff>:/menu/1494232917_icon-trash-b_app.png</normaloff>:/menu/1494232917_icon-trash-b_app.png</iconset>
+      <normaloff>:/menu/icons/1494232917_icon-trash_data.png</normaloff>:/menu/icons/1494232917_icon-trash_data.png</iconset>
     </property>
    </item>
    <item>
@@ -94,15 +87,15 @@ QComboBox::down-arrow {
     </property>
     <property name="icon">
      <iconset resource="icon.qrc">
-      <normaloff>:/menu/1494232917_icon-trash-b_data.png</normaloff>:/menu/1494232917_icon-trash-b_data.png</iconset>
+      <normaloff>:/menu/icons/1494232917_icon-trash_app.png</normaloff>:/menu/icons/1494232917_icon-trash_app.png</iconset>
     </property>
    </item>
   </widget>
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>250</x>
-     <y>50</y>
+     <x>260</x>
+     <y>160</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -111,26 +104,13 @@ QComboBox::down-arrow {
     <string>출시버전</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_6">
-   <property name="geometry">
-    <rect>
-     <x>257</x>
-     <y>157</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>버전확인</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pushButton_4">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>10</y>
-     <width>51</width>
-     <height>41</height>
+     <x>1</x>
+     <y>21</y>
+     <width>62</width>
+     <height>58</height>
     </rect>
    </property>
    <property name="text">
@@ -142,25 +122,12 @@ QComboBox::down-arrow {
    </property>
    <property name="iconSize">
     <size>
-     <width>40</width>
-     <height>40</height>
+     <width>50</width>
+     <height>50</height>
     </size>
    </property>
    <property name="flat">
     <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="MonkeyTest_2">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>30</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>앱 시작</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_5">
@@ -174,32 +141,6 @@ QComboBox::down-arrow {
    </property>
    <property name="text">
     <string>도움말</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="MonkeyTest_3">
-   <property name="geometry">
-    <rect>
-     <x>257</x>
-     <y>215</y>
-     <width>80</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>개발자페이지</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="MonkeyTest">
-   <property name="geometry">
-    <rect>
-     <x>257</x>
-     <y>186</y>
-     <width>82</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Monkey Test</string>
    </property>
   </widget>
   <widget class="QTableWidget" name="tableWidget">
@@ -230,6 +171,131 @@ QComboBox::down-arrow {
      <set>AlignCenter</set>
     </property>
    </column>
+  </widget>
+  <widget class="QComboBox" name="comboBox_2">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>20</y>
+     <width>71</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox {
+    border: 0px;
+	background-color: transparent;
+}
+QComboBox::drop-down {
+	background-color: transparent;
+}
+QComboBox QAbstractItemView {
+    border: 2px solid darkgray;
+    selection-background-color: lightblue;
+}</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>40</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="frame">
+    <bool>true</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="icon.qrc">
+      <normaloff>:/menu/icons/Activity_NOW.png</normaloff>:/menu/icons/Activity_NOW.png</iconset>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="icon.qrc">
+      <normaloff>:/menu/icons/Activity_permission.png</normaloff>:/menu/icons/Activity_permission.png</iconset>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="icon.qrc">
+      <normaloff>:/menu/icons/Activity_appstack.png</normaloff>:/menu/icons/Activity_appstack.png</iconset>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="icon.qrc">
+      <normaloff>:/menu/icons/Activity_dev.png</normaloff>:/menu/icons/Activity_dev.png</iconset>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="pushButton_6">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>20</y>
+     <width>62</width>
+     <height>58</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/menu/icons/icons8-play-50.png</normaloff>:/menu/icons/icons8-play-50.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>50</width>
+     <height>50</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_7">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>20</y>
+     <width>62</width>
+     <height>58</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/menu/icons/icons8-monkey-50.png</normaloff>:/menu/icons/icons8-monkey-50.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>50</width>
+     <height>50</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <resources>

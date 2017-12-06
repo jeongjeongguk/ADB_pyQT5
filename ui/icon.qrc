@@ -2,9 +2,19 @@
   <qresource prefix="menu">
     <file>icons/1494232917_icon-trash-b.png</file>
     <file>icons/Capture_image.png</file>
+    <file>icons/Activity_NOW.png</file>
     <file>icons/Capture_video.png</file>
+    <file>icons/if_ic_refresh_48px_352439.ico</file>
     <file>icons/Main.png</file>
+    <file>icons/icons8-monkey-50.png</file>
     <file>icons/Folder.png</file>
+    <file>icons/icons8-play-50.png</file>
+    <file>icons/Activity_appstack.png</file>
+    <file>icons/Activity_dev.png</file>
+    <file>icons/Activity_permission.png</file>
+    <file>icons/1494232917_icon-trash_app.png</file>
+    <file>icons/1494232917_icon-trash_data.png</file>
+    <file>icons/arrow.png</file>
     <file>icons/Option.png</file>
   </qresource>
 </RCC>
