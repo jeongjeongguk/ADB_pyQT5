@@ -20,7 +20,6 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
         : button과 기능함수을 연결해주는 함수
         '''
         # 앱 삭제, listWidget.selectedItems()의 반환값은 선택된 항목들 리스트.
-        # TODO : 바로 앱삭제 하지 않고, 물어보고 삭제하는걸로 변경할것. (앱삭제는, 재설치의 번거로움존재함)
         self.pushButton.clicked.connect(
             lambda :
             self.uninstall_apk("packageName", self.listWidget.selectedItems()[0].text())

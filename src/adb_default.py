@@ -167,7 +167,12 @@ class defaultADB(object) :
                 cls.run_info(args[1])
             elif args[0] == "packageName" :
                 cls.packageName = args[1]
-            os.system("adb uninstall " + cls.packageName)
+            confirmCnt = ctypes.windll.user32.MessageBoxW \
+                (0, "앱이 설치된 경우, 삭제가 진행됩니다.\n확인 : 앱삭제\n취소 : 삭제취소", "앱삭제확인", 1|consts_string.show_flag.foreground.value)
+            if confirmCnt == 1 :
+                os.system("adb uninstall " + cls.packageName)
+            else :
+                return None
             ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "삭제완료", consts_string.show_flag.foreground.value)
         except :
             ctypes.windll.user32.MessageBoxW(0, "PC와 연결을 확인해주세요.", "연결끊김", consts_string.show_flag.foreground.value)
@@ -463,8 +468,12 @@ class defaultADB(object) :
 
     @staticmethod
     def goPrevilegePage(self, packageName):
-        # TODO : 앱 패키지명 받아와서, 해당앱의 권한페이지 이동함수 필요
-        pass
+        try :
+            os.system("adb shell am start -a android.intent.action.MANAGE_APP_PERMISSIONS -e android.intent.extra.PACKAGE_NAME {}".format(
+                               packageName))
+        except :
+            ctypes.windll.user32.MessageBoxW(0, "개발자모드활성화 되지 않았습니다.", "모드 활성화요청",
+                                             consts_string.show_flag.foreground.value)
 
     @classmethod
     def makedir(cls):
@@ -519,8 +528,34 @@ class defaultADB(object) :
         cls.show_file_view(None, paths)
 
     @classmethod
-    def capture2image(cls):# TODO : 기기 잠금화면 상태유무 확인후, 잠금화면을 찍을지 or 잠금해제 메소드 추가 필요
+    def checkScreenLock(cls):
+        '''
+        :param deviceNum
+        This works only when device has NFC:
+        # returns one of: mScreenState=OFF|ON_LOCKED|ON_UNLOCKED
+        adb shell dumpsys nfc | grep 'mScreenState='
+        
+        :return OFF|ON_LOCKED|ON_UNLOCKED
+        '''
+        check = cmd.check_output("adb shell dumpsys nfc | grep 'mScreenState='",stderr=cmd.STDOUT, shell=True).decode("utf-8").split("=")[1]
+        check = re.sub('\s', '', check)  # white space 제거
+        return check
+        # TODO : NFC없는 기기 잠금화면 상태유무 확인방법 추가필요. & NFC 보유여부 확인 필요
+        # TODO : 선택된 기기에 대해서, adb -s [deviceNum] 으로 처리할것.
+
+    @classmethod
+    def capture2image(cls):
         ConnectedDevicesCnt = cls.check_connect()
+        Lock = cls.checkScreenLock()
+        if Lock== "OFF" :
+            print("화면 꺼진 잠금상태임")
+        elif Lock=='ON_LOCKED':
+            print("화면 켜졌어도 잠금상태임")
+        elif Lock=='ON_UNLOCKED':
+            print("잠금상태아님")
+        else :
+            print("이건뭐냐?!ㅋㅋㅋㅋ")
+        # # TODO : 잠금해제 메소드 or 잠금해제 안내 추가 필요
         if ConnectedDevicesCnt > 0 :
             cls.makedir()
             # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
@@ -555,6 +590,12 @@ class defaultADB(object) :
     @classmethod
     def capture2viedo(cls): # 함수 호출시 try...except pass로 묶을것. 최대 정확히 3분까지만 녹화됨
         ConnectedDevicesCnt = cls.check_connect()
+        path = os.getcwd().replace("\\", "/").replace("\r", "").replace("\n", "")
+        # gif 변환이후에, 다시 영상이나 사진촬영시, 폴더생성관련해서 경로확인위해 추가함
+        # print(
+        #     "=========================================================================================================")
+        # print(path)
+
         if ConnectedDevicesCnt > 0 :
             cls.makedir()
             cls.device_info(None)
@@ -635,6 +676,12 @@ class defaultADB(object) :
                     # print(org_path) # C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171012
                     print(changedName) # 171012_095106_LG-F700K_7.0_API_24.mp4
                     cls.mp4_downsize_gif(changedName, downPercent=100)
+
+                    os.chdir(path)
+                    # gif 변환이후에, 다시 영상이나 사진촬영시, 폴더생성관련해서 경로확인위해 추가함
+                    # path = os.getcwd().replace("\\", "/").replace("\r", "").replace("\n", "")
+                    # print("=========================================================================================================")
+                    # print(path)
                 else:
                     print("변환안함\n")
 
@@ -653,6 +700,11 @@ class defaultADB(object) :
         downPercent = downPercent / 100
         tmp_width, tmp_height = int(org_width * downPercent), int(org_height * downPercent)
         os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 -s {}x{} {}.gif".format(org_filename, tmp_width, tmp_height, org_filename))
+
+        # gif 변환이후에, 다시 영상이나 사진촬영시, 폴더생성관련해서 경로확인위해 추가함
+        # path = os.getcwd().replace("\\", "/").replace("\r", "").replace("\n", "")
+        # print("=========================================================================================================")
+        # print(path)
 
     @classmethod
     def ConnectedDevices(cls):
@@ -972,9 +1024,10 @@ if __name__ == "__main__":
     # test.controlDevice(None, "adb shell am start -n com.android.settings/.LanguageSettings")
     # test.goSetLanguagePage(None)
 
-    # TODO : 앱권한 페이지 이동. (바로 이동안되고, 해당 앱으로 이동하고서 이동해야될듯함)
-    # test.controlDevice(None, "adb shell am start -n com.android.settings/com.android.settings.applications.InstalledAppDetails")
-    # test.controlDevice(None, "adb shell am start -n com.google.android.packageinstaller/com.android.packageinstaller.permission.ui.ManagePermissionsActivity")
+
+    # 특정앱의 권한 페이지로 이동
+    packageName = "com.estsoft.alsong"
+    test.controlDevice(None, "adb shell am start -a android.intent.action.MANAGE_APP_PERMISSIONS -e android.intent.extra.PACKAGE_NAME {}".format(packageName))
 
     # 개발자옵션 페이지이동
     # test.goDevelopPage(None)
