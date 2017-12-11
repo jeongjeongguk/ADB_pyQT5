@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>524</height>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1007,9 +1007,9 @@ QToolButton::menu-arrow:open {
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>60</y>
+      <y>10</y>
       <width>191</width>
-      <height>381</height>
+      <height>431</height>
      </rect>
     </property>
     <property name="styleSheet">
