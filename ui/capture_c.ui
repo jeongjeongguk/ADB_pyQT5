@@ -23,6 +23,18 @@
    <iconset resource="capture.qrc">
     <normaloff>:/button/icons/Folder.png</normaloff>:/button/icons/Folder.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+  background-color: rgb(255, 255, 255);
+}
+
+QWidget::title {
+ height: 24px;
+ font-weight: bold;
+ color: #000000;
+ background: #ffffff;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
@@ -98,7 +110,64 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
-             <widget class="QTreeView" name="treeView_4"/>
+             <widget class="QTreeView" name="treeView_4">
+              <property name="styleSheet">
+               <string notr="true">QTreeView::branch {
+        background: palette(base);
+}
+
+QTreeView::branch:has-siblings:!adjoins-item {
+        background: cyan;
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+        background: red;
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+        background: blue;
+}
+
+QTreeView::branch:closed:has-children:has-siblings {
+        background: pink;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed {
+        background: gray;
+}
+
+QTreeView::branch:open:has-children:has-siblings {
+        background: magenta;
+}
+
+QTreeView::branch:open:has-children:!has-siblings {
+        background: green;
+}
+QTreeView::branch:has-siblings:!adjoins-item {
+    border-image: url(vline.png) 0;
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+    border-image: url(branch-more.png) 0;
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+    border-image: url(branch-end.png) 0;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+        border-image: none;
+        image: url(branch-closed.png);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings  {
+        border-image: none;
+        image: url(branch-open.png);
+}</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -178,13 +247,46 @@
          </layout>
         </item>
         <item>
-         <widget class="QGraphicsView" name="graphicsView">
-          <property name="mouseTracking">
-           <bool>true</bool>
+         <widget class="QTabWidget" name="tabWidget_2">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
+          <widget class="QWidget" name="tab_5">
+           <attribute name="title">
+            <string>image</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QGraphicsView" name="graphicsView">
+              <property name="mouseTracking">
+               <bool>true</bool>
+              </property>
+              <property name="whatsThis">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_6">
+           <attribute name="title">
+            <string>video</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <widget class="QAxWidget" name="axWidget">
+              <property name="control" stdset="0">
+               <string>{6bf52a52-394a-11d3-b153-00c04f79faa6}</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_7">
+           <attribute name="title">
+            <string>gif</string>
+           </attribute>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -336,6 +438,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QAxWidget</class>
+   <extends>QWidget</extends>
+   <header>qaxwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="capture.qrc"/>
  </resources>

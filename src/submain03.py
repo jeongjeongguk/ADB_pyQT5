@@ -3,7 +3,8 @@ currentPaths = os.getcwd()
 currentPathsSet = currentPaths.replace("src","ui_py")
 sys.path.insert(0, currentPathsSet)
 
-import capture_ui
+# import capture_ui
+import capture_c_ui
 import adb_default
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QWidget, QFileSystemModel, QTreeView, QVBoxLayout, QApplication, QLabel, QLineEdit, QGridLayout, QGraphicsScene
@@ -13,7 +14,8 @@ from PIL import Image, ImageQt
 import win32com.shell.shell as win32shell
 import consts_string
 
-class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.defaultADB):
+# class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.defaultADB):
+class SubWindow03(QtWidgets.QMainWindow, capture_c_ui.Ui_MainWindow, adb_default.defaultADB):
     def __init__(self, path, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
         self.pathRoot = path
@@ -93,11 +95,21 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         # file 실행시, 아래 커맨드 사용
         # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
         #
-        try :
+
+        # try :
+        #     img = Image.open(filePath)
+        #     self.display_image(img)
+        # except:
+        #     ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", consts_string.show_flag.foreground.value)
+        CheckType = filePath.split(".")[-1]
+        if CheckType == "png":
             img = Image.open(filePath)
             self.display_image(img)
-        except:
-            ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", consts_string.show_flag.foreground.value)
+        elif CheckType == "jpg":
+            img = Image.open(filePath)
+            self.display_image(img)
+        else:
+            pass
 
     @QtCore.pyqtSlot(QtCore.QModelIndex)
     def on_treeView_4_clicked(self, index):
@@ -110,12 +122,20 @@ class SubWindow03(QtWidgets.QMainWindow, capture_ui.Ui_MainWindow, adb_default.d
         # file 실행시, 아래 커맨드 사용
         # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
         #
-        try :
+        # try :
+        #     img = Image.open(filePath)
+        #     self.display_image(img)
+        # except:
+        #     ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", consts_string.show_flag.foreground.value)
+        CheckType = filePath.split(".")[-1]
+        if CheckType == "png":
             img = Image.open(filePath)
             self.display_image(img)
-        except:
-            ctypes.windll.user32.MessageBoxW(0, "이미지파일만 선택가능합니다.", "이미지만 편집가능", consts_string.show_flag.foreground.value)
-
+        elif CheckType == "jpg":
+            img = Image.open(filePath)
+            self.display_image(img)
+        else:
+            pass
 
     def display_image(self, img):
         self.scene.clear()
