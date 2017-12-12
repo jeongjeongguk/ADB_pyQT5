@@ -283,7 +283,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
   <widget class="QDockWidget" name="control">
    <property name="minimumSize">
     <size>
-     <width>566</width>
+     <width>587</width>
      <height>513</height>
     </size>
    </property>
@@ -578,7 +578,18 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="CBactivity"/>
+               <widget class="QComboBox" name="CBactivity">
+                <item>
+                 <property name="text">
+                  <string>Developer</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Permission</string>
+                 </property>
+                </item>
+               </widget>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="LActivity">
@@ -588,7 +599,18 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QComboBox" name="CBcheck"/>
+               <widget class="QComboBox" name="CBcheck">
+                <item>
+                 <property name="text">
+                  <string>Now</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>App's </string>
+                 </property>
+                </item>
+               </widget>
               </item>
              </layout>
             </item>
@@ -657,19 +679,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
             </item>
            </layout>
            <zorder>line</zorder>
-           <zorder>LDelete</zorder>
            <zorder>line_2</zorder>
-           <zorder>LActivity</zorder>
-           <zorder>CBactivity</zorder>
-           <zorder>CBcheck</zorder>
            <zorder>line_3</zorder>
-           <zorder>TBScreen</zorder>
-           <zorder>TBRefresh</zorder>
-           <zorder>TBStart</zorder>
-           <zorder>TBRecord</zorder>
-           <zorder>TBStart_3</zorder>
            <zorder></zorder>
-           <zorder>TBStart_4</zorder>
           </widget>
          </item>
          <item>
@@ -1211,7 +1223,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
             <enum>QTabWidget::Rounded</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="elideMode">
             <enum>Qt::ElideNone</enum>
@@ -1223,94 +1235,112 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
             <attribute name="title">
              <string>Screen Capture</string>
             </attribute>
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <layout class="QHBoxLayout" name="horizontalLayout_32">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_17">
                <item>
-                <widget class="QLineEdit" name="lineEdit"/>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton">
-                 <property name="text">
-                  <string>...</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="1">
-              <layout class="QVBoxLayout" name="verticalLayout_12">
-               <item>
-                <widget class="QRadioButton" name="radioButton">
-                 <property name="text">
-                  <string>Real [100%]</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                 <property name="autoExclusive">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_14">
+                <layout class="QHBoxLayout" name="horizontalLayout_30">
                  <item>
-                  <widget class="QRadioButton" name="radioButton_2">
+                  <widget class="QLabel" name="label_3">
                    <property name="text">
-                    <string>Custom [%]</string>
-                   </property>
-                   <property name="autoExclusive">
-                    <bool>true</bool>
+                    <string>Paths</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QSpinBox" name="spinBox"/>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
+                  <layout class="QHBoxLayout" name="horizontalLayout_15">
+                   <item>
+                    <widget class="QLineEdit" name="lineEdit"/>
+                   </item>
+                   <item>
+                    <widget class="QToolButton" name="toolButton">
+                     <property name="text">
+                      <string>...</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
                </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_31">
+                 <item>
+                  <widget class="QLabel" name="label_4">
+                   <property name="minimumSize">
+                    <size>
+                     <width>30</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>Size</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_12">
+                   <item>
+                    <widget class="QRadioButton" name="radioButton">
+                     <property name="text">
+                      <string>Real [100%]</string>
+                     </property>
+                     <property name="checked">
+                      <bool>true</bool>
+                     </property>
+                     <property name="autoExclusive">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_14">
+                     <item>
+                      <widget class="QRadioButton" name="radioButton_2">
+                       <property name="text">
+                        <string>Custom [%]</string>
+                       </property>
+                       <property name="autoExclusive">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QSpinBox" name="spinBox"/>
+                     </item>
+                     <item>
+                      <spacer name="horizontalSpacer_2">
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>40</width>
+                         <height>20</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>17</width>
+                   <height>37</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
               </layout>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>Paths</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Size</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <spacer name="verticalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </widget>
@@ -1318,97 +1348,411 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
             <attribute name="title">
              <string>Record</string>
             </attribute>
-            <widget class="QWidget" name="layoutWidget">
+            <layout class="QHBoxLayout" name="horizontalLayout_34">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_20">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_18">
+                 <item>
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>Paths</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_16">
+                   <item>
+                    <widget class="QLineEdit" name="lineEdit_2"/>
+                   </item>
+                   <item>
+                    <widget class="QToolButton" name="toolButton_2">
+                     <property name="text">
+                      <string>...</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>519</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_22">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_15">
+                   <item>
+                    <widget class="QLabel" name="label_7">
+                     <property name="text">
+                      <string>[ MP4 ]</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_19">
+                     <item>
+                      <widget class="QLabel" name="label_5">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Size</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_13">
+                       <item>
+                        <widget class="QRadioButton" name="radioButton_3">
+                         <property name="text">
+                          <string>Real [100%]</string>
+                         </property>
+                         <property name="checked">
+                          <bool>true</bool>
+                         </property>
+                         <property name="autoExclusive">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_17">
+                         <item>
+                          <widget class="QRadioButton" name="radioButton_4">
+                           <property name="text">
+                            <string>Custom [%]</string>
+                           </property>
+                           <property name="autoExclusive">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QSpinBox" name="spinBox_2"/>
+                         </item>
+                         <item>
+                          <spacer name="horizontalSpacer_3">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>40</width>
+                             <height>20</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line_6">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_16">
+                   <item>
+                    <widget class="QLabel" name="label_9">
+                     <property name="text">
+                      <string>[ Convert : MP4 -&gt; GIF ]</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_20">
+                     <item>
+                      <widget class="QLabel" name="label_8">
+                       <property name="minimumSize">
+                        <size>
+                         <width>50</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Size</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_14">
+                       <item>
+                        <widget class="QRadioButton" name="radioButton_5">
+                         <property name="text">
+                          <string>Real [100%]</string>
+                         </property>
+                         <property name="checked">
+                          <bool>true</bool>
+                         </property>
+                         <property name="autoExclusive">
+                          <bool>true</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_21">
+                         <item>
+                          <widget class="QRadioButton" name="radioButton_6">
+                           <property name="text">
+                            <string>Custom [%]</string>
+                           </property>
+                           <property name="autoExclusive">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QSpinBox" name="spinBox_3"/>
+                         </item>
+                         <item>
+                          <spacer name="horizontalSpacer_4">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <property name="sizeHint" stdset="0">
+                            <size>
+                             <width>40</width>
+                             <height>20</height>
+                            </size>
+                           </property>
+                          </spacer>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_3">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>519</width>
+                   <height>31</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_3">
+            <attribute name="title">
+             <string>Teamup</string>
+            </attribute>
+            <widget class="QWidget" name="layoutWidget_7">
              <property name="geometry">
               <rect>
-               <x>47</x>
-               <y>9</y>
-               <width>188</width>
-               <height>23</height>
+               <x>20</x>
+               <y>90</y>
+               <width>210</width>
+               <height>60</height>
               </rect>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_16">
+             <layout class="QHBoxLayout" name="horizontalLayout_29">
               <item>
-               <widget class="QLineEdit" name="lineEdit_2"/>
+               <widget class="QPushButton" name="pushButton_2">
+                <property name="text">
+                 <string>Confirm</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="teamup.qrc">
+                  <normaloff>:/icon/icons/if_Rounded-06_2024632.ico</normaloff>:/icon/icons/if_Rounded-06_2024632.ico</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item>
-               <widget class="QToolButton" name="toolButton_2">
+               <widget class="QPushButton" name="pushButton_3">
                 <property name="text">
-                 <string>...</string>
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="teamup.qrc">
+                  <normaloff>:/icon/icons/Option.png</normaloff>:/icon/icons/Option.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
              </layout>
             </widget>
-            <widget class="QLabel" name="label_5">
+            <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
               <rect>
-               <x>9</x>
-               <y>94</y>
-               <width>25</width>
-               <height>16</height>
+               <x>20</x>
+               <y>10</y>
+               <width>307</width>
+               <height>57</height>
               </rect>
              </property>
-             <property name="text">
-              <string>Size</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-            <widget class="QLabel" name="label_6">
-             <property name="geometry">
-              <rect>
-               <x>9</x>
-               <y>9</y>
-               <width>32</width>
-               <height>16</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Paths</string>
-             </property>
-            </widget>
-            <widget class="QWidget" name="layoutWidget_2">
-             <property name="geometry">
-              <rect>
-               <x>47</x>
-               <y>94</y>
-               <width>185</width>
-               <height>46</height>
-              </rect>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_13">
+             <layout class="QVBoxLayout" name="verticalLayout_18">
               <item>
-               <widget class="QRadioButton" name="radioButton_3">
-                <property name="text">
-                 <string>Real [100%]</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-                <property name="autoExclusive">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_17">
+               <layout class="QHBoxLayout" name="horizontalLayout_25">
                 <item>
-                 <widget class="QRadioButton" name="radioButton_4">
+                 <layout class="QHBoxLayout" name="horizontalLayout_26">
+                  <item>
+                   <widget class="QLabel" name="label_11">
+                    <property name="maximumSize">
+                     <size>
+                      <width>18</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>ID  </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="comboBox_inputID">
+                    <property name="minimumSize">
+                     <size>
+                      <width>150</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="editable">
+                     <bool>true</bool>
+                    </property>
+                    <property name="insertPolicy">
+                     <enum>QComboBox::InsertAfterCurrent</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="radioButton_real">
                   <property name="text">
-                   <string>Custom [%]</string>
+                   <string>R</string>
                   </property>
-                  <property name="autoExclusive">
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="radioButton_test">
+                  <property name="text">
+                   <string>T</string>
+                  </property>
+                  <property name="checked">
                    <bool>true</bool>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="spinBox_2"/>
+                 <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_27">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_28">
+                  <item>
+                   <widget class="QLabel" name="label_12">
+                    <property name="text">
+                     <string>PW</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_inputPW">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>150</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="echoMode">
+                     <enum>QLineEdit::Password</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <spacer name="horizontalSpacer_3">
+                 <widget class="QPushButton" name="pushButton_login">
+                  <property name="text">
+                   <string>로그인</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_6">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
@@ -1424,11 +1768,6 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
               </item>
              </layout>
             </widget>
-           </widget>
-           <widget class="QWidget" name="tab_3">
-            <attribute name="title">
-             <string>Teamup</string>
-            </attribute>
            </widget>
           </widget>
          </item>
@@ -1451,6 +1790,40 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
         <attribute name="title">
          <string>Log</string>
         </attribute>
+        <layout class="QHBoxLayout" name="horizontalLayout_33">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_19">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_23">
+             <item>
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Paths</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_24">
+               <item>
+                <widget class="QLineEdit" name="lineEdit_3"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton_3">
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="textBrowser"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </widget>
       </widget>
      </item>
@@ -1476,6 +1849,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
  <resources>
   <include location="icon.qrc"/>
   <include location="capture.qrc"/>
+  <include location="teamup.qrc"/>
  </resources>
  <connections/>
 </ui>
