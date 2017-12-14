@@ -4,6 +4,8 @@ currentPathsSet = currentPaths.replace("src","ui_py")
 sys.path.insert(0, currentPathsSet)
 
 from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import pyqtSlot
 
 import main_ui
 import submain01, submain02, submain03, optionSrc
@@ -11,6 +13,9 @@ import adb_default
 import consts_string
 
 import subprocess
+
+__author__ = "JeongKuk <wjdrnr6176@gmail.com>"
+
 
 '''
 기본 : QtWidgets.QMainWindow
@@ -75,8 +80,22 @@ class MainWindow(QtWidgets.QMainWindow, main_ui.Ui_MainWindow, adb_default.defau
         self.captureVideo.setEnabled(False)
         self.capture2viedo()
         self.captureVideo.setEnabled(True)
+# '''
+    @pyqtSlot()
+    def error(self):
+        raise RuntimeError
+
+def exception_hook(t, val, tb):
+    QMessageBox.critical(None, "An exception was raised", "Exception type: {}".format(t))
+    old_exception_hook(t, val, tb)
+# '''
 
 if __name__ == "__main__":
+    # '''
+    # 예외 훅을 재설정.
+    old_exception_hook = sys.excepthook
+    sys.excepthook = exception_hook
+    # '''
     app = QtWidgets.QApplication(sys.argv)
     Main = QtWidgets.QMainWindow()
     ui = MainWindow()

@@ -546,15 +546,16 @@ class defaultADB(object) :
     @classmethod
     def capture2image(cls):
         ConnectedDevicesCnt = cls.check_connect()
-        Lock = cls.checkScreenLock()
-        if Lock== "OFF" :
-            print("화면 꺼진 잠금상태임")
-        elif Lock=='ON_LOCKED':
-            print("화면 켜졌어도 잠금상태임")
-        elif Lock=='ON_UNLOCKED':
-            print("잠금상태아님")
-        else :
-            print("이건뭐냐?!ㅋㅋㅋㅋ")
+        # subprocess.CalledProcessError 발생으로 주석처리
+        # Lock = cls.checkScreenLock()
+        # if Lock== "OFF" :
+        #     print("화면 꺼진 잠금상태임")
+        # elif Lock=='ON_LOCKED':
+        #     print("화면 켜졌어도 잠금상태임")
+        # elif Lock=='ON_UNLOCKED':
+        #     print("잠금상태아님")
+        # else :
+        #     print("이건뭐냐?!ㅋㅋㅋㅋ")
         # # TODO : 잠금해제 메소드 or 잠금해제 안내 추가 필요
         if ConnectedDevicesCnt > 0 :
             cls.makedir()
