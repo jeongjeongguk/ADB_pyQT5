@@ -1,12 +1,12 @@
 import ui_test_161031
-
+import os
 class A (object)   :
     def test(self):
         self.fileDialog = ui_test_161031.QtWidgets.QFileDialog()
         select = self.fileDialog.getOpenFileUrl()
         path = str(select[0]).replace("PyQt5.QtCore.QUrl('file:///", "")
         path = path.replace("')", "")
-        .lineEdit.setText(path)
+        # .lineEdit.setText(path)
         print(path)
 
 
@@ -31,5 +31,7 @@ class A (object)   :
 
         # os.system("adb shell am start -n com.estsoft.alsongbeta/com.estsoft.alsong.SplashActivity")
         os.system("adb shell am start -n com.estsoft.teamuptest/com.estsoft.teamup.ui.login.LoginActivity")
+
+os.system("adb shell am start -n com.estsoft.teamuptest/com.estsoft.teamup.ui.login.teamup_test.LoginActivity")
 
 

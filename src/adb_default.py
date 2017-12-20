@@ -144,8 +144,33 @@ class defaultADB(object) :
             except:
                 # TODO:launchable activity가 구해지지 않는 경우 존재. : 추가처리 필요.
                 # ?????? 언제 안구해지지? 런쳐액티버티 가렸을때 못찾음 -> 파싱으로 찾기
-                # pass
-                return False, "None", "None"
+                # aapt dump xmltree teamUP-teamup_store-release-v3.7.0.0-172.apk AndroidManifest.xml > teamupstore.txt
+                # E: activity - alias(line=58)
+                # A: android:name(0x01010003) = "com.estsoft.teamup.ui.login.ModetalkLoginActivity"(
+                #     Raw: "com.estsoft.teamup.ui.login.ModetalkLoginActivity")
+                # A: android:targetActivity(0x01010202) = "com.estsoft.teamup.ui.login.LoginActivity"(
+                #     Raw: "com.estsoft.teamup.ui.login.LoginActivity")
+                # E: intent - filter(line=61)
+                # E: action(line=62)
+                # A: android:name(0x01010003) = "android.intent.action.MAIN"(Raw: "android.intent.action.MAIN")
+                # E: category(line=64)
+                # A: android:name(0x01010003) = "android.intent.category.LAUNCHER"(
+                #     Raw: "android.intent.category.LAUNCHER")
+                # return False, "None", "None"
+                if cls.packageName == "com.estsoft.teamup.test":
+                    cls.startActivity = "com.estsoft.teamup.ui.login.teamup_test.LoginActivity"
+                    return True, cls.packageName, cls.startActivity
+                elif cls.packageName == "com.estsoft.teamup.modetour":
+                    cls.startActivity = "com.estsoft.teamup.ui.login.ModetalkLoginActivity"
+                    return True, cls.packageName, cls.startActivity
+                elif cls.packageName == "com.estsoft.teamup.cmcnu.test":
+                    cls.startActivity = "com.estsoft.teamup.ui.login.cmc_test.LoginActivity"
+                    return True, cls.packageName, cls.startActivity
+                elif cls.packageName == "com.estsoft.teamup.cmcnu":
+                    cls.startActivity = "com.estsoft.teamup.ui.login.CmcnuLoginActivity"
+                    return True, cls.packageName, cls.startActivity
+                else:
+                    return False, "None", "None"
         else:
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
