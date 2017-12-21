@@ -966,6 +966,11 @@ class defaultADB(object) :
         try:
             packageName = agrs[0]
             # cmd.check_output("adb shell pm list packages -f | findstr " + packageName , stderr=cmd.STDOUT, shell=True)
+
+            # OSError: [WinError 123] 파일 이름, 디렉터리 이름 또는 볼륨 레이블 구문이 잘못되었습니다: '
+            # C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\src\\com.zum.android.swing\r.apk'
+            packageName = re.sub('\s', '', packageName) # white space 제거
+
             print(packageName)
             test = cmd.check_output("adb shell pm list packages -f | findstr " + packageName, stderr=cmd.STDOUT, shell=True).decode("utf-8")
             test = re.sub('\s', '', test) # white space 제거
@@ -1024,7 +1029,7 @@ if __name__ == "__main__":
     # test.check_install()
     # test.uninstall_apk(filepath)
     # test.check_connect()
-    # print(test.check_connect())
+    print(test.check_connect())
     # test.update(None,None)
     # filepath_new = "teamUP-teamup_store-release.apk"
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
@@ -1052,8 +1057,8 @@ if __name__ == "__main__":
 
 
     # 특정앱의 권한 페이지로 이동
-    packageName = "com.estsoft.alsong"
-    test.controlDevice(None, "adb shell am start -a android.intent.action.MANAGE_APP_PERMISSIONS -e android.intent.extra.PACKAGE_NAME {}".format(packageName))
+    # packageName = "com.estsoft.alsong"
+    # test.controlDevice(None, "adb shell am start -a android.intent.action.MANAGE_APP_PERMISSIONS -e android.intent.extra.PACKAGE_NAME {}".format(packageName))
 
     # 개발자옵션 페이지이동
     # test.goDevelopPage(None)
@@ -1064,7 +1069,7 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    test.getCurrentActivity(None)
+    # test.getCurrentActivity(None)
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
