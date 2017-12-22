@@ -91,6 +91,7 @@ def exception_hook(t, val, tb):
     # TODO: 알림창도 좋은데, 알림창내용 변경하고, log에도 찍을것.
     # TODO: 알림창도 좋은데, 알림창내용 변경하고, log에도 찍을것.
     QMessageBox.critical(None, "An exception was raised", "Exception type: {}".format(t))
+    adb_default.logger.error("Main exception type: {}".format(t))
     old_exception_hook(t, val, tb)
 # '''
 

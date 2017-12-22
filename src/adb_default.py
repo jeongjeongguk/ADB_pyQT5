@@ -53,79 +53,103 @@ class defaultADB(object) :
             cls.ConnectDevices = List_misi.split("	")
             cls.ConnectDevices.remove("")
             # print(cls.ConnectDevices) # 여기에, 연결된 기기들 접근 serial이 다 모임
-
             # TODO: device 제거하지말고, 해당 기기와 같이 묶어서 튜플로 가기, 공백문자는 정규식으로 구분.
+            # TODO : 연결된 리스트 표시된 항목에서 선택기기에 대해서만, 설치하도록.
+            # TODO : 연결된 리스트에서, 이름수정하더라도 원래 기기넘버는 저장하도록.
+            # TODO : 한번 연결했었던 기기에 대해서는 기기넘버랑 수정이름 저장하도록.(appdata쪽 폴더생성해서 기록)
             # List_misi = cmd.check_output("adb devices | findstr device", stderr=cmd.STDOUT, shell=True) \
             #     .decode("utf-8") \
             #     .replace("List of devices attached", "")
             # List_misi = re.sub('\s', '', List_misi)  # white space 제거
-
-            return len(cls.ConnectDevices)
+            # print(cls.ConnectDevices) # class 변수이다. 조심할것.
+            return len(cls.ConnectDevices), cls.ConnectDevices
         except:
             return -1
 
     @classmethod
-    def install_apk(cls, filepath, option): # def install_apk(self, filepath, option): # option : r, b, ...
+    def install_apk(cls, filepath, option, *args): # def install_apk(self, filepath, option): # option : r, b, ...
         '''
         :param filepath: to install file(.apk)'s path. Must use in English&Number. (because adb doesn't use another language)
         :param option: "" or something
+        :param *args: to install device's tuple
         :return:
         '''
         fileCheck = cls.run_info(filepath)
-        try :
-            if  fileCheck[0]:
-                if option == "" :
-                    title = "설치 시작확인"
-                    version = cls.getVersion(filepath, "")
-                    message = "버전 : {}\n".format(version)
+        # print(type(args)) #argument는 튜플로 변환된다
+        # for i in range(0,len(args)+1):
+        #     print(args[0][i])
+        #     print("----------")
+        # print(DeviceList)
+        for num in range(0,len(args)+1) :
+            # print(args[0][num])
+            try :
+                if  fileCheck[0]:
+                    if option == "" :
+                        title = "설치 시작확인"
+                        version = cls.getVersion(filepath, "") # path일때는, 2개만으로 콜.
+                        message = "버전 : {}\n".format(version)
+                    else :
+                        # 옵션이 ""이 아닌경우, 덮어쓰기 설치로 간주. 지금은, 요청하는쪽에서 "-r"를 인자로 넘겨줌.
+                        ConnectedDevicesCnt = cls.check_connect()
+                        if ConnectedDevicesCnt != 0:
+                            title = "덮어쓰기설치 시작확인"
+                            OldVersion, NewVersion = cls.getVersion(cls.packageName, filepath, args[0][num])
+                            # 덮어쓰기는, 패키지명을 1번째인자로, 선택된 기기를 3번째인자로
+                            message = "설치할 기기명 : {}\n" \
+                                      "설치된 버전 : {}\n설치할 버전 : {}\n" \
+                                      "\n[주의]\n" \
+                                      "같거나 높은 버전으로만 덮어쓰기 설치가 가능합니다.\n"\
+                                        .format(args[0][num], OldVersion, NewVersion)
+                        else:
+                            # 연결된 기기가 하나도 없을때, 처리.
+                            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
+                            return None
+
+                    userChoice = ctypes.windll.user32.MessageBoxW \
+                                (
+                                    0,  "설치할 기기명 : {}\n"
+                                        "패키지명 : {} \n"
+                                        "{}"
+                                        "\n'확인'을 클릭하시면, 설치를 시작합니다."
+                                        "\n기기에따라 최대 20초가량 소요됩니다.".format(args[0][num], cls.packageName, message), title, 1 | consts_string.show_flag.foreground.value
+                                )
+                    # https://msdn.microsoft.com/en-us/library/ms645505(VS.85).aspx
+
+                    if userChoice == 1:
+                        ConnectedDevicesCnt = cls.check_connect()
+                        if ConnectedDevicesCnt != 0:
+                            if option == "": cls.uninstall_apk("path", filepath, args[0][num])
+                            logger.info("Device : {} / Start installation : {}".format(args[0][num], cls.packageName))
+                            # os.system("adb install " + option + filepath)
+                            info = cmd.check_output("adb -s {} install {} {}".format(args[0][num], option, filepath), stderr=cmd.STDOUT, shell=True)
+                            # 요청할때, option이 ""이면, 삭제후 설치로, "-r"이면 덮어쓰기 설치진행
+                            logger.info(info)
+                            logger.info("Device : {} / End installation : {}".format(args[0][num], cls.packageName))
+                            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
+                        else:
+                            logger.info("Failed installation : {} \nDisconnected.".format(cls.packageName))
+                            ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
+                    else :
+                        logger.info("Device : {} / Canceled installation : {} \n.".format(args[0][num], cls.packageName))
+                        ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", consts_string.show_flag.foreground.value)
                 else :
-                    ConnectedDevicesCnt = cls.check_connect()
-                    if ConnectedDevicesCnt != 0:
-                        title = "덮어쓰기설치 시작확인"
-                        OldVersion, NewVersion = cls.getVersion(cls.packageName, filepath)
-                        message = "설치된 버전 : {}\n설치할 버전 : {}\n" \
-                                  "\n[주의]\n" \
-                                  "같거나 높은 버전으로만 덮어쓰기 설치가 가능합니다.\n"\
-                                    .format(OldVersion, NewVersion)
-                    else:
-                        ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
-                        return None
+                    logger.info("Confirm apk's paths or file's name : {} \n.".format(cls.packageName))
+                    ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", consts_string.show_flag.foreground.value)
+            except:
+                logger.error("Device : {} / {} : Failed to install".format(args[0][num], cls.install_apk.__name__))
+            #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
+            #TODO : 위 내용관련한 처리필요
 
-                userChoice = ctypes.windll.user32.MessageBoxW \
-                            (
-                                0,  "패키지명 : {} \n"
-                                    "{}"
-                                    "\n'확인'을 클릭하시면, 설치를 시작합니다."
-                                    "\n기기에따라 최대 20초가량 소요됩니다.".format(cls.packageName, message), title, 1 | consts_string.show_flag.foreground.value
-                            )
-                # https://msdn.microsoft.com/en-us/library/ms645505(VS.85).aspx
+            #TODO : Failed to install C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/4.0.16.1.apk: Failure [INSTALL_PARSE_FAILED_NO_CERTIFICATES: Failed to collect certificates from /data/app/vmdl490955904.tmp/base.apk using APK Signature Scheme v2: SHA-256 digest of contents did not verify]
+            #-----> 최신버전 설치후에 이전버전 덮어쓰기 설치시도해서 설치실패후, 최신버전 재설치할려다가 발생된 메시지 : TODO : 처리필요
 
-                if userChoice == 1:
-                    ConnectedDevicesCnt = cls.check_connect()
-                    if ConnectedDevicesCnt != 0:
-                        if option == "": cls.uninstall_apk("path", filepath)
-                        os.system("adb install " + option + filepath)
-                        ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
-                    else:
-                        ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
-                else :
-                    ctypes.windll.user32.MessageBoxW(0, "설치가 취소되었습니다.", "설치취소", consts_string.show_flag.foreground.value)
-            else :
-                ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", consts_string.show_flag.foreground.value)
-        except:
-            logger.error("{} : Failed to install".format(cls.install_apk.__name__))
-        #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
-        #TODO : 위 내용관련한 처리필요
+            #TODO : Failure [INSTALL_FAILED_UID_CHANGED] ??? 삭제후 설치과정에서, 계속뜸.. 원인확인필요 Gpro 4.4.2 alsong 4.1.1.3 에서 4.1.1.4 갈때 발생.
+            # https://byunsooblog.wordpress.com/2013/12/07/install_failed_uid_changed-%EC%97%90%EB%9F%AC/
+            # DB삭제가 완전히 안된거. 제대로 삭제가 필요하다.
 
-        #TODO : Failed to install C:/Users/Jeongkuk/PycharmProjects/androidADB/apks/4.0.16.1.apk: Failure [INSTALL_PARSE_FAILED_NO_CERTIFICATES: Failed to collect certificates from /data/app/vmdl490955904.tmp/base.apk using APK Signature Scheme v2: SHA-256 digest of contents did not verify]
-        #-----> 최신버전 설치후에 이전버전 덮어쓰기 설치시도해서 설치실패후, 최신버전 재설치할려다가 발생된 메시지 : TODO : 처리필요
-
-        #TODO : Failure [INSTALL_FAILED_UID_CHANGED] ??? 삭제후 설치과정에서, 계속뜸.. 원인확인필요 Gpro 4.4.2 alsong 4.1.1.3 에서 4.1.1.4 갈때 발생.
-        # https://byunsooblog.wordpress.com/2013/12/07/install_failed_uid_changed-%EC%97%90%EB%9F%AC/
-        # DB삭제가 완전히 안된거. 제대로 삭제가 필요하다.
     @classmethod
     def run_info(cls, filepath):
-        ConnectedDevicesCnt = cls.check_connect()
+        ConnectedDevicesCnt = cls.check_connect()[0]
         if ConnectedDevicesCnt > 0:
             if os.path.isfile(filepath) :
                 cls.filepath = filepath
@@ -195,7 +219,10 @@ class defaultADB(object) :
             confirmCnt = ctypes.windll.user32.MessageBoxW \
                 (0, "앱이 설치된 경우, 삭제가 진행됩니다.\n확인 : 앱삭제\n취소 : 삭제취소", "앱삭제확인", 1|consts_string.show_flag.foreground.value)
             if confirmCnt == 1 :
-                os.system("adb uninstall " + cls.packageName)
+                info = cmd.check_output("adb -s {} uninstall {}".format(args[2], cls.packageName),
+                                        stderr=cmd.STDOUT, shell=True)
+                logger.info(info)
+                logger.info("Device : {} / End uninstall : {}".format(args[2], cls.packageName))
             else :
                 return None
             ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "삭제완료", consts_string.show_flag.foreground.value)
@@ -966,26 +993,27 @@ class defaultADB(object) :
         try:
             packageName = agrs[0]
             # cmd.check_output("adb shell pm list packages -f | findstr " + packageName , stderr=cmd.STDOUT, shell=True)
-
             # OSError: [WinError 123] 파일 이름, 디렉터리 이름 또는 볼륨 레이블 구문이 잘못되었습니다: '
             # C:\\Users\\Jeongkuk\\PycharmProjects\\androidADB\\src\\com.zum.android.swing\r.apk'
             packageName = re.sub('\s', '', packageName) # white space 제거
-
-            print(packageName)
+            # print(packageName)
             test = cmd.check_output("adb shell pm list packages -f | findstr " + packageName, stderr=cmd.STDOUT, shell=True).decode("utf-8")
             test = re.sub('\s', '', test) # white space 제거
-            print(test)
-            print("OK")
+            # print(test)
+            # print("OK")
             # print(test.decode("utf-8").split("=")[0].split(":")[1]) # /data/app/com.estsoft.alsong-1/base.apk
             install_path = test.split("=")[0].split(":")[1] # /data/app/com.estsoft.alsong-1/base.apk
             download_path = os.getcwd() + "\\" + packageName + ".apk"
-            print("인스톨경로 : " + install_path)
-            print("PC경로 : " + download_path)
+            # print("안드로이드에서 인스톨경로 : " + install_path)
+            logger.info("Installation path on android : " + install_path)
+            # print("PC임시 저장경로 : " + download_path)
+            logger.info("Path to temporarily store on PC : " + download_path)
             time.sleep(2)
             os.system("adb pull {} {}".format(install_path, download_path))
             return download_path
         except:
-            print("oops")
+            # print("oops")
+            logger.error("Execution failed. : {}".format(packageName))
             return False
 
 
@@ -1029,7 +1057,9 @@ if __name__ == "__main__":
     # test.check_install()
     # test.uninstall_apk(filepath)
     # test.check_connect()
-    print(test.check_connect())
+    # print(test.check_connect())
+    # test.check_connect()
+    # print(test.ConnectDevices)
     # test.update(None,None)
     # filepath_new = "teamUP-teamup_store-release.apk"
     # filepath_old = "teamUP-teamup_store-release-v3.6.0.0-132.apk"
@@ -1166,3 +1196,8 @@ if __name__ == "__main__":
     # test.getAPK("com.estsoft.alsong")
     # test.getAPK("com.zum.android.swing") #스윙만 죽음
 
+    # TODO : 살려줘 UI재작업 및 멀티 디바이스 대응
+    path = "C:\\Users\Jeongkuk\Desktop\\teamUP-teamup_test-release-v3.7.0.0-172.apk"
+    list_all = test.check_connect()[1]
+    # print(type(list_all))
+    test.install_apk(path,"",list_all)
