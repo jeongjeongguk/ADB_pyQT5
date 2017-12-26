@@ -33,19 +33,21 @@ class SubWindow01(QtWidgets.QMainWindow, adb_command_ui.Ui_Form, adb_default.def
         )
         self.pushButton_2.clicked.connect(
             lambda:
-            self.install_apk(self.lineEdit.text(),"")
+            self.install_apk(self.lineEdit.text(),"", self.check_connect()[1])
             if self.lineEdit.text() != ""
             else self.exceptionMessage()
-        )
+        )# 현재 연결된 기기들 전체설치하는 상태임. 선택기기로 변경할것.
         # self.pushButton_3.clicked.connect(
         #     lambda: self.reinstall_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()
         # )
         self.pushButton_3.clicked.connect(
             lambda:
-            self.install_apk(self.lineEdit.text(), "-r ")
+            self.install_apk(self.lineEdit.text(), "-r ", self.check_connect()[1])
             if self.lineEdit.text() != ""
             else self.exceptionMessage()
         )
+        # 현재 연결된 기기들 전체설치하는 상태임. 선택기기로 변경할것.
+        # 연결된 기기들의 설치상태확인하는 부분도 멀티디바이스로 변경.
 
         self.pushButton_4.clicked.connect(
             lambda: self.run_apk(self.lineEdit.text()) if self.lineEdit.text() != "" else self.exceptionMessage()

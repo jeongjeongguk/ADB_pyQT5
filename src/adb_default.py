@@ -80,9 +80,13 @@ class defaultADB(object) :
         #     print(args[0][i])
         #     print("----------")
         # print(DeviceList)
-        for num in range(0,len(args)+1) :
-            # print(args[0][num])
-            try :
+        # print(type(len(args)))
+        # print(len(args[0]))
+        # length = len(args[0]) + 1 if len(args[0]) > 1 else len(args[0])
+        # print(length)
+        try :
+            for num in range(0,len(args[0])) :
+                print(args[0][num])
                 if  fileCheck[0]:
                     if option == "" :
                         title = "설치 시작확인"
@@ -90,16 +94,15 @@ class defaultADB(object) :
                         message = "버전 : {}\n".format(version)
                     else :
                         # 옵션이 ""이 아닌경우, 덮어쓰기 설치로 간주. 지금은, 요청하는쪽에서 "-r"를 인자로 넘겨줌.
-                        ConnectedDevicesCnt = cls.check_connect()
+                        ConnectedDevicesCnt = cls.check_connect()[0]
                         if ConnectedDevicesCnt != 0:
                             title = "덮어쓰기설치 시작확인"
                             OldVersion, NewVersion = cls.getVersion(cls.packageName, filepath, args[0][num])
                             # 덮어쓰기는, 패키지명을 1번째인자로, 선택된 기기를 3번째인자로
-                            message = "설치할 기기명 : {}\n" \
-                                      "설치된 버전 : {}\n설치할 버전 : {}\n" \
+                            message = "설치된 버전 : {}\n설치할 버전 : {}\n" \
                                       "\n[주의]\n" \
                                       "같거나 높은 버전으로만 덮어쓰기 설치가 가능합니다.\n"\
-                                        .format(args[0][num], OldVersion, NewVersion)
+                                        .format(OldVersion, NewVersion)
                         else:
                             # 연결된 기기가 하나도 없을때, 처리.
                             ctypes.windll.user32.MessageBoxW(0, "연결된 기기가 없습니다.", "USB연결 확인요청", consts_string.show_flag.foreground.value)
@@ -135,8 +138,8 @@ class defaultADB(object) :
                 else :
                     logger.info("Confirm apk's paths or file's name : {} \n.".format(cls.packageName))
                     ctypes.windll.user32.MessageBoxW(0, "경로나 파일을 확인해주세요", "apk파일확인안됨", consts_string.show_flag.foreground.value)
-            except:
-                logger.error("Device : {} / {} : Failed to install".format(args[0][num], cls.install_apk.__name__))
+        except:
+            logger.error("Device : {} / {} : Failed to install".format(args[0][num], cls.install_apk.__name__))
             #TODO : adb: error: failed to copy 'teamUP-store-release-v3.5.2.7-122.apk' to '/data/local/tmp/teamUP-store-release-v3.5.2.7-122.apk': no response: Connection reset by peer
             #TODO : 위 내용관련한 처리필요
 
@@ -888,7 +891,7 @@ class defaultADB(object) :
         '''
         if (args[0] != "") & (args[0].split(".")[0] == "com"):
             try :
-                dumpsys_result = cmd.check_output("adb shell dumpsys package {}".format(args[0])
+                dumpsys_result = cmd.check_output("adb -s {} shell dumpsys package {}".format(args[2], args[0])
                                                   , stderr=cmd.STDOUT, shell=True).decode("utf-8").split("\r\n")
                 for data in dumpsys_result:
                     if "versionName" in data :
@@ -1197,7 +1200,8 @@ if __name__ == "__main__":
     # test.getAPK("com.zum.android.swing") #스윙만 죽음
 
     # TODO : 살려줘 UI재작업 및 멀티 디바이스 대응
-    path = "C:\\Users\Jeongkuk\Desktop\\teamUP-teamup_test-release-v3.7.0.0-172.apk"
+    path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.4-176.apk")
     list_all = test.check_connect()[1]
     # print(type(list_all))
-    test.install_apk(path,"",list_all)
+    # test.install_apk(path,"",list_all)
+    test.install_apk(path,"-r",list_all)

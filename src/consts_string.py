@@ -13,6 +13,13 @@ class show_flag(Enum):
     # MB_SETFOREGROUND 0x00010000L
     # The message box becomes the foreground window. Internally, the system calls the SetForegroundWindow function for the message box.
 
+class Device(Enum):
+    '''
+    Test 기기 기준.
+    '''
+    SamsungS6Edge ="04157df41370c224"
+    SamsungS5="33bb4b79"
+
 
 class alyac(Enum):
     run = ""

@@ -107,4 +107,5 @@ if __name__ == "__main__":
     ui.setupUi(Main)
     ui.connect()
     Main.show()
+    os.system("adb devices") #https://github.com/jeongjeongguk/androidADB/issues/2
     sys.exit(app.exec_())
