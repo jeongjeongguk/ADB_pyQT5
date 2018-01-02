@@ -205,12 +205,22 @@ class defaultADB(object) :
             return False, "None", "None"
 
     @classmethod
-    def run_apk(cls,filepath):
-        if cls.run_info(filepath)[0] :
-            os.system("adb shell am start -n " + cls.packageName +"/"+cls.startActivity)
-            ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "작업완료", consts_string.show_flag.foreground.value)
-        else:
-            pass
+    def run_apk(cls,filepath,*args):
+        #TODO : 1. 실행동작확인 필요. submain2 : 리스트에 있는 패키지명을 가지고 연결된 기기에서 apk추출해서 실행(-> 다수기기 적용필요)
+        #TODO : 2. submain1 : PC에 있는 APK 파일 가지고서, 실행시킴
+        #TODO : run_apk(cls, flag, *args) : flag 로 PC's APK or Android 구분해서 함수실행하기결정할것.
+        for num in range(0, len(args[0])):
+            if cls.run_info(filepath)[0] :
+                # os.system("adb shell am start -n " + cls.packageName +"/"+cls.startActivity)
+                info = cmd.check_output("adb -s {} shell am start -n {}/{}".format(args[0][num], cls.packageName, cls.startActivity),
+                                        stderr=cmd.STDOUT, shell=True)
+                logger.info(info)
+                ctypes.windll.user32.MessageBoxW(0, "Device : {}\n기기를 확인해주세요.".format(args[0][num]), "앱실행 성공", consts_string.show_flag.foreground.value)
+                logger.info("[App launch successful] : {}\nDevice : {}".format(cls.run_info(filepath)[0], args[0][num]))
+            else:
+                logger.info("[App launch failed] : {}\nDevice : {}".format(cls.run_info(filepath)[0], args[0][num]))
+                ctypes.windll.user32.MessageBoxW(0, "Device : {}\n앱이 설치되어 있지 않아,\n실행하지 못했습니다.".format(args[0][num]), "앱실행 실패", consts_string.show_flag.foreground.value)
+
 
     @classmethod
     def uninstall_apk(cls, *args):
@@ -227,9 +237,14 @@ class defaultADB(object) :
                 logger.info(info)
                 logger.info("Device : {} / End uninstall : {}".format(args[2], cls.packageName))
             else :
+                ctypes.windll.user32.MessageBoxW(0,
+                                                 "삭제취소하셨습니다.\n앱이 설치된 상황에서는,\n정상적으로 설치되지 않을 수 있습니다.",
+                                                 "삭제취소 안내", consts_string.show_flag.foreground.value | consts_string.show_flag.ICON_INFO.value)
+                logger.info("[Undelete app] Device : {} / End uninstall : {}".format(args[2], cls.packageName))
                 return None
             ctypes.windll.user32.MessageBoxW(0, "기기를 확인해주세요.", "삭제완료", consts_string.show_flag.foreground.value)
         except :
+            logger.info("[Disconnected] Device : {} / End uninstall : {}".format(args[2], cls.packageName))
             ctypes.windll.user32.MessageBoxW(0, "PC와 연결을 확인해주세요.", "연결끊김", consts_string.show_flag.foreground.value)
 
         # cls.check_install()
