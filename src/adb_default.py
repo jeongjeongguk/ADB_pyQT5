@@ -1216,8 +1216,10 @@ if __name__ == "__main__":
 
     # TODO : 살려줘 UI재작업 및 멀티 디바이스 대응
     # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.4-176.apk")
-    path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.5-177.apk")
+    # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.5-177.apk")
+    path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.10-182.apk")
+    # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.6.4.14-171.apk")
     list_all = test.check_connect()[1]
     # print(type(list_all))
-    test.install_apk(path,"",list_all)
-    # test.install_apk(path,"-r",list_all)
+    # test.install_apk(path,"",list_all)
+    test.install_apk(path,"-r",list_all)
