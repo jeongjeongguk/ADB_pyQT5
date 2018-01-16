@@ -46,11 +46,16 @@ PROGRAMLIST = [
 ]
 
 CONFIRM_LIST_PROGRAMLIST = [
-    ["ALUpdate.dll ",""],
+    ["ALUpdate.dll",""],
     ["ALCMProxy.dll",""],
     ["ALSTS.dll",""]
 ]
 AUTHSERIAL_DLL = [["AuthSerial.dll",""]]
+# DLL_LIST = []
+# for i in range(0, len(PROGRAMLIST)):
+#     DLL_LIST[i] = [PROGRAMLIST[i],CONFIRM_LIST_PROGRAMLIST,AUTHSERIAL_DLL]
+DLL_LIST = {PROGRAMNAME: [CONFIRM_LIST_PROGRAMLIST, AUTHSERIAL_DLL] for PROGRAMNAME in PROGRAMLIST}
+# print(DLL_LIST)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -234,13 +239,19 @@ class Ui_Form(object):
         item.setText(_translate("Form", "11.7.15.0"))
         item = self.tableWidget_2.item(0, 3)
         item.setText(_translate("Form", "16.12.19.1"))
+        # --------------------------------------------------------------------------------------------------------------
+        # TODO : Func.
+        # for j in range(0, len(CONFIRM_LIST_ALUPDATE)):
+        #     # print(CONFIRM_LIST_ALUPDATE[j][1] )
+        #     self.tableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(CONFIRM_LIST_ALUPDATE[j][1] ))
+        # --------------------------------------------------------------------------------------------------------------
         self.tableWidget_2.setSortingEnabled(__sortingEnabled)
 
 
 
 class functions(object):
     @classmethod
-    def get_version_number(filename):
+    def get_version_number(cls,filename):
         try:
             info = GetFileVersionInfo(filename, "\\")
             ms = info['FileVersionMS']
@@ -254,13 +265,14 @@ class functions(object):
         # ==================================================================================================================
         print("=" * 5 + "[ {} ]".format(PROGRAMFILES + ALUPDATE) + "=" * 5)
         print("{}".format(PROGRAMFILES + ALUPDATE + CONFIRM_LIST_ALUPDATE[1][0]))
-        for i in range(0, len(CONFIRM_LIST_ALUPDATE)):
+        for j in range(0, len(CONFIRM_LIST_ALUPDATE)):
             try:
-                CONFIRM_LIST_ALUPDATE[i][1] = ".".join([str(i) for i in cls.get_version_number(
-                    "{}".format(PROGRAMFILES + ALUPDATE + CONFIRM_LIST_ALUPDATE[i][0]))])
+                CONFIRM_LIST_ALUPDATE[j][1] = ".".join([str(i) for i in cls.get_version_number(
+                    "{}".format(PROGRAMFILES + ALUPDATE + CONFIRM_LIST_ALUPDATE[j][0]))])
+
             except:
-                CONFIRM_LIST_ALUPDATE[i][1] = "None"
-            print("{} : ".format(CONFIRM_LIST_ALUPDATE[i][0]) + CONFIRM_LIST_ALUPDATE[i][1])
+                CONFIRM_LIST_ALUPDATE[j][1] = "None"
+            print("{} : ".format(CONFIRM_LIST_ALUPDATE[j][0]) + CONFIRM_LIST_ALUPDATE[j][1])
         # ==================================================================================================================
         print("=" * 5 + "[ {} ]".format(APPDATA + ALAUTH) + "=" * 5)
         try:
@@ -281,25 +293,47 @@ class functions(object):
         for i in range(0, len(PROGRAMLIST)):
             if os.path.isdir("{}".format(PROGRAMFILES + ESTSOFT + PROGRAMLIST[i])):
                 print("=" * 5 + "[ {} ]".format(PROGRAMFILES + ESTSOFT + PROGRAMLIST[i]) + "=" * 5)
-                for i in range(0, len(CONFIRM_LIST_PROGRAMLIST)):
+                for j in range(0, len(CONFIRM_LIST_PROGRAMLIST)):
                     try:
-                        CONFIRM_LIST_PROGRAMLIST[i][1] = ".".join([str(i) for i in cls.get_version_number(
-                            "{}".format(PROGRAMFILES + ESTSOFT + PROGRAMLIST[i] + CONFIRM_LIST_PROGRAMLIST[i][0]))])
+                        DLL_LIST[PROGRAMLIST[i]][0][j][1] = ".".join([str(i) for i in cls.get_version_number(
+                            "{}".format(PROGRAMFILES + ESTSOFT + PROGRAMLIST[i] + CONFIRM_LIST_PROGRAMLIST[j][0]))])
+                        # print("test : " + str(DLL_LIST[PROGRAMLIST[i]][0][i][1]))
+                        # print(DLL_LIST[PROGRAMLIST[i]][0])
                     except:
-                        CONFIRM_LIST_PROGRAMLIST[i][1] = "None"
-                    if CONFIRM_LIST_PROGRAMLIST[i][1] != "N.o.n.e":
-                        print("{} :   {}".format(CONFIRM_LIST_PROGRAMLIST[i][0], CONFIRM_LIST_PROGRAMLIST[i][1]))
+                        pass
+                    if CONFIRM_LIST_PROGRAMLIST[j][1] != "N.o.n.e":
+                        print("{} :   {}".format(CONFIRM_LIST_PROGRAMLIST[j][0], CONFIRM_LIST_PROGRAMLIST[j][1]))
             else:
                 print("=" * 5 + "[ {} ]".format(PROGRAMFILES + ESTSOFT + PROGRAMLIST[i]) + "=" * 5)
                 print(PROGRAMLIST[i] + "'s foleder isn't Exist")
 
+
+class refresh(Ui_Form):
+    functions.confirm_version()
+    def confirmedVersion(self):
+        # --------------------------------------------------------------------------------------------------------------
+        for j in range(0, len(CONFIRM_LIST_ALUPDATE)):
+            # print(CONFIRM_LIST_ALUPDATE[j][1] )
+            self.tableWidget.setItem(j, 1, QtWidgets.QTableWidgetItem(CONFIRM_LIST_ALUPDATE[j][1] ))
+        # --------------------------------------------------------------------------------------------------------------
+        for i in range(1, len(PROGRAMLIST)+1):
+            print(PROGRAMLIST[i-1] + " : " + str(DLL_LIST[PROGRAMLIST[i-1]]))
+            # ALCapture\ : [[['ALUpdate.dll', 'None'], ['ALCMProxy.dll', 'None'], ['ALSTS.dll', 'None']], [['AuthSerial.dll', '']]]
+            for j in range(0, len(CONFIRM_LIST_PROGRAMLIST)):
+                self.tableWidget_2.setItem(i, j, QtWidgets.QTableWidgetItem(DLL_LIST[PROGRAMLIST[i-1]][0][j][1]  ))
+
 if __name__ == "__main__":
     import sys
+    # functions.confirm_version()
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
-    functions.confirm_version()
+
+    # setText Func.
+    refresh.confirmedVersion(ui)
+
+
     Form.show()
     sys.exit(app.exec_())
 
