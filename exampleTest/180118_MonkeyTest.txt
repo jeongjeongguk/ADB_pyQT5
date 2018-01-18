@@ -1,0 +1,10 @@
+type= user
+speed= 1000
+
+start data >>
+DispatchPointer(0, 0, 0, 700, 2300, 0, 0, 0, 0, 0, 0, 0)
+DispatchPointer(0, 0, 1, 700, 2300, 0, 0, 0, 0, 0, 0, 0)
+UserWait(1000)
+
+quit
+
