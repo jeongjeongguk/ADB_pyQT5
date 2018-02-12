@@ -1117,7 +1117,7 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    # test.getCurrentActivity(None)
+    test.getCurrentActivity(None)
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"

@@ -57,16 +57,18 @@ from moviepy.editor import *
 
 # 영상크기축소없이, gif 변환
 # imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\src\dist\171108\171108\171108_140525_SM-G930K_7.0_API_24.mp4'
-# os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 171108_140525_SM-G930K_7.0_API_24.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
+imsi = r'C:\Users\Jeongkuk\Desktop\recording.mp4'
+os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 recording.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
 
 # 영상 자르기
 # ffmpeg   -i   동영상.avi -ss  600  -t  120  -vcodec copy -acodec copy  clip.avi
 # 출처: http://crynut84.tistory.com/6 [Life is Dynamic]
 # imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\exampleTest\iphone7_11.0.mov'
-imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171114\171114\171114\171114_154651_SM-G925S_6.0.1_API_23.mp4'
-startTime = "90" #second. cutting start time.
-ToCutTime = "20" #second. cutting during time from start time.
-os.system("ffmpeg -i {} -ss {} -t {} -vcodec copy -acodec copy clip.mp4".format(imsi, startTime, ToCutTime))
+# imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\src\171114\171114\171114\171114_154651_SM-G925S_6.0.1_API_23.mp4'
+# imsi = r'C:\Users\Jeongkuk\Desktop\recording.mp4'
+# startTime = "90" #second. cutting start time.
+# ToCutTime = "20" #second. cutting during time from start time.
+# os.system("ffmpeg -i {} -ss {} -t {} -vcodec copy -acodec copy clip.mp4".format(imsi, startTime, ToCutTime))
 #TODO : 영상이 150초가량 되는 원본에서, 90초부분부터 110초까지 뽑아낼려는데 못 뽑아냄.
 
 # File 'movie_360p_320_tmp.gif' already exists. Overwrite ? [y/N]
