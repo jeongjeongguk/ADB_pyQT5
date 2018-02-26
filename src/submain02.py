@@ -114,6 +114,7 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
     def exceptionMessage(self):
         ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 없습니다.\n리스트에서 앱을 선택하세요.", "리스트확인요청",
                                          consts_string.show_flag.foreground.value | consts_string.show_flag.ICON_STOP.value)
+        
 
 
 if __name__ == "__main__":
