@@ -627,7 +627,7 @@ class defaultADB(object) :
         # else :
         #     print("이건뭐냐?!ㅋㅋㅋㅋ")
         # # TODO : 잠금해제 메소드 or 잠금해제 안내 추가 필요
-        if ConnectedDevicesCnt > 0 :
+        if ConnectedDevicesCnt[0] > 0 :
             cls.makedir()
             # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
             os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
@@ -667,7 +667,7 @@ class defaultADB(object) :
         #     "=========================================================================================================")
         # print(path)
 
-        if ConnectedDevicesCnt > 0 :
+        if ConnectedDevicesCnt[0] > 0 :
             cls.makedir()
             cls.device_info(None)
             # print(ConnectedDevicesCnt)
@@ -1117,7 +1117,7 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    # test.getCurrentActivity(None)
+    test.getCurrentActivity(None)
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"

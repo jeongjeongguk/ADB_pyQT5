@@ -1,1 +1,0 @@
-echo "aaa" | wc -l > b.txt
