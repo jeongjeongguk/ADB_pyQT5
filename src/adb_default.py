@@ -84,6 +84,7 @@ class defaultADB(object) :
         # print(len(args[0]))
         # length = len(args[0]) + 1 if len(args[0]) > 1 else len(args[0])
         # print(length)
+
         try :
             for num in range(0,len(args[0])) :
                 print(args[0][num])
@@ -209,6 +210,13 @@ class defaultADB(object) :
         #TODO : 1. 실행동작확인 필요. submain2 : 리스트에 있는 패키지명을 가지고 연결된 기기에서 apk추출해서 실행(-> 다수기기 적용필요)
         #TODO : 2. submain1 : PC에 있는 APK 파일 가지고서, 실행시킴
         #TODO : run_apk(cls, flag, *args) : flag 로 PC's APK or Android 구분해서 함수실행하기결정할것.
+        '''
+
+        :param filepath:
+        :param args[0]
+        :param args[0]
+        :return:
+        '''
         for num in range(0, len(args[0])):
             if cls.run_info(filepath)[0] :
                 # os.system("adb shell am start -n " + cls.packageName +"/"+cls.startActivity)
@@ -630,11 +638,13 @@ class defaultADB(object) :
         if ConnectedDevicesCnt[0] > 0 :
             cls.makedir()
             # win32shell.ShellExecuteEx(lpFile='cmd.exe', lpParameters='/c ' + filePath)
+
             os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
             os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
             os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
             os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
             os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
+
             cls.check_time()
             time.sleep(1)
             cls.device_info(None)
@@ -673,7 +683,7 @@ class defaultADB(object) :
             # print(ConnectedDevicesCnt)
             # print(cls.deviceData)
             ctypes.windll.user32.MessageBoxW \
-                (0, "현재 %i대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n%s" %(ConnectedDevicesCnt, cls.deviceData), "연결된 기기", consts_string.show_flag.foreground.value)
+                (0, "현재 {}대의 기기가 PC에 연결되어있습니다.\n\n[연결된기기]\n{}".format(ConnectedDevicesCnt[0], cls.deviceData), "연결된 기기", consts_string.show_flag.foreground.value)
         else :
             ctypes.windll.user32.MessageBoxW \
                 (0, "USB연결 및 드라이버설치 \n\n또는 개발자모드활성화를 확인하세요.", "연결된 기기없음", consts_string.show_flag.foreground.value)
@@ -1034,7 +1044,27 @@ class defaultADB(object) :
             logger.error("Execution failed. : {}".format(packageName))
             return False
 
+    @classmethod
+    def checkapp(cls, *args):
+        #TODO : 앱프로필 설정화면처럼, 설치된 앱에 대한 정보들을 쫙 가지고 와서 정리할것. 패키지명/ 아이콘이미지/ 버전/ 시작화면
+        '''
+        앱이 설치되어있는지, 설치되어있으면 버전은 뭔지 확인
+        :param args:
+        :return:
+        '''
+        # 멀티디바이스적용시 활용
+        # api_level = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.sdk",
+        #                              stderr=cmd.STDOUT, shell=True).decode("utf-8")\
 
+        # 단일 디바이스
+        try:
+            check = cmd.check_output("adb shell dumpsys package {} | findstr versionName",
+                                         stderr=cmd.STDOUT, shell=True).decode("utf-8")
+            check = re.sub('\s', '', check) # white space 제거
+            check = check.split("=")[1]
+            return check
+        except:
+            return "Not installed app."
 
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
@@ -1117,7 +1147,7 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    test.getCurrentActivity(None)
+    # test.getCurrentActivity(None)
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
@@ -1217,9 +1247,20 @@ if __name__ == "__main__":
     # TODO : 살려줘 UI재작업 및 멀티 디바이스 대응
     # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.4-176.apk")
     # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.5-177.apk")
-    path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.10-182.apk")
+    # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.7.0.10-182.apk")
     # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-teamup_test-release-v3.6.4.14-171.apk")
-    list_all = test.check_connect()[1]
+    # path = "C:\\Users\Jeongkuk\Desktop\\180316\\{}".format("teamUP-cmc_store-release-v3.7.0.13-185.apk")
+    # path = "C:\\Users\Jeongkuk\Desktop\\180316\\{}".format("teamUP-teamup_test-release-v3.7.2.2-190.apk")
+    # path = "C:\\Users\Jeongkuk\Desktop\\180316\\{}".format("teamUP-cmc_test-release-v3.7.0.13-185.apk")
+    # path = "C:\\Users\Jeongkuk\Desktop\\180316\\{}".format("teamUP-modetalk_store-release-v3.7.0.13-185.apk")
+    # path = "C:\\Users\Jeongkuk\Desktop\\180316\\{}".format("teamUP-teamup_store-release-v3.7.0.13-185.apk")
     # print(type(list_all))
     # test.install_apk(path,"",list_all)
-    test.install_apk(path,"-r",list_all)
+
+    # 멀티 디바이스 설치과정
+    # path = "C:\\Users\Jeongkuk\Desktop\\180316\\{}".format("teamUP-teamup_test-release-v3.7.0.13-185.apk")
+    list_all = test.check_connect()[1]
+    # test.install_apk(path,"-r",list_all)
+
+    test.run_apk("C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src\com.estsoft.alsong.apk","")
+

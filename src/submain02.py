@@ -95,7 +95,8 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
         getAPP = self.getAPK(args[1])
         print(getAPP)
         if getAPP :
-            self.run_apk(getAPP)
+            # self.check_connect()[1] : connected devices's list
+            self.run_apk(getAPP, self.check_connect()[1])
             os.remove(getAPP)
         else:
             ctypes.windll.user32.MessageBoxW(0, "선택된 앱이 설치되지 않았습니다.\n리스트갱신합니다.", "리스트확인요청",
