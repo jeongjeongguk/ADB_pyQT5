@@ -148,7 +148,11 @@ class SubWindow03(QtWidgets.QMainWindow, capture_c_ui.Ui_MainWindow, adb_default
 
     def call_capture2image(self):
         self.newCapture.setEnabled(False)
-        self.capture2image()
+        try :
+            self.capture2image()
+        except :
+            ctypes.windll.user32.MessageBoxW \
+                (0, "앱에서 보안설정 or 기기연결상태불량으로 \n\n화면캡처가 불가능합니다.", "화면캡쳐 실패", consts_string.show_flag.foreground.value)
         self.newCapture.setEnabled(True)
 
     def call_mspaint2image(self):

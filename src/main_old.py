@@ -73,7 +73,11 @@ class MainWindow(QtWidgets.QMainWindow, main_ui_old.Ui_MainWindow, adb_default.d
 
     def call_capture2image(self):
         self.captureImage.setEnabled(False)
-        self.capture2image()
+        try :
+            self.capture2image()
+        except:
+            ctypes.windll.user32.MessageBoxW \
+                (0, "앱에서 보안설정 or 기기연결상태불량으로 \n\n화면캡처가 불가능합니다.", "화면캡쳐 실패", consts_string.show_flag.foreground.value)
         self.captureImage.setEnabled(True)
 
     def call_capture2viedo(self):

@@ -665,12 +665,9 @@ class defaultADB(object) :
             #TODO : 기기별 앱에서 화면캡쳐 막았을때, 문제없는지 확인필요. 보안설정상관없이 화면캡쳐가능 방법 확인필요
             # g5 7.0 에서 아래와 같은 메시지 리턴됨.
             # Error opening file: /mnt/sdcard/ScreenCapture/test.png (No such file or directory)
-            try :
-                os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
-            except :
-                ctypes.windll.user32.MessageBoxW \
-                    (0, "앱에서 보안설정으로 인해\n\n화면캡처가 불가능합니다.", "화면캡쳐 실패", consts_string.show_flag.foreground.value)
-                return None
+            # LG U 6.0 에서는, screencap 은 가능해서, 0KB짜리로 저장됨
+            # 그래서, 이 함수 내에 sizedown부분에서 더이상 사이즈 다운이 안된다고 에러가남.
+            os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
             os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
             os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
 
@@ -1256,10 +1253,16 @@ if __name__ == "__main__":
     # test.run_info(filepath)
     # test.install_apk(filepath)
     # test.capture2image()
+    try:
+        test.capture2image()
+    except:
+        ctypes.windll.user32.MessageBoxW \
+            (0, "앱에서 보안설정 or 기기연결상태불량으로 \n\n화면캡처가 불가능합니다.", "화면캡쳐 실패", consts_string.show_flag.foreground.value)
     # try :
     #     test.capture2viedo()
     # except :
-    #     pass
+    #     ctypes.windll.user32.MessageBoxW \
+    #         (0, "앱에서 보안설정 or 기기연결상태불량으로 \n\n화면캡처가 불가능합니다.", "화면캡쳐 실패", consts_string.show_flag.foreground.value)
     # from cProfile import Profile
     # from pstats import Stats
     # profiler = Profile()
