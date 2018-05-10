@@ -57,7 +57,7 @@ from moviepy.editor import *
 
 # 영상크기축소없이, gif 변환
 # imsi = r'C:\Users\Jeongkuk\PycharmProjects\androidADB\src\dist\171108\171108\171108_140525_SM-G930K_7.0_API_24.mp4'
-imsi = r'C:\Users\Jeongkuk\Desktop\recording.mp4'
+imsi = r'C:\Users\Jeongkuk\Desktop\title.mov'
 os.system("ffmpeg -i {} -pix_fmt rgb24 -r 10 recording.gif".format(imsi)) #OK> ffmpeg 폴더를 path에 추가.
 
 # 영상 자르기

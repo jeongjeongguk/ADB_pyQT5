@@ -6,6 +6,7 @@ import installedList_ui
 import adb_default
 from PyQt5 import QtWidgets
 import consts_string
+import subprocess as cmd
 
 class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.defaultADB):
     def __init__(self, parent=None):
@@ -84,12 +85,36 @@ class SubWindow02(QtWidgets.QMainWindow, installedList_ui.Ui_Form, adb_default.d
         )
 
         # StartApp
+        # 패키지를 PC로 가지고와서, aapt로 시작화면 구해서 실행시키는거
+        # self.StartApp.clicked.connect(
+        #     lambda:
+        #         self.getappinfo(None, self.listWidget.selectedItems()[0].text())
+        #     if self.listWidget.selectedItems() != []
+        #     else self.exceptionMessage()
+        # )
         self.StartApp.clicked.connect(
             lambda:
-                self.getappinfo(None, self.listWidget.selectedItems()[0].text())
+                self.startAppCmd(self.listWidget.selectedItems()[0].text())
+                # print(self.listWidget.selectedItems()[0].text())
             if self.listWidget.selectedItems() != []
             else self.exceptionMessage()
         )
+
+    def startAppCmd(self, packageName):
+        '''
+        adb shell monkey -p $packageName -c android.intent.category.LAUNCHER 1
+        :param packageName:
+        :return:
+        '''
+        try:
+            CMD = "adb shell monkey -p ${} -c android.intent.category.LAUNCHER 1".format(packageName)
+            print(CMD)
+            cmd.call(CMD, stderr=None, shell=True)
+        except:
+            ctypes.windll.user32.MessageBoxW(0,
+                                             "선택된 앱 : {}\n위 앱이 설치되지 않은 상태입니다.\n리스트갱신 버튼을 클릭하세요."
+                                             .format(self.listWidget.selectedItems()[0].text())
+                                             , "설치확인", consts_string.show_flag.foreground.value)
 
     def getappinfo(self, *args):
         getAPP = self.getAPK(args[1])

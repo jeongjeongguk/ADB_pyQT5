@@ -594,6 +594,27 @@ class defaultADB(object) :
         cls.deviceData = re.sub('\s','',cls.deviceData) #white space 제거
 
     @classmethod
+    def device_info_multiTest(cls, *args):
+        '''
+        :param args == ALL : for loop all devices
+        :param args != ALL : special devices
+        :return:
+        '''
+        if args[0] == "ALL" :
+            for device in range(len(args[0])):
+                pass
+        else :
+            select_device = args[0]
+            os_ver = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.release",
+                                      stderr=cmd.STDOUT, shell=True).decode("utf-8")
+            api_level = cmd.check_output("adb shell " + select_device + "getprop ro.build.version.sdk",
+                                         stderr=cmd.STDOUT, shell=True).decode("utf-8")
+            model = cmd.check_output("adb shell " + select_device + "getprop ro.product.model",
+                                     stderr=cmd.STDOUT, shell=True).decode("utf-8")
+            cls.deviceData = r"{}_{}_API_{}".format(model, os_ver, api_level)
+            cls.deviceData = re.sub('\s','',cls.deviceData) #white space 제거
+
+    @classmethod
     def open_capture_folder(cls):
         chkValue = cls.makedir()
         if chkValue == -1 :
@@ -641,7 +662,15 @@ class defaultADB(object) :
 
             os.system("adb shell rm -r /mnt/sdcard/ScreenCapture")
             os.system("adb shell mkdir /mnt/sdcard/ScreenCapture")
-            os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
+            #TODO : 기기별 앱에서 화면캡쳐 막았을때, 문제없는지 확인필요. 보안설정상관없이 화면캡쳐가능 방법 확인필요
+            # g5 7.0 에서 아래와 같은 메시지 리턴됨.
+            # Error opening file: /mnt/sdcard/ScreenCapture/test.png (No such file or directory)
+            try :
+                os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
+            except :
+                ctypes.windll.user32.MessageBoxW \
+                    (0, "앱에서 보안설정으로 인해\n\n화면캡처가 불가능합니다.", "화면캡쳐 실패", consts_string.show_flag.foreground.value)
+                return None
             os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
             os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
 
@@ -1262,5 +1291,5 @@ if __name__ == "__main__":
     list_all = test.check_connect()[1]
     # test.install_apk(path,"-r",list_all)
 
-    test.run_apk("C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src\com.estsoft.alsong.apk","")
+    # test.run_apk("C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src\com.estsoft.alsong.apk","")
 
