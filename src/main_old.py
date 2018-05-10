@@ -82,7 +82,12 @@ class MainWindow(QtWidgets.QMainWindow, main_ui_old.Ui_MainWindow, adb_default.d
 
     def call_capture2viedo(self):
         self.captureVideo.setEnabled(False)
-        self.capture2viedo()
+        # 중간 연결끊어질때 -> UI단에서 예외처리. 녹화하면서, 연결상태확인해보면 좋긴할듯. 근데 이게 편함.
+        try :
+            self.capture2viedo()
+        except:
+            ctypes.windll.user32.MessageBoxW \
+                (0, "기기연결상태불량으로 \n\n 작업중 문제가 발생했습니다.", "화면녹화 실패", consts_string.show_flag.foreground.value)
         self.captureVideo.setEnabled(True)
 # '''
     @pyqtSlot()

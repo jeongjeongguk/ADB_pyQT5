@@ -667,6 +667,7 @@ class defaultADB(object) :
             # Error opening file: /mnt/sdcard/ScreenCapture/test.png (No such file or directory)
             # LG U 6.0 에서는, screencap 은 가능해서, 0KB짜리로 저장됨
             # 그래서, 이 함수 내에 sizedown부분에서 더이상 사이즈 다운이 안된다고 에러가남.
+
             os.system("adb shell screencap /mnt/sdcard/ScreenCapture/test.png")
             os.system("adb pull /mnt/sdcard/ScreenCapture/test.png ./test.png")
             os.system("adb shell rm /mnt/sdcard/ScreenCapture/test.png")
