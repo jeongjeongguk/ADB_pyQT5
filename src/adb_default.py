@@ -50,6 +50,7 @@ class defaultADB(object) :
                 .replace("List of devices attached", "") \
                 .replace("\r\n", "") \
                 .replace("device", "")
+            # TODO : 연결이 왜 끊기는지 모르겠으나, device상태에서 offline상태로 되는 경우가 존재한다.
             cls.ConnectDevices = List_misi.split("	")
             cls.ConnectDevices.remove("")
             # print(cls.ConnectDevices) # 여기에, 연결된 기기들 접근 serial이 다 모임
@@ -217,11 +218,11 @@ class defaultADB(object) :
         :param args[0]
         :return:
         '''
-        for num in range(0, len(args[0])):
+        for num in range(0, len(args[0])): #TODO : 이거, args[0]이 아니라, **args로 되어야할거같은데.
             if cls.run_info(filepath)[0] :
                 # os.system("adb shell am start -n " + cls.packageName +"/"+cls.startActivity)
                 info = cmd.check_output("adb -s {} shell am start -n {}/{}".format(args[0][num], cls.packageName, cls.startActivity),
-                                        stderr=cmd.STDOUT, shell=True)
+                                        stderr=cmd.STDOUT, shell=True) #TODO : 여기서는, args[0][num]이 아니라, args[num]으로 되어야할거 같고.
                 logger.info(info)
                 ctypes.windll.user32.MessageBoxW(0, "Device : {}\n기기를 확인해주세요.".format(args[0][num]), "앱실행 성공", consts_string.show_flag.foreground.value)
                 logger.info("[App launch successful] : {}\nDevice : {}".format(cls.run_info(filepath)[0], args[0][num]))
@@ -232,6 +233,7 @@ class defaultADB(object) :
 
     @classmethod
     def uninstall_apk(cls, *args):
+        #TODO : install_apk처럼 parameter 하나 더쓰기
         try :
             if args[0] == "path" :
                 cls.run_info(args[1])
@@ -952,6 +954,8 @@ class defaultADB(object) :
                         version = version.split("=")[1]
                     if "Unable" in data :
                         version = "Not installed"
+                    else :
+                        version = "Not installed" #TODO : OS ver 6.0 이하는, 미설치시에 $dumpsys pakage [packageName] 이 ''으로 리턴된다.(빈값)
 
                 if os.path.isfile(args[1]):
                     dumpsys_result = cmd.check_output("aapt d badging {}".format(args[1])
@@ -1252,9 +1256,9 @@ if __name__ == "__main__":
     #
     #
     # time.sleep(30)
-    filepath = "C:\\Users\\Jeongkuk\\Desktop\\"+"teamUP-hanmi_store-debug-v3.8.6.12-256.apk"
-    # test.run_info(filepath)
-    test.install_apk(filepath,"",list_all)
+    # filepath = "C:\\Users\\Jeongkuk\\Desktop\\"+"teamUP-hanmi_store-debug-v3.8.6.12-256.apk"
+    # # test.run_info(filepath)
+    # test.install_apk(filepath,"",list_all)
     # test.capture2image()
     # try:
     #     test.capture2image()
@@ -1293,9 +1297,9 @@ if __name__ == "__main__":
     # test.install_apk(path,"",list_all)
 
     # 멀티 디바이스 설치과정
-    # path = "C:\\Users\Jeongkuk\Desktop\\180316\\{}".format("teamUP-teamup_test-release-v3.7.0.13-185.apk")
-    # list_all = test.check_connect()[1]
-    # test.install_apk(path,"-r",list_all)
+    path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-cmc_store-release-v3.8.6.2-247.apk")
+    list_all = test.check_connect()[1]
+    test.install_apk(path,"-r",list_all)
 
-    # test.run_apk("C:\\Users\Jeongkuk\PycharmProjects\\androidADB\src\com.estsoft.alsong.apk","")
+    # test.run_apk(path,"")
 
