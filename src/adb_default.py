@@ -382,6 +382,7 @@ class defaultADB(object) :
     def exportXML():
         cmd.call("adb shell uiautomator dump /mnt/sdcard/test.xml", stderr=cmd.STDOUT, shell=True)
         cmd.call("adb pull /mnt/sdcard/test.xml ./test_me.xml", stderr=cmd.STDOUT, shell=True)
+        cmd.call("adb shell rm /mnt/sdcard/test.xml", stderr=cmd.STDOUT, shell=True)
 
     @classmethod
     def touchByID(cls, ID):
@@ -1179,8 +1180,10 @@ if __name__ == "__main__":
     # os.system("adb reboot")
 
     # 현재화면 구하기
-    # test.getCurrentActivity(None)
+    test.getCurrentActivity(None)
 
+    # 현재화면 xml따기
+    test.exportXML()
 
     # 패키지 버전 확인
     # packageName = "com.estsoft.picnic"
@@ -1297,9 +1300,9 @@ if __name__ == "__main__":
     # test.install_apk(path,"",list_all)
 
     # 멀티 디바이스 설치과정
-    path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-cmc_store-release-v3.8.6.2-247.apk")
-    list_all = test.check_connect()[1]
-    test.install_apk(path,"-r",list_all)
+    # path = "C:\\Users\Jeongkuk\Desktop\\{}".format("teamUP-cmc_store-release-v3.8.6.2-247.apk")
+    # list_all = test.check_connect()[1]
+    # test.install_apk(path,"-r",list_all)
 
     # test.run_apk(path,"")
 
